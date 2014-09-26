@@ -3,7 +3,8 @@
 build: clean
 	sass --no-cache \
          --style=compressed \
-         src/static/main.scss:src/static/main.css
+         src/static/style.sass:src/static/style.css
 
 clean:
-	-$(RM) src/static/main.css
+	-$(RM) src/static/style.css
+	-$(RM) src/static/style.*.map
