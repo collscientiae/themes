@@ -7,4 +7,4 @@ you need to install it in a recent version, e.g.:
     $ gem install --user-install sass
 
 This requires `ruby` and here is the
-[SASS documentation](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#css_extensions)
+[SASS Guide](http://sass-lang.com/guide)
