@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for mod in modules %}
+    <li><a href='{{ mod }}/index.html'>{{ mod }}</a></li>
+{% endfor %}
+{% endblock %}
