@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for mod in modules %}
-    <li><a href='{{ mod }}/index.html'>{{ mod }}</a></li>
+{% for name, href in links %}
+<ul>
+    <li><a href='{{ href }}'>{{ name }}</a></li>
+</ul>
 {% endfor %}
 {% endblock %}

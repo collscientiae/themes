@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="intro">
+    <h2>{{ doc.title }}</h2>
+    <div class="subtitle">{{ doc.subtitle }}</div>
+    {% if doc.abstract %}
+    <div class="abstract">{{ doc.abstract }}</div>
+    {% endif %}
+</section>
+
+<section class="content">
+{{ doc.output }}
+</section>
+
+<section class="outro">
+    <h3>See Also</h3>
+    <div class="seealso">
+    {{ doc.seealso }}
+    </div>
+</section>
+
+{% endblock %}

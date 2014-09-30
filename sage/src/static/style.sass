@@ -1,6 +1,6 @@
 /*
- *! collscientia sage style
- *! includes git.io/normalize and Boilerplate http://h5bp.com/ (both MIT License)
+ *! collscientia style
+ *! draws bits and pieces from git.io/normalize and http://h5bp.com/ (both MIT License)
 
 @import normalize
 
@@ -19,8 +19,9 @@ $screen-large: 1140px
 
 @import boilerplate
 
+
 /* ==========================================================================
- * MAIN PART STARTS HERE
+ * MIXIN DEFINITIONS
  * ==========================================================================
 
 =border-radius($radius)
@@ -29,12 +30,36 @@ $screen-large: 1140px
   -ms-border-radius:     $radius
   border-radius:         $radius
 
+=shadow($style)
+  -webkit-box-shadow:  $style
+  -moz-box-shadow:  $style
+  box-shadow: $style
+
+=clearfix
+  &:after
+    content: "."
+    display: block
+    height: 0
+    clear: both
+    visibility: hidden
+  * html &
+    height: 1px
+
+
+/* ==========================================================================
+ * MAIN PART STARTS HERE
+ * ==========================================================================
+
+
 .round
   +border-radius($x)
 
+html
+  font-size: 1em
+  line-height: 1.1
+
 body
-  .test
-    font-weight: bold
+  font: 16px/26px Helvetica, Helvetica Neue, Arial, sans-serif
 
   margin: $x
   padding: $x
@@ -43,9 +68,58 @@ body
     padding: $x/2
     margin: $x/2
 
+
+html,
+button,
+input,
+select,
+textarea
+  color: #222
+
+
+.wrapper
+  width: 90%
+  margin: 0 5%
+
+
 // add class .hover to :hover
 .hover
   @extend a:hover
+
+article
+  @extend .wrapper
+
+header
+  border-bottom: 20px solid #e44d26
+  display: block
+
+footer,
+article aside
+  border-top: 20px solid #e44d26
+
+header,
+footer,
+article aside
+  background: #f16529
+  +clearfix
+
+header,
+footer
+  @extend .wrapper
+
+.title
+  color: white
+
+header .title
+  padding: 0 $x
+
+footer a
+  padding: $x
+
+article
+  min-height: 30 * $x
+
+
 
 /* ==========================================================================
  * Media Queries
@@ -65,23 +139,16 @@ body
     margin-left: 0
   nav li:last-child a
     margin-right: 0
-  /* ========================
-   *  INTERMEDIATE: IE Fixes
-   * ========================
-  nav ul li
-    display: inline
-  .oldie nav a
-    margin: 0 0.7%
+
 
 @media only screen and (min-width: $screen-medium)
   /* ====================
    *  WIDE: CSS3 Effects
    * ====================
-  .header-container,
-  .main aside
-    -webkit-box-shadow: 0 5px 10px #aaa
-    -moz-box-shadow: 0 5px 10px #aaa
-    box-shadow: 0 5px 10px #aaa
+  header,
+  footer
+    +clearfix
+    +shadow(0 5px 10px #aaa)
   /* ============
    *  WIDE: Menu
    * ============
@@ -90,15 +157,7 @@ body
   nav
     float: right
     width: 38%
-  /* ============
-   *  WIDE: Main
-   * ============
-  .main article
-    float: left
-    width: 57%
-  .main aside
-    float: right
-    width: 28%
+
 
 @media only screen and (min-width: $screen-large)
   /* ===============
@@ -108,22 +167,11 @@ body
     /* 1140px - 10% for margins */
     width: $screen-large * .9
     margin: 0 auto
+    +clearfix
 
 /* ==========================================================================
  * Helper classes
  * ==========================================================================
-
-.ir
-  background-color: transparent
-  border: 0
-  overflow: hidden
-  *text-indent: -9999px
-
-.ir:before
-  content: ""
-  display: block
-  width: 0
-  height: 150%
 
 .hidden
   display: none !important
@@ -151,16 +199,18 @@ body
 .invisible
   visibility: hidden
 
-.clearfix:before,
-.clearfix:after
-  content: " "
-  display: table
-
-.clearfix:after
-  clear: both
-
-.clearfix
-  *zoom: 1
+/*
+ *.clearfix:before,
+ *.clearfix:after
+ *  content: " "
+ *  display: table
+ *
+ *.clearfix:after
+ *  clear: both
+ *
+ *.clearfix
+ *  *zoom: 1
+ */
 
 /* ==========================================================================
  * Print styles
@@ -170,7 +220,7 @@ body
   *
     background: transparent !important
     color: #000 !important
-    box-shadow: none !important
+    +shadow(none !important)
     text-shadow: none !important
   a,
   a:visited
