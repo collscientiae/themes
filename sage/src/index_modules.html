@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="modules">
+    {% for module in modules %}
+    <div>
+        <div>
+            <a href="{{ module.namespace }}/index.html">{{ module.name }}</a>
+        </div>
+        <div>
+            {{ module.description }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

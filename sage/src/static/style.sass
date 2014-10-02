@@ -12,6 +12,21 @@
 // smallest unit for spacing, round borders, etc.
 $x: 16px
 
+// colors
+$col_base: #5d7cd4
+
+$col1:  adjust_hue($col_base, 0)
+$col1d: darken($col1, 30)
+$col1l: lighten($col1, 30)
+
+$col2:  adjust_hue($col_base, -30)
+$col2d: darken($col2, 30)
+$col2l: lighten($col2, 30)
+
+$col3:  adjust_hue($col_base, 30)
+$col3d: darken($col3, 30)
+$col3l: lighten($col3, 30)
+
 // @media
 $screen-small: 480px
 $screen-medium: 768px
@@ -50,6 +65,9 @@ $screen-large: 1140px
  * MAIN PART STARTS HERE
  * ==========================================================================
 
+a,
+a:visited
+  color: $col3
 
 .round
   +border-radius($x)
@@ -60,12 +78,14 @@ html
 
 body
   font: 16px Helvetica, Helvetica Neue, sans-serif
-  margin: $x
+  margin: 0 auto
   padding: $x
 
-  @media (min-width: $screen-small)
-    padding: $x/2
-    margin: $x/2
+  @media only screen and (min-width: $screen-large)
+    max-width: 1000px
+
+  @media only screen and (max-width: $screen-small)
+    padding: 0
 
 
 html,
@@ -75,48 +95,114 @@ select,
 textarea
   color: #222
 
-
-.wrapper
-  width: 90%
-  margin: 0 5%
-
-
 // add class .hover to :hover
 .hover
   @extend a:hover
 
+/* ==============
+ *  MOBILE: Menu
+ * ==============
+
+nav ul
+  margin: 0
+  padding: 0
+
+nav a
+  display: block
+  margin-bottom: 10px
+  padding: $x 0
+  text-align: center
+  text-decoration: none
+  font-weight: bold
+  color: $col3l
+  &:visited
+    color: $col3l
+  &:hover
+    color: $col3l
+    background: $col1d
+  background: $col1
+
+
+/* ==============
+ *  MOBILE: Main
+ * ==============
+
+.main
+  padding: 30px 0
+
+.main article h1
+  font-size: 2em
+
+.main aside
+  color: white
+  padding: 0px 5% 10px
+
+.footer-container footer
+  color: white
+  padding: 20px 0
+
+
+
 article
-  @extend .wrapper
+  padding: 2*$x $x
+  @media only screen and (max-width: $screen-medium)
+    padding-top: $x
+  @media only screen and (max-width: $screen-small)
+    padding:
+      left: $x
+      right: $x
 
 header
-  border-bottom: 20px solid #e44d26
+  border-bottom: $x solid $col1
   display: block
 
 footer,
 article aside
-  border-top: 20px solid #e44d26
+  border-top: $x solid $col1
 
 header,
 footer,
 article aside
-  background: #f16529
+  background: $col2
   +clearfix
 
 header,
 footer
   @extend .wrapper
 
-.title
-  color: white
-
-header .title
+header > h1
   padding: 0 $x
+  color: white
 
 footer a
   padding: $x
 
 article
   min-height: 30 * $x
+
+/* MODULES INDEX */
+
+.modules
+  display: table
+  @media only screen and (max-width: $screen-medium)
+    display: block
+
+.modules > div
+  display: table-row
+  @media only screen and (max-width: $screen-medium)
+    display: block
+    margin: $x 0
+
+.modules > div > div
+  display: table-cell
+  padding-top: $x
+  &:nth-child(2)
+    padding-left: $x
+  @media only screen and (max-width: $screen-medium)
+    display: block
+    &:nth-child(2)
+      padding-left: 2 * $x
+      padding-top: inherit
 
 
 
@@ -151,9 +237,9 @@ article
   /* ============
    *  WIDE: Menu
    * ============
-  .title
+  header > h1
     float: left
-  nav
+  header > nav
     float: right
     width: 38%
 
