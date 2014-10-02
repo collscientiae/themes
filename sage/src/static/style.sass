@@ -99,6 +99,11 @@ textarea
 .hover
   @extend a:hover
 
+section.intro
+  background: $col3l
+  margin-top: $x
+
+
 /* ==============
  *  MOBILE: Menu
  * ==============
@@ -143,8 +148,8 @@ nav a
 
 
 
-article
-  padding: 2*$x $x
+article > section
+  padding: $x $x
   @media only screen and (max-width: $screen-medium)
     padding-top: $x
   @media only screen and (max-width: $screen-small)
@@ -249,8 +254,6 @@ article
    *  Maximal Width
    * ===============
   .wrapper
-    /* 1140px - 10% for margins */
-    width: $screen-large * .9
     margin: 0 auto
     +clearfix
 

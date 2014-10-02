@@ -1,0 +1,10 @@
+{% macro KNOWL(kid, title=none) -%}
+{% set hover = "%s [%s]"|format(title, kid) -%}
+{% if title is none -%}
+<a title="{{ hover }}" knowl="{{ kid }}" kwargs="{{ kwargs|urlencode }}">{{ kid }}</a>
+{%- else -%}
+{% if title|length > 0 -%}
+<a title="{{ hover }}" knowl="{{ kid }}" kwargs="{{ kwargs|urlencode }}">{{ title|safe }}</a>
+{%- endif %}
+{%- endif %}
+{%- endmacro %}
