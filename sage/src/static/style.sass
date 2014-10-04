@@ -2,8 +2,6 @@
  *! collscientia style
  *! draws bits and pieces from git.io/normalize and http://h5bp.com/ (both MIT License)
 
-@import normalize
-
 
 /* ==========================================================================
  * VARIABLE DECLARATION
@@ -32,6 +30,7 @@ $screen-small: 480px
 $screen-medium: 768px
 $screen-large: 1140px
 
+@import normalize
 @import boilerplate
 
 
@@ -60,6 +59,11 @@ $screen-large: 1140px
   * html &
     height: 1px
 
+=narrowpaddingonsmallscreen
+  @media only screen and (max-width: $screen-small)
+    padding:
+      left: $x / 2
+      right: $x / 2
 
 /* ==========================================================================
  * MAIN PART STARTS HERE
@@ -68,6 +72,7 @@ $screen-large: 1140px
 a,
 a:visited
   color: $col3
+  text-decoration: none
 
 .round
   +border-radius($x)
@@ -152,10 +157,7 @@ article > section
   padding: $x $x
   @media only screen and (max-width: $screen-medium)
     padding-top: $x
-  @media only screen and (max-width: $screen-small)
-    padding:
-      left: $x
-      right: $x
+  +narrowpaddingonsmallscreen
 
 header
   border-bottom: $x solid $col1
@@ -176,8 +178,11 @@ footer
   @extend .wrapper
 
 header > h1
-  padding: 0 $x
   color: white
+  padding: 0 $x
+  +narrowpaddingonsmallscreen
+  //@media only screen and (max-width: $screen-small)
+  margin-top: 0
 
 footer a
   padding: $x
@@ -196,7 +201,7 @@ article
   display: table-row
   @media only screen and (max-width: $screen-medium)
     display: block
-    margin: $x 0
+    margin: 0
 
 .modules > div > div
   display: table-cell

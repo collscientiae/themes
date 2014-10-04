@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="modules">
-    {% for module in modules %}
-    <div>
+<article>
+  <section>
+    <h1>{{ title }}</h1>
+    <div class="modules">
+        {% for module in modules %}
         <div>
-            <a href="{{ module.namespace }}/index.html">{{ module.name }}</a>
+            <div>
+                <a href="{{ module.namespace }}/index.html">{{ module.name }}</a>
+            </div>
+            <div>
+                {{ module.description }}
+            </div>
         </div>
-        <div>
-            {{ module.description }}
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+  </section>
+</article>
 {% endblock %}

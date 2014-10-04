@@ -1,7 +1,8 @@
 // Avoid `console` errors in browsers that lack a console.
-(function() {
+(function () {
     var method;
-    var noop = function () {};
+    var noop = function () {
+    };
     var methods = [
         'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
         'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
@@ -22,22 +23,23 @@
 }());
 
 function initMathjax() {
-  var head = document.getElementsByTagName("head")[0], script;
-  script = document.createElement("script");
-  script.type = "text/x-mathjax-config";
-  script[(window.opera ? "innerHTML" : "text")] =
-    "MathJax.Hub.Config({\n" +
-    "  extensions: ['tex2jax.js','fp.js','asciimath2jax.js'],\n" +
-    "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
-    "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
-    "  asciimath2jax: { delimiters: [['``','``']]  },\n" +
-    "  TeX: {extensions: ['autoload-all.js']}\n" +
-    "});";
-  head.appendChild(script);
-  script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-  head.appendChild(script);
+    var head = document.getElementsByTagName("head")[0], script;
+    var proto = /^http:/.test(document.location) ? 'http' : 'https';
+    script = document.createElement("script");
+    script.type = "text/x-mathjax-config";
+    script[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({\n" +
+        "  extensions: ['tex2jax.js','fp.js','asciimath2jax.js'],\n" +
+        "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
+        "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
+        "  asciimath2jax: { delimiters: [['``','``']]  },\n" +
+        "  TeX: {extensions: ['autoload-all.js']}\n" +
+        "});";
+    head.appendChild(script);
+    script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = proto + "://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    head.appendChild(script);
 }
 
 function googleAnalytics() {
@@ -58,7 +60,7 @@ function googleAnalytics() {
         __gaTracker('require', 'linkid');
         __gaTracker('send', 'pageview');
     }
- }
+}
 
 $(googleAnalytics);
 $(initMathjax);
