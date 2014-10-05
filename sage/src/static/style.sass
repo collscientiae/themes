@@ -49,15 +49,17 @@ $screen-large: 1140px
   -moz-box-shadow:  $style
   box-shadow: $style
 
+// that's a mixin and below a placeholder via %
+// ALWAYS use it as @extend %clearfix, not as an include!
+// (unless you are inside an @media query, then "+clearfix" without @extend)
 =clearfix
   &:after
-    content: "."
-    display: block
-    height: 0
+    content: ""
+    display: table
     clear: both
-    visibility: hidden
-  * html &
-    height: 1px
+
+%clearfix
+  +clearfix
 
 =narrowpaddingonsmallscreen
   @media only screen and (max-width: $screen-small)
@@ -147,12 +149,6 @@ nav a
   color: white
   padding: 0px 5% 10px
 
-.footer-container footer
-  color: white
-  padding: 20px 0
-
-
-
 article > section
   padding: $x $x
   @media only screen and (max-width: $screen-medium)
@@ -171,7 +167,7 @@ header,
 footer,
 article aside
   background: $col2
-  +clearfix
+  @extend %clearfix
 
 header,
 footer
@@ -183,6 +179,9 @@ header > h1
   +narrowpaddingonsmallscreen
   //@media only screen and (max-width: $screen-small)
   margin-top: 0
+
+footer
+  min-height: 5 * $x
 
 footer a
   padding: $x
