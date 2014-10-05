@@ -4,8 +4,9 @@
 {% block content %}
 
 <section class="intro">
-    <h2>{{ doc.title }}</h2>
+{% if doc.subtitle -%}
     <div class="subtitle">{{ doc.subtitle }}</div>
+{%- endif %}
     {% if doc.abstract %}
     <div class="abstract">{{ doc.abstract }}</div>
     {% endif %}

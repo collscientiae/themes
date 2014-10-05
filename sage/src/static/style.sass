@@ -11,7 +11,7 @@
 $x: 16px
 
 // colors
-$col_base: #5d7cd4
+$col_base: #5c5ccc
 
 $col1:  adjust_hue($col_base, 0)
 $col1d: darken($col1, 30)
@@ -21,7 +21,7 @@ $col2:  adjust_hue($col_base, -30)
 $col2d: darken($col2, 30)
 $col2l: lighten($col2, 30)
 
-$col3:  adjust_hue($col_base, 30)
+$col3:  adjust_hue($col_base, -90)
 $col3d: darken($col3, 30)
 $col3l: lighten($col3, 30)
 
@@ -73,7 +73,7 @@ $screen-large: 1140px
 
 a,
 a:visited
-  color: $col3
+  color: $col1
   text-decoration: none
 
 .round
@@ -85,14 +85,15 @@ html
 
 body
   font: 16px Helvetica, Helvetica Neue, sans-serif
-  margin: 0 auto
-  padding: $x
+  margin: $x auto
+  padding: 0
 
   @media only screen and (min-width: $screen-large)
     max-width: 1000px
 
   @media only screen and (max-width: $screen-small)
     padding: 0
+    margin: 0
 
 
 html,
@@ -107,8 +108,13 @@ textarea
   @extend a:hover
 
 section.intro
+  background: $col2l
+
+section.content
   background: $col3l
-  margin-top: $x
+
+section.outro
+  background: $col2l
 
 
 /* ==============
@@ -166,18 +172,21 @@ article aside
 header,
 footer,
 article aside
-  background: $col2
+  background: $col1d
   @extend %clearfix
 
 header,
 footer
   @extend .wrapper
 
-header > h1
+header > h1,
+footer
   color: white
-  padding: 0 $x
   +narrowpaddingonsmallscreen
   //@media only screen and (max-width: $screen-small)
+
+header > h1
+  padding: 0 $x
   margin-top: 0
 
 footer
@@ -186,8 +195,8 @@ footer
 footer a
   padding: $x
 
-article
-  min-height: 30 * $x
+article > section.content
+  min-height: 20 * $x
 
 /* MODULES INDEX */
 
@@ -239,10 +248,12 @@ article
   /* ====================
    *  WIDE: CSS3 Effects
    * ====================
+  body
+    +shadow(0 5px 10px #aaa)
+
   header,
   footer
     +clearfix
-    +shadow(0 5px 10px #aaa)
   /* ============
    *  WIDE: Menu
    * ============
