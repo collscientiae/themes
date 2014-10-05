@@ -15,10 +15,24 @@
 </section>
 
 <section class="outro">
-    <h3>See Also</h3>
-    <div class="seealso">
-    {{ doc.seealso }}
-    </div>
+{% if doc.seealso|length > 0 %}
+<h3>See Also</h3>
+<ul class="seealso">
+{% for document in doc.seealso %}
+    <li><a href="../{{ doc.namespace }}/{{ document.docid }}.html">{{ document.title }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if doc.backlinks|length > 0 %}
+<h3>Backlinks</h3>
+<ul class="backlinks">
+{% for document in doc.backlinks %}
+    <li><a href="../{{ doc.namespace }}/{{ document.docid }}.html">{{ document.title }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 </section>
 
 {% endblock %}
