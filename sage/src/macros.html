@@ -1,0 +1,10 @@
+{% macro document_list(title, documents) -%}
+{%- if documents|length > 0 -%}
+    <h3>{{  title }}</h3>
+    <ul>
+    {% for d in documents %}
+        <li><a href="../{{ d.namespace }}/{{ d.docid }}.html">{{ d.title }}</a></li>
+    {% endfor %}
+    </ul>
+{%- endif -%}
+{%- endmacro %}
