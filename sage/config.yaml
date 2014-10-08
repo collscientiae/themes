@@ -1,9 +1,1 @@
-# this configuration is inserted into the global
-# space of variables for the jinja2 templating engine.
 
-sage: Sage Mathematical Software System
-sage_url: http://www.sagemath.org
-
-test1: this is the value of the test variable 1
-
-google_analytics: UA-66100-13
