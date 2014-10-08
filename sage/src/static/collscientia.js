@@ -22,6 +22,25 @@
     }
 }());
 
+collscientia = {
+    "include" : function() {
+        $("section[include]").each(function () {
+            var $this = $(this);
+            var url = $this.attr("include");
+            url = "../" + url + ".html section.content";
+            console.log("URL: " + url);
+            $this.load(url,
+                function (response, status, xhr) {
+                    if (status == "error") {
+                        var msg = "Sorry but there was an error: ";
+                        $this.html(msg + xhr.status + " " + xhr.statusText);
+                    }
+
+                });
+        });
+    }
+};
+
 function initMathjax() {
     var head = document.getElementsByTagName("head")[0], script;
     var proto = /^http:/.test(document.location) ? 'http' : 'https';
@@ -32,7 +51,7 @@ function initMathjax() {
         "  extensions: ['tex2jax.js','fp.js','asciimath2jax.js'],\n" +
         "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
         "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
-        "  asciimath2jax: { delimiters: [['``','``']]  },\n" +
+        "  asciimath2jax: { delimiters: [['\\\'\\\'','\\\'\\\'']]  },\n" +
         "  TeX: {extensions: ['autoload-all.js']}\n" +
         "});";
     head.appendChild(script);
@@ -62,5 +81,6 @@ function googleAnalytics() {
     }
 }
 
+$(collscientia.include);
 $(googleAnalytics);
 $(initMathjax);
