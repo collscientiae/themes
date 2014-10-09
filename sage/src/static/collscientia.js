@@ -81,6 +81,34 @@ function googleAnalytics() {
     }
 }
 
+function initSageCell() {
+    sagecell.loadMathJax  = false;
+
+    sagecell.init(function () {
+        document.head.appendChild(
+            sagecell.util.createElement("link",
+                {rel: "stylesheet", href: "../static/sagecell_overrides.css"}));
+    });
+
+    sagecell.makeSagecell({
+        inputLocation: 'div.cell-sage',
+        hide: ["permalink", "editorToggle"],
+        evalButtonText: 'Evaluate'});
+
+    sagecell.makeSagecell({
+        inputLocation: 'div.cell-python',
+        languages: ["python"],
+        hide: ["permalink", "editorToggle"],
+        evalButtonText: 'Evaluate'});
+
+    sagecell.makeSagecell({
+        inputLocation: 'div.cell-r',
+        languages: ["r"],
+        hide: ["permalink", "editorToggle"],
+        evalButtonText: 'Evaluate'});
+}
+
 $(collscientia.include);
-$(googleAnalytics);
 $(initMathjax);
+$(initSageCell);
+$(googleAnalytics);

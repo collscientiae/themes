@@ -80,11 +80,14 @@ a:visited
   +border-radius($x)
 
 html
-  font-size: 1em
-  line-height: 1.1
+  padding: 0
+  margin: 0
 
 body
-  font: 16px Helvetica, Helvetica Neue, sans-serif
+  font:
+    family: Helvetica, Helvetica Neue, sans-serif
+    size: 100%
+  line-height: 1.1
   margin: $x auto
   padding: 0
 
@@ -140,6 +143,9 @@ nav a
     background: $col1d
   background: $col1
 
+/* Sage Cell Overrides */
+.sagecell_sessionOutput
+  border: 1px solid gray
 
 /* ==============
  *  MOBILE: Main

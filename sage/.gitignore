@@ -1,2 +1,2 @@
-src/static/style.css
-src/static/style.css.map
+src/static/*.css
+src/static/*.css.map

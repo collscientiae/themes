@@ -11,6 +11,8 @@
     {% set title = title|default("Index") %}
     <title>{%- if title %}{{ title }} - {% endif -%}CollScientia</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
+{#  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -40,7 +42,7 @@
     <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 Licensed</a>
 </footer>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src='{{ "static/collscientia.js"|prefix }}' type="text/javascript"></script>
+<script src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
 </body>
 </html>
