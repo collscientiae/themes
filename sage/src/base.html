@@ -3,16 +3,18 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     {% if google_analytics -%}
     <meta name="google_analytics" account="{{ google_analytics }}" />
     {%- endif %}
+    <meta name="X-DOC-ROOT-HASH" hash="{{ doc_root_hash }}" />
     {% set title = title|default("Index") %}
     <title>{%- if title %}{{ title }} - {% endif -%}CollScientia</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
 {#  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://raw.githubusercontent.com/julien-maurel/jQuery-Storage-API/master/jquery.storageapi.min.js"></script>
 </head>
 <body>
 

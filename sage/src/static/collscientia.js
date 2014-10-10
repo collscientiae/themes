@@ -22,14 +22,65 @@
     }
 }());
 
+jQuery.fn.tag = function() {
+  return this.prop("tagName").toLowerCase();
+};
+
+jQuery.fn.loadKnowl = function (knowlID, label, limit, callback) {
+
+    var selector, response, self = this;
+    var url = url = "../" + knowlID + ".html";
+    var selector = "section.content";
+    if (typeof label !== "undefined") {
+        selector += " [label='" + label + "']";
+    }
+
+    // If we have elements to modify, make the request
+    if (self.length == 0) { return this; }
+
+    jQuery.ajax({
+        url: url,
+        dataType: "html"
+    }).done(function (responseText) {
+        // Save response for use in complete callback
+        response = arguments;
+        if (typeof label == "undefined") {
+            var $knowl = $(jQuery.parseHTML(responseText)).find(selector);
+        } else {
+            var $knowl = $("<div>");
+            var $start = $(jQuery.parseHTML(responseText)).find(selector);
+            $knowl.append($start.clone());
+            var endtag = $start.tag();
+            $start.nextUntil(endtag).each(function (idx) {
+                // console.log(idx, $(this).html());
+                if (typeof limit == "undefined" || idx < limit) {
+                    $knowl.append($(this).clone());
+                }
+            });
+        }
+        self.html($knowl);
+    }).complete(callback && function (jqXHR, status) {
+        self.each(callback, response || [jqXHR.responseText, status, jqXHR]);
+    });
+    return this;
+};
+
 collscientia = {
+    "storage" : undefined,
+    "init" : function() {
+        var rhash = document.querySelector("meta[name='X-DOC-ROOT-HASH']").hash;
+        collscientia.storage = $.initNamespaceStorage("collscientia-" + rhash).localStorage;
+    },
     "include" : function() {
-        $("section[include]").each(function () {
+        $("div[include]").each(function () {
             var $this = $(this);
-            var url = $this.attr("include");
-            url = "../" + url + ".html section.content";
-            console.log("URL: " + url);
-            $this.load(url,
+            var knowlID = $this.attr("include");
+            var label = $this.attr("label");
+            var limit = $this.attr("limit");
+            if (typeof limit !== "undefined") {
+                limit = parseInt(limit);
+            }
+            $this.loadKnowl(knowlID, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
                         var msg = "Sorry but there was an error: ";
@@ -108,6 +159,7 @@ function initSageCell() {
         evalButtonText: 'Evaluate'});
 }
 
+$(collscientia.init);
 $(collscientia.include);
 $(initMathjax);
 $(initSageCell);
