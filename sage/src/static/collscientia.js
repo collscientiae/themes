@@ -68,8 +68,16 @@ jQuery.fn.loadKnowl = function (knowlID, label, limit, callback) {
 collscientia = {
     "storage" : undefined,
     "init" : function() {
-        var rhash = document.querySelector("meta[name='X-DOC-ROOT-HASH']").hash;
-        collscientia.storage = $.initNamespaceStorage("collscientia-" + rhash).localStorage;
+        // clear storage, if root hash is different
+        var storage = $.initNamespaceStorage("collscientia").localStorage;
+        var rhash = $("meta[name='doc_root_hash']").attr("value");
+        if(typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
+            console.log("clearing local storage");
+            storage.removeAll();
+        }
+        console.log("DOC_ROOT_HASH = " + rhash)
+        storage.set("DOC_ROOT_HASH", rhash);
+        collscientia.storage = storage;
     },
     "include" : function() {
         $("div[include]").each(function () {

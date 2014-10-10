@@ -8,7 +8,7 @@
     {% if google_analytics -%}
     <meta name="google_analytics" account="{{ google_analytics }}" />
     {%- endif %}
-    <meta name="X-DOC-ROOT-HASH" hash="{{ doc_root_hash }}" />
+    <meta name="doc_root_hash" value="{{ doc_root_hash }}" />
     {% set title = title|default("Index") %}
     <title>{%- if title %}{{ title }} - {% endif -%}CollScientia</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
