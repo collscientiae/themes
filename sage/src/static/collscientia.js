@@ -1,5 +1,6 @@
 // Avoid `console` errors in browsers that lack a console.
 (function () {
+    'use strict';
     var method;
     var noop = function () {
     };
@@ -22,13 +23,14 @@
     }
 }());
 
-jQuery.fn.tag = function() {
-  return this.prop("tagName").toLowerCase();
+jQuery.fn.tag = function () {
+    'use strict';
+    return this.prop("tagName").toLowerCase();
 };
 
-jQuery.fn.loadKnowl = function (knowlID, label, limit, callback) {
-
-    var selector, response, self = this;
+jQuery.fn.includeKnowl = function (knowlID, label, limit, callback) {
+    'use strict';
+    var response, self = this;
     var url = url = "../" + knowlID + ".html";
     var selector = "section.content";
     if (typeof label !== "undefined") {
@@ -36,7 +38,9 @@ jQuery.fn.loadKnowl = function (knowlID, label, limit, callback) {
     }
 
     // If we have elements to modify, make the request
-    if (self.length == 0) { return this; }
+    if (self.length == 0) {
+        return this;
+    }
 
     jQuery.ajax({
         url: url,
@@ -65,21 +69,46 @@ jQuery.fn.loadKnowl = function (knowlID, label, limit, callback) {
     return this;
 };
 
-collscientia = {
-    "storage" : undefined,
-    "init" : function() {
+var collscientia = {
+    "storage": undefined,
+    "init": function () {
+        'use strict';
         // clear storage, if root hash is different
         var storage = $.initNamespaceStorage("collscientia").localStorage;
         var rhash = $("meta[name='doc_root_hash']").attr("value");
-        if(typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
+        if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
             console.log("clearing local storage");
             storage.removeAll();
         }
         console.log("DOC_ROOT_HASH = " + rhash)
         storage.set("DOC_ROOT_HASH", rhash);
         collscientia.storage = storage;
+
+        // activate sage cells
+        $("a.activate_cell").on("click", function (event) {
+            event.preventDefault();
+            var cell_id = $(this).attr("target");
+            $(this).remove();
+            collscientia.sagecellify(cell_id);
+        });
+
+        // handle clicks on knowls
+        $("a[knowl]").on("click", function(event) {
+            event.preventDefault();
+            collscientia.handle_knowl($(this));
+        });
     },
-    "include" : function() {
+    "handle_knowl": function($link) {
+        'use strict';
+        var kid = $link.attr("knowl");
+        var url = "../" + kid + ".html";
+        var $knowl = $("<p>")
+            .attr("class", "knowl")
+            .append("knowl: " + kid + " url: " + url);
+        $link.parent().append($knowl);
+    },
+    "include": function () {
+        'use strict';
         $("div[include]").each(function () {
             var $this = $(this);
             var knowlID = $this.attr("include");
@@ -88,7 +117,7 @@ collscientia = {
             if (typeof limit !== "undefined") {
                 limit = parseInt(limit);
             }
-            $this.loadKnowl(knowlID, label, limit,
+            $this.includeKnowl(knowlID, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
                         var msg = "Sorry but there was an error: ";
@@ -97,10 +126,21 @@ collscientia = {
 
                 });
         });
+    },
+    "sagecellify": function (cell_id) {
+        var $cell = $("#" + cell_id)
+        sagecell.makeSagecell({
+            inputLocation: $cell.get(0),
+            languages: [$cell.attr("mode")],
+            hide: ["permalink", "editorToggle"],
+            evalButtonText: 'Evaluate',
+            autoeval: true
+        });
     }
 };
 
 function initMathjax() {
+    'use strict';
     var head = document.getElementsByTagName("head")[0], script;
     var proto = /^http:/.test(document.location) ? 'http' : 'https';
     script = document.createElement("script");
@@ -121,6 +161,7 @@ function initMathjax() {
 }
 
 function googleAnalytics() {
+    'use strict';
     var uaid = document.querySelector("meta[name='google_analytics']").account;
     if (uaid !== null) {
         (function (i, s, o, g, r, a, m) {
@@ -141,31 +182,17 @@ function googleAnalytics() {
 }
 
 function initSageCell() {
-    sagecell.loadMathJax  = false;
+    'use strict';
+
+    sagecell.loadMathJax = false;
 
     sagecell.init(function () {
         document.head.appendChild(
             sagecell.util.createElement("link",
                 {rel: "stylesheet", href: "../static/sagecell_overrides.css"}));
     });
-
-    sagecell.makeSagecell({
-        inputLocation: 'div.cell-sage',
-        hide: ["permalink", "editorToggle"],
-        evalButtonText: 'Evaluate'});
-
-    sagecell.makeSagecell({
-        inputLocation: 'div.cell-python',
-        languages: ["python"],
-        hide: ["permalink", "editorToggle"],
-        evalButtonText: 'Evaluate'});
-
-    sagecell.makeSagecell({
-        inputLocation: 'div.cell-r',
-        languages: ["r"],
-        hide: ["permalink", "editorToggle"],
-        evalButtonText: 'Evaluate'});
 }
+
 
 $(collscientia.init);
 $(collscientia.include);
