@@ -1,0 +1,75 @@
+/* ==========================================================================
+ * VARIABLE DECLARATION
+ * ==========================================================================
+
+// smallest unit for spacing, round borders, etc.
+$x: 16px
+
+// colors
+$col_base: #5c5ccc
+
+$col1:  adjust_hue($col_base, 0)
+$col1d: darken($col1, 30)
+$col1l: lighten($col1, 30)
+
+$col2:  adjust_hue($col_base, -30)
+$col2d: darken($col2, 30)
+$col2l: lighten($col2, 30)
+
+$col3:  adjust_hue($col_base, -90)
+$col3d: darken($col3, 30)
+$col3l: lighten($col3, 30)
+
+// @media
+$screen-small: 480px
+$screen-medium: 768px
+$screen-large: 1140px
+
+/* ==========================================================================
+ * MIXIN DEFINITIONS
+ * ==========================================================================
+
+=border-radius($radius)
+  -webkit-border-radius: $radius
+  -moz-border-radius:    $radius
+  -ms-border-radius:     $radius
+  border-radius:         $radius
+
+=round-bottom($radius)
+  border-bottom-left-radius:           $radius
+  -moz-border-radius-bottomleft:       $radius
+  -webkit-border-bottom-left-radius:   $radius
+  border-bottom-right-radius:          $radius
+  -moz-border-radius-bottomright:      $radius
+  -webkit-border-bottom-right-radius:  $radius
+
+=round-top($radius)
+  border-top-left-radius:           $radius
+  -moz-border-radius-topleft:       $radius
+  -webkit-border-top-left-radius:   $radius
+  border-top-right-radius:          $radius
+  -moz-border-radius-topright:      $radius
+  -webkit-border-top-right-radius:  $radius
+
+=shadow($style)
+  -webkit-box-shadow:  $style
+  -moz-box-shadow:  $style
+  box-shadow: $style
+
+// that's a mixin and below a placeholder via %
+// ALWAYS use it as @extend %clearfix, not as an include!
+// (unless you are inside an @media query, then "+clearfix" without @extend)
+=clearfix
+  &:after
+    content: ""
+    display: table
+    clear: both
+
+%clearfix
+  +clearfix
+
+=narrowpaddingonsmallscreen
+  @media only screen and (max-width: $screen-small)
+    padding:
+      left: $x / 2
+      right: $x / 2

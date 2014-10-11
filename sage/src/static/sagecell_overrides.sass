@@ -1,6 +1,18 @@
+@import global
+
+code.sagecell
+  @media only screen and (max-width: $screen-medium)
+    display: block
+  @include clearfix
+
 .sagecell_sessionOutput
-  border: 1px solid gray
+  border: 1px solid black
   background: white
+  &.sagecell_active
+    border: 1px solid orange
+
+  img:not(.sagecell_spinner)
+    width: 100%
 
 .sagecell .ui-widget
   font:
@@ -14,3 +26,24 @@
 
 .sagecell button.sagecell_evalButton
   cursor: pointer
+
+.sagecell-templates.hide
+  display: none
+
+.sagecell_input,
+.sagecell_output_elements
+  width: 49%
+  padding-top: 0
+  @media only screen and (max-width: $screen-medium)
+    display: block
+    width: inherit
+
+.sagecell_input
+  float: left
+
+.sagecell_output_elements
+  float: right
+  margin-top: 0
+
+.sagecell_sessionOutput
+  margin-top: 0
