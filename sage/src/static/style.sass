@@ -44,6 +44,22 @@ $screen-large: 1140px
   -ms-border-radius:     $radius
   border-radius:         $radius
 
+=round-bottom($radius)
+  border-bottom-left-radius:           $radius
+  -moz-border-radius-bottomleft:       $radius
+  -webkit-border-bottom-left-radius:   $radius
+  border-bottom-right-radius:          $radius
+  -moz-border-radius-bottomright:      $radius
+  -webkit-border-bottom-right-radius:  $radius
+
+=round-top($radius)
+  border-top-left-radius:           $radius
+  -moz-border-radius-topleft:       $radius
+  -webkit-border-top-left-radius:   $radius
+  border-top-right-radius:          $radius
+  -moz-border-radius-topright:      $radius
+  -webkit-border-top-right-radius:  $radius
+  
 =shadow($style)
   -webkit-box-shadow:  $style
   -moz-box-shadow:  $style
@@ -231,9 +247,100 @@ article > section.content
 /*
  * KNOWLS
  */
-.knowl
-  border-left: $x solid $col2d
-  padding-left: $x
+
+$kx: $x/2
+$kcol: $col3
+
+.knowl-content
+  padding: $kx $kx 0 $kx
+  border-bottom-left-radius: $kx
+  -moz-border-radius-bottomleft: $kx
+
+.knowl-content h1
+  margin: 0px 0px $kx 0px
+
+.knowl-content h2
+  margin: 0px 0px $kx/2 0px
+
+.knowl p
+  margin-bottom: 0
+  margin-top: $kx
+
+*[knowl]
+  display: inline
+  border-bottom: 1px dotted $kcol
+  color: $kcol
+  cursor: pointer
+  +round-top($kx / 2)
+  margin: 3px 0 0 0
+
+  &:hover,
+  &.active
+    border-bottom: 1px solid $kcol
+    background: $kcol
+    color: #006
+    padding: 0
+    margin: 0 0 0 0
+
+
+div > *[knowl],
+p > *[knowl]
+  position: relative
+
+.knowl-error
+  color: red
+  border-bottom: 0
+
+.knowl-output
+  background: $col3l
+  border: $kx solid $kcol
+  border-top: none
+  +round-bottom($kx)
+  padding: 0 $kx $kx $kx
+  margin:
+    top: 10px
+    bottom: 0px
+    right: 0px
+
+.knowl-output .knowl-output,
+.knowl-output .knowl-output.loading
+  margin-left: 0
+  margin-right: 0
+
+.knowl-output.loading
+  color: grey
+  font-style: italic
+  font-size: small
+
+.knowl-output h1,
+.knowl-output h2
+  margin: 5px 0
+
+.knowl-output h1
+  color: #006
+
+.knowl-output h2
+  color: #006
+
+.knowl-output a
+  display: inline
+
+.knowl-footer
+  text-align: right
+  height: $kx
+  position: relative
+  bottom: $kx + 1px
+  font-size: $kx + 1
+  line-height: $kx
+  background: $kcol
+  color: white
+  padding: 0 $kx
+  margin:  0 $kx
+  & a
+    color: white
+  & a:hover
+    background: none
+    color: lightgray
 
 
 /* ==========================================================================

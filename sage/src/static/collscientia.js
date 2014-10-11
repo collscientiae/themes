@@ -70,6 +70,7 @@ jQuery.fn.includeKnowl = function (knowlID, label, limit, callback) {
 };
 
 var collscientia = {
+    "knowl_id_counter": 0,
     "storage": undefined,
     "init": function () {
         'use strict';
@@ -93,19 +94,186 @@ var collscientia = {
         });
 
         // handle clicks on knowls
-        $("a[knowl]").on("click", function(event) {
+        $("body").on("click", "*[knowl]", function (event) {
             event.preventDefault();
-            collscientia.handle_knowl($(this));
+            var $knowl = $(this);
+            collscientia.handle_knowl($knowl);
         });
     },
-    "handle_knowl": function($link) {
+    "handle_knowl": function ($link) {
         'use strict';
-        var kid = $link.attr("knowl");
-        var url = "../" + kid + ".html";
-        var $knowl = $("<p>")
-            .attr("class", "knowl")
-            .append("knowl: " + kid + " url: " + url);
-        $link.parent().append($knowl);
+        //var kid = $link.attr("knowl");
+        //var url = "../" + kid + ".html";
+        //var $knowl = $("<p>")
+        //    .attr("class", "knowl")
+        //    .append("knowl: " + kid + " url: " + url);
+        //$link.parent().append($knowl);
+
+        var knowl_id = $link.attr("knowl");
+        // the uid is necessary if we want to reference the same content several times
+
+        // each knowl "link" needs to have a unique ID
+        if (!$link.attr("knowl-uid")) {
+            $link.attr("knowl-uid", collscientia.knowl_id_counter);
+            collscientia.knowl_id_counter++;
+        }
+        var uid = $link.attr("knowl-uid");
+        var output_id = '#knowl-output-' + uid;
+        var $output_id = $(output_id);
+        var url = "../" + knowl_id + ".html";
+        // create the element for the content, insert it after the one where the
+        // knowl element is included (e.g. inside a <h1> tag) (sibling in DOM)
+        var idtag = "id='" + output_id.substring(1) + "'";
+        //var kid = "id='kuid-" + uid + "'";
+        // if we already have the content, toggle visibility
+        if ($output_id.length > 0) {
+            $("#kuid-" + uid).slideToggle("fast");
+            $link.toggleClass("active");
+
+            // otherwise download it or get it from the cache
+        } else {
+            //var knowl = "<div class='knowl' " + kid +
+            //    "><div class='knowl'><div class='knowl-content' " +
+            //    idtag + ">loading '" + knowl_id + "'</div><div class='knowl-footer'>"
+            //    + knowl_id + "</div></div></div>";
+
+            var $knowl = $("<div>")
+                .attr("class", "knowl")
+                .attr("id", "kuid-" + uid)
+                .append($("<div>")
+                    .addClass("knowl-output")
+                    .attr("id", output_id.substring(1))
+                    .text("loading ..."))
+                .append($("<div>")
+                    .addClass("knowl-footer")
+                    .html($("<a>")
+                        .attr("href", url)
+                        .text(knowl_id)));
+
+            // check, if the knowl is inside a td or th in a table. otherwise assume its
+            // properly sitting inside a <div> or <p>
+            if ($link.parent().is("td") || $link.parent().is("th")) {
+                // assume we are in a td or th tag, go 2 levels up
+                var cols = $link.parent().parent().children().length;
+                $link.parents().eq(1).after(
+                    // .parents().eq(1) was formerly written as .parent().parent()
+                    // "<tr><td colspan='" + cols + "'>" + knowl + "</td></tr>");
+                    $knowl.wrap("<tr><td colspan='" + cols + "'></td></tr>"));
+            } else if ($link.parent().is("li")) {
+                $link.parent().after($knowl);
+            }
+            // the following is implemented stupidly, but I had to do it quickly.
+            // someone please replace it with an appropriate loop -- DF
+            // the '.is("p")' is for the first paragraph of a theorem or proof
+            //also, after you close the knowl, it still has a shaded background
+            else if ($link.parent().parent().is("li")) {
+                $link.parent().parent().after($knowl);
+            }
+            else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
+                $link.parent().after($knowl);
+            } else if ($link.parent().parent().css('display') == "block" || $link.parent().parent().is("p")) {
+                $link.parent().parent().after($knowl);
+            } else {
+                $link.parent().parent().parent().after($knowl);
+            }
+
+            //else {
+            //      // $link.parent().after(knowl);
+            //      var theparents=$link.parents();
+            //      var ct=0;
+            //     while (theparents[ct] != "block" && ct<2)
+            //       ct++;
+            //      ct=0;
+            //      //$link.parents().eq(ct).after(knowl);
+            //      $link.parents().eq(ct).after(theparents[1]);
+            //    }
+
+            // "select" where the output is and get a hold of it
+            var $output = $(output_id);
+            var $knowl = $("#kuid-" + uid);
+            $output.addClass("loading");
+            $knowl.hide();
+            // DRG: inline code
+            if ($link.attr("class") == 'internal') {
+                $output.html($link.attr("value"));
+                $knowl.hide();
+                $link.addClass("active");
+                if (window.MathJax == undefined) {
+                    $knowl.slideDown("slow");
+                } else {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+                    MathJax.Hub.Queue([function () {
+                        $knowl.slideDown("slow");
+                    }]);
+                }
+            } else if ($link.attr("class") == 'id-ref') {
+                $output.html($("#".concat($link.attr("refid"))).text());
+                $knowl.hide();
+                $link.addClass("active");
+                if (window.MathJax == undefined) {
+                    $knowl.slideDown("slow");
+                } else {
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+                    MathJax.Hub.Queue([function () {
+                        $knowl.slideDown("slow");
+                    }]);
+                }
+            } else {
+                // Get code from server.
+                $output.includeKnowl(knowl_id, undefined, undefined,
+                    function (response, status, xhr) {
+                        $output.removeClass("loading");
+                        if (status == "error") {
+                            $link.removeClass("active");
+                            $output.html("<div class='knowl-output error'>ERROR: " + xhr.status + " " + xhr.statusText + '</div>');
+                            $output.show();
+                        } else if (status == "timeout") {
+                            $link.removeClass("active");
+                            $output.html("<div class='knowl-output error'>ERROR: timeout. " + xhr.status + " " + xhr.statusText + '</div>');
+                            $output.show();
+                        } else {
+                            $knowl.hide();
+                            $link.addClass("active");
+                        }
+                        // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
+                        if (window.MathJax == undefined) {
+                            $knowl.slideDown("slow");
+                        } else {
+                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+                            MathJax.Hub.Queue([function () {
+                                $knowl.slideDown("slow");
+                            }]);
+                        }
+                    }
+                );
+                //$output.load(url, "section.content",
+                //    function (response, status, xhr) {
+                //        $knowl.removeClass("loading");
+                //        if (status == "error") {
+                //            $link.removeClass("active");
+                //            $output.html("<div class='knowl-output error'>ERROR: " + xhr.status + " " + xhr.statusText + '</div>');
+                //            $output.show();
+                //        } else if (status == "timeout") {
+                //            $link.removeClass("active");
+                //            $output.html("<div class='knowl-output error'>ERROR: timeout. " + xhr.status + " " + xhr.statusText + '</div>');
+                //            $output.show();
+                //        } else {
+                //            $knowl.hide();
+                //            $link.addClass("active");
+                //        }
+                //        // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
+                //        if (window.MathJax == undefined) {
+                //            $knowl.slideDown("slow");
+                //        } else {
+                //            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
+                //            MathJax.Hub.Queue([function () {
+                //                $knowl.slideDown("slow");
+                //            }]);
+                //        }
+                //    }
+                //);
+            }
+        }
     },
     "include": function () {
         'use strict';
