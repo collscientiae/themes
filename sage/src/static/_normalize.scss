@@ -15,7 +15,6 @@ figcaption,
 figure,
 footer,
 header,
-hgroup,
 main,
 nav,
 section,
@@ -209,7 +208,7 @@ mark {
 
 p,
 pre {
-    margin: 1em 0;
+    margin: $x 0 0 0 ;
 }
 
 /**

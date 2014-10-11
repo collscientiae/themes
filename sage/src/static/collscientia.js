@@ -81,16 +81,20 @@ var collscientia = {
             console.log("clearing local storage");
             storage.removeAll();
         }
-        console.log("DOC_ROOT_HASH = " + rhash)
+        console.log("DOC_ROOT_HASH = " + rhash);
         storage.set("DOC_ROOT_HASH", rhash);
         collscientia.storage = storage;
 
         // activate sage cells
-        $("a.activate_cell").on("click", function (event) {
+        $("body").on("click", "a.activate_cell", function (event) {
             event.preventDefault();
             var cell_id = $(this).attr("target");
-            $(this).remove();
-            collscientia.sagecellify(cell_id);
+            var $activate_link = $(this);
+            $activate_link.text("loading ...");
+            $activate_link.removeAttr("target");
+            collscientia.sagecellify(cell_id, function() {
+                $activate_link.hide();
+            });
         });
 
         // handle clicks on knowls
@@ -132,10 +136,6 @@ var collscientia = {
 
             // otherwise download it or get it from the cache
         } else {
-            //var knowl = "<div class='knowl' " + kid +
-            //    "><div class='knowl'><div class='knowl-content' " +
-            //    idtag + ">loading '" + knowl_id + "'</div><div class='knowl-footer'>"
-            //    + knowl_id + "</div></div></div>";
 
             var $knowl = $("<div>")
                 .attr("class", "knowl")
@@ -150,14 +150,12 @@ var collscientia = {
                         .attr("href", url)
                         .text(knowl_id)));
 
-            // check, if the knowl is inside a td or th in a table. otherwise assume its
-            // properly sitting inside a <div> or <p>
+            // check, if the knowl is inside a td or th in a table.
+            // otherwise assume its properly sitting inside a <div> or <p>
             if ($link.parent().is("td") || $link.parent().is("th")) {
                 // assume we are in a td or th tag, go 2 levels up
                 var cols = $link.parent().parent().children().length;
                 $link.parents().eq(1).after(
-                    // .parents().eq(1) was formerly written as .parent().parent()
-                    // "<tr><td colspan='" + cols + "'>" + knowl + "</td></tr>");
                     $knowl.wrap("<tr><td colspan='" + cols + "'></td></tr>"));
             } else if ($link.parent().is("li")) {
                 $link.parent().after($knowl);
@@ -177,20 +175,8 @@ var collscientia = {
                 $link.parent().parent().parent().after($knowl);
             }
 
-            //else {
-            //      // $link.parent().after(knowl);
-            //      var theparents=$link.parents();
-            //      var ct=0;
-            //     while (theparents[ct] != "block" && ct<2)
-            //       ct++;
-            //      ct=0;
-            //      //$link.parents().eq(ct).after(knowl);
-            //      $link.parents().eq(ct).after(theparents[1]);
-            //    }
-
-            // "select" where the output is and get a hold of it
-            var $output = $(output_id);
-            var $knowl = $("#kuid-" + uid);
+            var $output = $knowl.find(output_id);
+            //var $knowl = $("#kuid-" + uid);
             $output.addClass("loading");
             $knowl.hide();
             // DRG: inline code
@@ -295,14 +281,16 @@ var collscientia = {
                 });
         });
     },
-    "sagecellify": function (cell_id) {
-        var $cell = $("#" + cell_id)
+    "sagecellify": function (cell_id, callback) {
+        'use strict';
+        var $cell = $("#" + cell_id);
         sagecell.makeSagecell({
             inputLocation: $cell.get(0),
             languages: [$cell.attr("mode")],
             hide: ["permalink", "editorToggle"],
             evalButtonText: 'Evaluate',
-            autoeval: true
+            autoeval: true,
+            callback: callback
         });
     }
 };
@@ -351,9 +339,7 @@ function googleAnalytics() {
 
 function initSageCell() {
     'use strict';
-
     sagecell.loadMathJax = false;
-
     sagecell.init(function () {
         document.head.appendChild(
             sagecell.util.createElement("link",
