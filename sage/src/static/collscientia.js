@@ -92,7 +92,7 @@ var collscientia = {
             var $activate_link = $(this);
             $activate_link.text("loading ...");
             $activate_link.removeAttr("target");
-            collscientia.sagecellify(cell_id, function() {
+            collscientia.sagecellify(cell_id, function () {
                 $activate_link.hide();
             });
         });
@@ -206,21 +206,24 @@ var collscientia = {
                 }
             } else {
                 // Get code from server.
+                console.log("includeKnowl: ID=" + knowl_id);
                 $output.includeKnowl(knowl_id, undefined, undefined,
                     function (response, status, xhr) {
                         $output.removeClass("loading");
                         if (status == "error") {
                             $link.removeClass("active");
-                            $output.html("<div class='knowl-output error'>ERROR: " + xhr.status + " " + xhr.statusText + '</div>');
+                            $output.html("<div class='error'>Knowl Error 1: ID =" + knowl_id + " / " +
+                            xhr.status + " " + xhr.statusText + '</div>');
                             $output.show();
                         } else if (status == "timeout") {
                             $link.removeClass("active");
-                            $output.html("<div class='knowl-output error'>ERROR: timeout. " + xhr.status + " " + xhr.statusText + '</div>');
+                            $output.html("<div class='error'>Knowl timeout: " + xhr.status + " " + xhr.statusText + '</div>');
                             $output.show();
                         } else {
                             $knowl.hide();
                             $link.addClass("active");
                         }
+                        collscientia.include($output);
                         // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
                         if (window.MathJax == undefined) {
                             $knowl.slideDown("slow");
@@ -261,25 +264,42 @@ var collscientia = {
             }
         }
     },
-    "include": function () {
+    "include": function ($where) {
         'use strict';
-        $("div[include]").each(function () {
+
+        //if (typeof $where === "undefined") {
+            $where = $("div[include]");
+        //} else {
+        //    $where = $where.find("div[include]");
+        //}
+
+        $where.each(function () {
+            'use strict';
+
             var $this = $(this);
+            if ($this.attr("status") == "done") {
+                return;
+            }
             var knowlID = $this.attr("include");
             var label = $this.attr("label");
             var limit = $this.attr("limit");
             if (typeof limit !== "undefined") {
                 limit = parseInt(limit);
             }
+            console.log("knowlID: ", knowlID);
             $this.includeKnowl(knowlID, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
-                        var msg = "Sorry but there was an error: ";
+                        var msg = "Includes Error: ";
                         $this.html(msg + xhr.status + " " + xhr.statusText);
+                    } else {
+                        // all good
+                        $this.attr("status", "done");
                     }
-
-                });
+                }
+            );
         });
+
     },
     "sagecellify": function (cell_id, callback) {
         'use strict';

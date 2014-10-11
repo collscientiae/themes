@@ -177,6 +177,7 @@ a.activate_cell
 
 $kx: $x/2
 $kcol: $col3
+$kcold: $col3d
 
 .knowl-content
   padding: $kx $kx 0 $kx
@@ -194,18 +195,25 @@ $kcol: $col3
 *[knowl]
   display: inline
   border-bottom: 1px dotted $kcol
-  color: $kcol
+  color: $kcold
   cursor: pointer
   +round-top($kx / 2)
   margin: 3px 0 0 0
+  +transition(padding .76s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
   &:hover,
   &.active
     border-bottom: 1px solid $kcol
     background: $kcol
-    color: #006
+    color: black
     padding: 0
     margin: 0 0 0 0
+
+  &.active
+    padding:
+      left: $x / 2
+      right: $x / 2
+
 
 
 div > *[knowl],
@@ -252,11 +260,13 @@ p > *[knowl]
 
 .knowl-footer
   text-align: right
-  height: $kx
+  height: $kx + 2px
   position: relative
-  bottom: $kx + 1px
-  font-size: $kx + 1
-  line-height: $kx
+  bottom: $kx + 2px
+  font:
+    weight: bold
+    size: $kx + 3
+  line-height: $kx + 1px
   background: $kcol
   color: white
   padding: 0 $kx
