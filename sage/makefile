@@ -1,14 +1,15 @@
-.PHONY=build clean
+.PHONY=build clean sass
 
-build: clean
-	sass --no-cache \
-         --style=compressed \
-         src/static/style.sass:src/static/style.css
-	sass --no-cache \
-         --style=compressed \
-         src/static/sagecell_overrides.sass:src/static/sagecell_overrides.css
+SASS=sass --no-cache --style=compressed
 
+CSS  = $(filter-out src/static/_%.css,\
+       $(patsubst %.sass,%.css,$(wildcard src/static/*.sass)))
+
+build: $(CSS)
+
+%.css: %.sass
+	$(SASS) $<:$@
 
 clean:
-	-$(RM) src/static/style.css
-	-$(RM) src/static/style.*.map
+	-$(RM) $(CSS)
+	-$(RM) $(patsubst %.css,%.css.map,$(CSS))
