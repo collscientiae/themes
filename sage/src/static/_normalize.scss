@@ -208,18 +208,20 @@ mark {
 
 p,
 pre {
-    margin: $x 0 0 0 ;
+    margin: $x 0;
 }
 
 /**
  * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
  */
 
+// https://www.google.com/fonts#UsePlace:use/Collection:Dosis:400,700|Ubuntu+Mono:400,700,400italic,700italic
+
 code,
 kbd,
 pre,
 samp {
-    font-family: monospace;
+    font-family: "Ubuntu Mono", monospace
 }
 
 /**

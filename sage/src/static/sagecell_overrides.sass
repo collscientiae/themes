@@ -14,7 +14,7 @@ div.sagecell_input button.sagecell_evalButton
   border: 1px solid black
   background: white
   &.sagecell_active
-    border: 1px solid orange
+    border: 1px solid black
 
   img:not(.sagecell_spinner)
     width: 100%
@@ -52,3 +52,15 @@ div.sagecell_input button.sagecell_evalButton
 
 .sagecell_sessionOutput
   margin-top: 0
+
+.sagecell_output
+  .sagecell_interactOutput
+    padding: 0
+  .sagecell_interactControlCell
+    padding-top: 10px
+  .sagecell_interactContainer
+    border: none
+    padding: 0
+
+.CodeMirror
+  font-family: "Ubuntu Mono", monospace

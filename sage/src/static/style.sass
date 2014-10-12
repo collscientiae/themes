@@ -25,15 +25,19 @@ html
 
 body
   font:
-    // https://www.google.com/fonts#UsePlace:use/Collection:Marvel:400,700,400italic,700italic
-    family: 'Marvel', sans-serif
+    // https://www.google.com/fonts#UsePlace:use/Collection:Dosis:400,700|Ubuntu+Mono:400,700,400italic,700italic
+    family: 'Dosis', sans-serif
     size: 100%
-  line-height: 1.1
-  margin: $x auto
+  // line-height: 1.1
+  margin: 0 auto
   padding: 0
 
-  @media only screen and (min-width: $screen-large)
-    max-width: 1200px
+  //@media only screen and (min-width: 1200px)
+  max-width: 1200px
+
+  @media only screen and (max-width: $screen-medium)
+    padding: 0
+    margin: 0
 
   @media only screen and (max-width: $screen-small)
     padding: 0
@@ -132,8 +136,8 @@ footer
   //@media only screen and (max-width: $screen-small)
 
 header > h1
-  padding: 0 $x
-  margin-top: 0
+  padding: $x 0 0 0
+  margin: 0 0 $x $x
 
 footer
   min-height: 5 * $x
@@ -199,7 +203,7 @@ $kcold: $col3d
   cursor: pointer
   +round-top($kx / 2)
   margin: 3px 0 0 0
-  +transition(padding .76s cubic-bezier(0.445, 0.05, 0.55, 0.95))
+  +transition(padding .5s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
   &:hover,
   &.active
@@ -211,8 +215,8 @@ $kcold: $col3d
 
   &.active
     padding:
-      left: $x / 2
-      right: $x / 2
+      left: .5em
+      right: .5em
 
 
 
@@ -231,7 +235,7 @@ p > *[knowl]
   +round-bottom($kx)
   padding: 0 $kx $kx $kx
   margin:
-    top: 3px
+    top: 0
     bottom: 0px
     right: 0px
 
@@ -308,10 +312,8 @@ p > *[knowl]
   header,
   footer
     +clearfix
-  /* ============
-   *  WIDE: Menu
-   * ============
   header > h1
+    bottom: 0
     float: left
   header > nav
     float: right
