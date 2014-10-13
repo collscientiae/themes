@@ -157,8 +157,8 @@ var collscientiae = {
             if ($link.parent().is("td") || $link.parent().is("th")) {
                 // assume we are in a td or th tag, go 2 levels up
                 var cols = $link.parent().parent().children().length;
-                $link.parents().eq(1).after(
-                    $knowl.wrap("<tr><td colspan='" + cols + "'></td></tr>"));
+                var $kwrapped = $("<tr>").append($("<td>").attr("colspan", cols).append($knowl));
+                $link.parents().eq(1).after($kwrapped);
             } else if ($link.parent().is("li")) {
                 $link.parent().after($knowl);
             }
