@@ -227,15 +227,9 @@ var collscientia = {
                         }
                         collscientia.include($output);
                         collscientia.create_sagecell_links($output);
-                        // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
-                        if (window.MathJax == undefined) {
+                        collscientia.process_mathjax($output, function() {
                             $knowl.slideDown("slow");
-                        } else {
-                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
-                            MathJax.Hub.Queue([function () {
-                                $knowl.slideDown("slow");
-                            }]);
-                        }
+                        });
                     }
                 );
                 //$output.load(url, "section.content",
@@ -267,11 +261,17 @@ var collscientia = {
             }
         }
     },
+    "process_mathjax": function($where, callback) {
+        if (window.MathJax != undefined) {
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $where.get(0)]);
+            MathJax.Hub.Queue([callback]);
+        }
+    },
     "include": function ($where) {
         'use strict';
 
         //if (typeof $where === "undefined") {
-            $where = $("div[include]");
+        $where = $("div[include]");
         //} else {
         //    $where = $where.find("div[include]");
         //}
@@ -283,14 +283,14 @@ var collscientia = {
             if ($this.attr("status") == "done") {
                 return;
             }
-            var knowlID = $this.attr("include");
+            var include_id = $this.attr("include");
             var label = $this.attr("label");
             var limit = $this.attr("limit");
             if (typeof limit !== "undefined") {
                 limit = parseInt(limit);
             }
-            console.log("knowlID: ", knowlID);
-            $this.loadPartial(knowlID, label, limit,
+            console.log("include_id: ", include_id, " label:", label, " limit: " + limit);
+            $this.loadPartial(include_id, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
                         var msg = "Includes Error: ";
@@ -299,6 +299,7 @@ var collscientia = {
                         // all good
                         $this.attr("status", "done");
                         collscientia.create_sagecell_links($this);
+                        collscientia.process_mathjax($this);
                     }
                 }
             );
