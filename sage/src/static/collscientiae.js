@@ -75,18 +75,20 @@ var collscientiae = {
     "init": function () {
         'use strict';
         // clear storage, if root hash is different
-        var storage = $.initNamespaceStorage("collscientiae").localStorage;
-        var rhash = $("meta[name='doc_root_hash']").attr("value");
-        if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
-            console.log("clearing local storage");
-            storage.removeAll();
-        }
-        console.log("DOC_ROOT_HASH = " + rhash);
-        storage.set("DOC_ROOT_HASH", rhash);
-        collscientiae.storage = storage;
+        //var storage = $.initNamespaceStorage("collscientiae").localStorage;
+        //var rhash = $("meta[name='doc_root_hash']").attr("value");
+        //if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
+        //    console.log("clearing local storage");
+        //    storage.removeAll();
+        //}
+        //console.log("DOC_ROOT_HASH = " + rhash);
+        //storage.set("DOC_ROOT_HASH", rhash);
+        //collscientiae.storage = storage;
 
         // activate sage cells
-        $("body").on("click", "a.activate_cell", function (event) {
+        var $body = $("body");
+        $body.on("click", "a.activate_cell", function (event) {
+            'use strict';
             event.preventDefault();
             var cell_id = $(this).attr("target");
             var $activate_link = $(this);
@@ -98,7 +100,8 @@ var collscientiae = {
         });
 
         // handle clicks on knowls
-        $("body").on("click", "*[knowl]", function (event) {
+        $body.on("click", "*[knowl]", function (event) {
+            'use strict';
             event.preventDefault();
             var $knowl = $(this);
             collscientiae.handle_knowl($knowl);
@@ -181,100 +184,59 @@ var collscientiae = {
             //var $knowl = $("#kuid-" + uid);
             $output.addClass("loading");
             $knowl.hide();
-            // DRG: inline code
-            if ($link.attr("class") == 'internal') {
-                $output.html($link.attr("value"));
-                $knowl.hide();
-                $link.addClass("active");
-                if (window.MathJax == undefined) {
-                    $knowl.slideDown("slow");
-                } else {
-                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
-                    MathJax.Hub.Queue([function () {
-                        $knowl.slideDown("slow");
-                    }]);
-                }
-            } else if ($link.attr("class") == 'id-ref') {
-                $output.html($("#".concat($link.attr("refid"))).text());
-                $knowl.hide();
-                $link.addClass("active");
-                if (window.MathJax == undefined) {
-                    $knowl.slideDown("slow");
-                } else {
-                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
-                    MathJax.Hub.Queue([function () {
-                        $knowl.slideDown("slow");
-                    }]);
-                }
-            } else {
-                // Get code from server.
-                console.log("loadPartial: ID=" + knowl_id);
-                $output.loadPartial(knowl_id, undefined, undefined,
-                    function (response, status, xhr) {
-                        $output.removeClass("loading");
-                        if (status == "error") {
-                            $link.removeClass("active");
-                            $output.html("<div class='error'>Knowl Error 1: ID =" + knowl_id + " / " +
-                            xhr.status + " " + xhr.statusText + '</div>');
-                            $output.show();
-                        } else if (status == "timeout") {
-                            $link.removeClass("active");
-                            $output.html("<div class='error'>Knowl timeout: " + xhr.status + " " + xhr.statusText + '</div>');
-                            $output.show();
-                        } else {
-                            $knowl.hide();
-                            $link.addClass("active");
-                        }
-                        collscientiae.include($output);
-                        collscientiae.create_sagecell_links($output);
-                        collscientiae.process_mathjax($output, function() {
-                            $knowl.slideDown("slow");
-                        });
+
+            // Get code from server.
+            console.log("loadPartial: ID=" + knowl_id);
+            $output.loadPartial(knowl_id, undefined, undefined,
+                function (response, status, xhr) {
+                    'use strict';
+                    $output.removeClass("loading");
+                    if (status == "error") {
+                        $link.removeClass("active");
+                        $output.html("<div class='error'>Knowl Error 1: ID =" + knowl_id + " / " +
+                        xhr.status + " " + xhr.statusText + '</div>');
+                        $output.show();
+                    } else if (status == "timeout") {
+                        $link.removeClass("active");
+                        $output.html("<div class='error'>Knowl timeout: " + xhr.status + " " + xhr.statusText + '</div>');
+                        $output.show();
+                    } else {
+                        $knowl.hide();
+                        $link.addClass("active");
                     }
-                );
-                //$output.load(url, "section.content",
-                //    function (response, status, xhr) {
-                //        $knowl.removeClass("loading");
-                //        if (status == "error") {
-                //            $link.removeClass("active");
-                //            $output.html("<div class='knowl-output error'>ERROR: " + xhr.status + " " + xhr.statusText + '</div>');
-                //            $output.show();
-                //        } else if (status == "timeout") {
-                //            $link.removeClass("active");
-                //            $output.html("<div class='knowl-output error'>ERROR: timeout. " + xhr.status + " " + xhr.statusText + '</div>');
-                //            $output.show();
-                //        } else {
-                //            $knowl.hide();
-                //            $link.addClass("active");
-                //        }
-                //        // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
-                //        if (window.MathJax == undefined) {
-                //            $knowl.slideDown("slow");
-                //        } else {
-                //            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
-                //            MathJax.Hub.Queue([function () {
-                //                $knowl.slideDown("slow");
-                //            }]);
-                //        }
-                //    }
-                //);
-            }
+                    collscientiae.include($output);
+                    collscientiae.create_sagecell_links($output);
+                    collscientiae.process_mathjax($output, function() {
+                        $knowl.slideDown("slow");
+                    });
+                }
+            );
         }
     },
     "process_mathjax": function($where, callback) {
+        'use strict';
         if (window.MathJax != undefined) {
             MathJax.Hub.Queue(['Typeset', MathJax.Hub, $where.get(0)]);
             MathJax.Hub.Queue([callback]);
         }
     },
-    "include": function ($where) {
+    "include": function ($where, parents) {
         'use strict';
+        // $where the element where to search for include divs
+        // parents the stack of parent includes -- to avoid circular imports!
 
-        //if (typeof $where === "undefined") {
-        $where = $("div[include]");
-        //} else {
-        //    $where = $where.find("div[include]");
-        //}
+        if (typeof $where === "undefined") {
+            //$where = $("div[include]");
+            console.log("ERROR: $where is undefined");
+            return;
+        } else {
+            $where = $where.find("div[include]");
+        }
+
+        if (typeof parents === "undefined") {
+            // init array with itself
+            parents = new Array(); //$(this).attr("include"));
+        }
 
         $where.each(function () {
             'use strict';
@@ -283,12 +245,25 @@ var collscientiae = {
             if ($this.attr("status") == "done") {
                 return;
             }
+
             var include_id = $this.attr("include");
             var label = $this.attr("label");
             var limit = $this.attr("limit");
             if (typeof limit !== "undefined") {
                 limit = parseInt(limit);
             }
+
+            // TODO check circular based on include_id only -> maybe include label?
+            if(parents.some(function(p) { return p == include_id})) {
+                console.log("Circular import detected: ", include_id, "parents:", parents);
+                $this.html($("<div>")
+                    .text("Circular import: ")
+                    .append($("<a>")
+                        .attr("href", "../" + include_id + ".html")
+                        .text("continue here")));
+                return;
+            }
+
             console.log("include_id: ", include_id, " label:", label, " limit: " + limit);
             $this.loadPartial(include_id, label, limit,
                 function (response, status, xhr) {
@@ -300,13 +275,19 @@ var collscientiae = {
                         $this.attr("status", "done");
                         collscientiae.create_sagecell_links($this);
                         collscientiae.process_mathjax($this);
+                        // need to create a shallow copy of it!
+                        parents = parents.slice();
+                        parents.push(include_id);
+                        collscientiae.include($this, parents);
                     }
                 }
             );
         });
     },
     "create_sagecell_links": function($block) {
+        'use strict';
         $block.find("code[mode]").each(function() {
+            'use strict';
             var $this = $(this);
             var cell_id = $this.attr("id");
             var $a = $("<a>")
@@ -384,7 +365,7 @@ function initSageCell() {
 
 
 $(collscientiae.init);
-$(collscientiae.include);
+$(function() { collscientiae.include($("section.content")) });
 $(initMathjax);
 $(initSageCell);
 $(googleAnalytics);
