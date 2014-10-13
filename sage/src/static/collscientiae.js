@@ -69,13 +69,13 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     return this;
 };
 
-var collscientia = {
+var collscientiae = {
     "knowl_id_counter": 0,
     "storage": undefined,
     "init": function () {
         'use strict';
         // clear storage, if root hash is different
-        var storage = $.initNamespaceStorage("collscientia").localStorage;
+        var storage = $.initNamespaceStorage("collscientiae").localStorage;
         var rhash = $("meta[name='doc_root_hash']").attr("value");
         if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
             console.log("clearing local storage");
@@ -83,7 +83,7 @@ var collscientia = {
         }
         console.log("DOC_ROOT_HASH = " + rhash);
         storage.set("DOC_ROOT_HASH", rhash);
-        collscientia.storage = storage;
+        collscientiae.storage = storage;
 
         // activate sage cells
         $("body").on("click", "a.activate_cell", function (event) {
@@ -92,7 +92,7 @@ var collscientia = {
             var $activate_link = $(this);
             $activate_link.text("loading ...");
             $activate_link.removeAttr("target");
-            collscientia.sagecellify(cell_id, function () {
+            collscientiae.sagecellify(cell_id, function () {
                 $activate_link.hide();
             });
         });
@@ -101,10 +101,10 @@ var collscientia = {
         $("body").on("click", "*[knowl]", function (event) {
             event.preventDefault();
             var $knowl = $(this);
-            collscientia.handle_knowl($knowl);
+            collscientiae.handle_knowl($knowl);
         });
 
-        collscientia.create_sagecell_links($("section.content"));
+        collscientiae.create_sagecell_links($("section.content"));
     },
     "handle_knowl": function ($link) {
         'use strict';
@@ -120,8 +120,8 @@ var collscientia = {
 
         // each knowl "link" needs to have a unique ID
         if (!$link.attr("knowl-uid")) {
-            $link.attr("knowl-uid", collscientia.knowl_id_counter);
-            collscientia.knowl_id_counter++;
+            $link.attr("knowl-uid", collscientiae.knowl_id_counter);
+            collscientiae.knowl_id_counter++;
         }
         var uid = $link.attr("knowl-uid");
         var output_id = '#knowl-output-' + uid;
@@ -225,9 +225,9 @@ var collscientia = {
                             $knowl.hide();
                             $link.addClass("active");
                         }
-                        collscientia.include($output);
-                        collscientia.create_sagecell_links($output);
-                        collscientia.process_mathjax($output, function() {
+                        collscientiae.include($output);
+                        collscientiae.create_sagecell_links($output);
+                        collscientiae.process_mathjax($output, function() {
                             $knowl.slideDown("slow");
                         });
                     }
@@ -298,8 +298,8 @@ var collscientia = {
                     } else {
                         // all good
                         $this.attr("status", "done");
-                        collscientia.create_sagecell_links($this);
-                        collscientia.process_mathjax($this);
+                        collscientiae.create_sagecell_links($this);
+                        collscientiae.process_mathjax($this);
                     }
                 }
             );
@@ -383,8 +383,8 @@ function initSageCell() {
 }
 
 
-$(collscientia.init);
-$(collscientia.include);
+$(collscientiae.init);
+$(collscientiae.include);
 $(initMathjax);
 $(initSageCell);
 $(googleAnalytics);
