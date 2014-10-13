@@ -28,10 +28,10 @@ jQuery.fn.tag = function () {
     return this.prop("tagName").toLowerCase();
 };
 
-jQuery.fn.includeKnowl = function (knowlID, label, limit, callback) {
+jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     'use strict';
     var response, self = this;
-    var url = url = "../" + knowlID + ".html";
+    var url = url = "../" + part_id + ".html";
     var selector = "section.content";
     if (typeof label !== "undefined") {
         selector += " [label='" + label + "']";
@@ -103,6 +103,8 @@ var collscientia = {
             var $knowl = $(this);
             collscientia.handle_knowl($knowl);
         });
+
+        collscientia.create_sagecell_links($("section.content"));
     },
     "handle_knowl": function ($link) {
         'use strict';
@@ -206,8 +208,8 @@ var collscientia = {
                 }
             } else {
                 // Get code from server.
-                console.log("includeKnowl: ID=" + knowl_id);
-                $output.includeKnowl(knowl_id, undefined, undefined,
+                console.log("loadPartial: ID=" + knowl_id);
+                $output.loadPartial(knowl_id, undefined, undefined,
                     function (response, status, xhr) {
                         $output.removeClass("loading");
                         if (status == "error") {
@@ -224,6 +226,7 @@ var collscientia = {
                             $link.addClass("active");
                         }
                         collscientia.include($output);
+                        collscientia.create_sagecell_links($output);
                         // if we are using MathJax, then we reveal the knowl after it has finished rendering the contents
                         if (window.MathJax == undefined) {
                             $knowl.slideDown("slow");
@@ -287,7 +290,7 @@ var collscientia = {
                 limit = parseInt(limit);
             }
             console.log("knowlID: ", knowlID);
-            $this.includeKnowl(knowlID, label, limit,
+            $this.loadPartial(knowlID, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
                         var msg = "Includes Error: ";
@@ -295,11 +298,22 @@ var collscientia = {
                     } else {
                         // all good
                         $this.attr("status", "done");
+                        collscientia.create_sagecell_links($this);
                     }
                 }
             );
         });
-
+    },
+    "create_sagecell_links": function($block) {
+        $block.find("code[mode]").each(function() {
+            var $this = $(this);
+            var cell_id = $this.attr("id");
+            var $a = $("<a>")
+                .attr("class", "activate_cell")
+                .attr("target", cell_id)
+                .text("activate cell");
+            $this.after($a);
+        });
     },
     "sagecellify": function (cell_id, callback) {
         'use strict';
