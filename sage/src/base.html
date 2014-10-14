@@ -9,6 +9,9 @@
     <meta name="google_analytics" account="{{ google_analytics }}" />
     {%- endif %}
     <meta name="doc_root_hash" value="{{ doc_root_hash }}" />
+    {% if doc is defined -%}
+    <meta name="doc_id" value="{{ doc.namespace }}/{{ doc.docid }}" />
+    {%- endif %}
     {% set title = title|default("Index") %}
     <title>{%- if title %}{{ title }} - {% endif -%}CollScientia</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />

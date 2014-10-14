@@ -253,10 +253,11 @@ var collscientiae = {
         } else {
             $where = $where.find("div[include]");
         }
-
         if (typeof parents === "undefined") {
             // init array with itself
-            parents = new Array(); //$(this).attr("include"));
+            var doc_id = $("meta[name='doc_id']").attr("value")
+            parents = new Array(doc_id);
+            console.log("init: ", parents)
         }
 
         $where.each(function () {
@@ -274,14 +275,16 @@ var collscientiae = {
                 limit = parseInt(limit);
             }
 
+
             // TODO check circular based on include_id only -> maybe include label?
             if(parents.some(function(p) { return p == include_id})) {
                 console.log("Circular import detected: ", include_id, "parents:", parents);
-                $this.html($("<div>")
-                    .text("Circular import: ")
+                $this.html($("<span>")
+                    .addClass("circular")
+                    .text("Circular import to ")
                     .append($("<a>")
                         .attr("href", "../" + include_id + ".html")
-                        .text("continue here")));
+                        .text("'" + include_id + "'")));
                 return;
             }
 
