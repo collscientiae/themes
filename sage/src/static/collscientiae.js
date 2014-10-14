@@ -74,54 +74,75 @@ var collscientiae = {
     "storage": undefined,
     "init": function () {
         'use strict';
-        // clear storage, if root hash is different
-        //var storage = $.initNamespaceStorage("collscientiae").localStorage;
-        //var rhash = $("meta[name='doc_root_hash']").attr("value");
-        //if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
-        //    console.log("clearing local storage");
-        //    storage.removeAll();
-        //}
-        //console.log("DOC_ROOT_HASH = " + rhash);
-        //storage.set("DOC_ROOT_HASH", rhash);
-        //collscientiae.storage = storage;
-
-        // activate sage cells
-        var $body = $("body");
-        $body.on("click", "a.activate_cell", function (event) {
-            'use strict';
-            event.preventDefault();
-            var cell_id = $(this).attr("target");
-            var $activate_link = $(this);
-            $activate_link.text("loading ...");
-            $activate_link.removeAttr("target");
-            collscientiae.sagecellify(cell_id, function () {
-                $activate_link.hide();
+        { // init storage (clear storage, if root hash is different)
+            var storage = $.initNamespaceStorage("collscientiae").localStorage;
+            var rhash = $("meta[name='doc_root_hash']").attr("value");
+            if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
+                console.log("clearing local storage");
+                storage.removeAll();
+                $.removeAllStorages();
+                // re-init explicitly
+                storage = $.initNamespaceStorage("collscientiae").localStorage;
+            }
+            console.log("storage: all initialized namespaces: ", $.namespaceStorages);
+            console.log("storage: known keys: " + storage.keys());
+            storage.set("DOC_ROOT_HASH", rhash);
+            console.log("storage: DOC_ROOT_HASH = " + storage.get("DOC_ROOT_HASH"));
+            collscientiae.storage = storage;
+        }
+        {   // activate sage cells
+            var $body = $("body");
+            $body.on("click", "a.activate_cell", function (event) {
+                'use strict';
+                event.preventDefault();
+                var cell_id = $(this).attr("target");
+                var $activate_link = $(this);
+                $activate_link.text("loading ...");
+                $activate_link.removeAttr("target");
+                collscientiae.sagecellify(cell_id, function () {
+                    $activate_link.hide();
+                });
             });
-        });
+        }
 
-        // handle clicks on knowls
-        $body.on("click", "*[knowl]", function (event) {
-            'use strict';
-            event.preventDefault();
-            var $knowl = $(this);
-            collscientiae.handle_knowl($knowl);
-        });
+        {   // handle clicks on knowls
+            $body.on("click", "*[knowl]", function (event) {
+                'use strict';
+                event.preventDefault();
+                var $knowl = $(this);
+                collscientiae.handle_knowl($knowl);
+            });
 
+            // highlight knowl output on hover over knowl link
+            $body.on("mouseenter mouseleave", "*[knowl]", function(evt) {
+                'use strict';
+                var $this = $(this);
+                var uid = $this.attr("knowl-uid");
+                if (typeof uid !== "undefined") {
+                    var hover = evt.type == "mouseenter";
+                    $this.toggleClass("hover", hover);
+                    $('#kuid-' + uid).toggleClass("hover", hover);
+                }
+            });
+
+            // highlight originating knowl link when mouse is inside an actual knowl
+            $body.on("mouseenter mouseleave", "div.knowl", function(evt) {
+                'use strict';
+                var $this = $(this);
+                var uid = $this.attr("id").substring(5);
+                var hover = evt.type == "mouseenter";
+                $this.toggleClass("hover", hover);
+                $('*[knowl-uid=' + uid + ']').toggleClass("hover", hover);
+            });
+        }
         collscientiae.create_sagecell_links($("section.content"));
     },
     "handle_knowl": function ($link) {
         'use strict';
-        //var kid = $link.attr("knowl");
-        //var url = "../" + kid + ".html";
-        //var $knowl = $("<p>")
-        //    .attr("class", "knowl")
-        //    .append("knowl: " + kid + " url: " + url);
-        //$link.parent().append($knowl);
 
         var knowl_id = $link.attr("knowl");
-        // the uid is necessary if we want to reference the same content several times
-
         // each knowl "link" needs to have a unique ID
+        // this uid is necessary if we want to reference the same content several times
         if (!$link.attr("knowl-uid")) {
             $link.attr("knowl-uid", collscientiae.knowl_id_counter);
             collscientiae.knowl_id_counter++;
@@ -143,7 +164,7 @@ var collscientiae = {
         } else {
 
             var $knowl = $("<div>")
-                .attr("class", "knowl")
+                .addClass("knowl hover")
                 .attr("id", "kuid-" + uid)
                 .append($("<div>")
                     .addClass("knowl-output")
@@ -202,13 +223,13 @@ var collscientiae = {
                         $output.show();
                     } else {
                         $knowl.hide();
-                        $link.addClass("active");
+                        $link.addClass("active hover");
                     }
-                    collscientiae.include($output);
                     collscientiae.create_sagecell_links($output);
                     collscientiae.process_mathjax($output, function() {
                         $knowl.slideDown("slow");
                     });
+                    collscientiae.include($output);
                 }
             );
         }
