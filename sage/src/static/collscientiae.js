@@ -33,10 +33,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     var response;
     var $target = this;
     var url = "../" + part_id + ".html";
-    var selector = "section.content";
-    if (typeof label !== "undefined") {
-        selector += " [label='" + label + "']";
-    }
+    var selector_outer = "section.content";
 
     // only make requests if necessary
     if ($target.length == 0) {
@@ -48,16 +45,17 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
         "use strict";
         from_cache = from_cache === "cached";
         console.log("from_cache:", from_cache);
-        var $knowl, $response ;
+        var $knowl, $response;
 
-        console.log("responseText:", responseText);
-        $response = $(jQuery.parseHTML(responseText)); // BUG HERE
-        console.log("$response1 : ", $response);
-        collscientiae.storage[url] = $response.html();
-
-        if (!from_cache) {
-            $response = $response.find(selector);
+        if (from_cache) {
+            $response = $("<section>").addClass("content").html(responseText);
+            // console.log("$response_cached : ", $response.html());
+        } else {
+            $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
+            // console.log("$response_uncached : ", $response.html());
+            collscientiae.storage[url] = $response.html();
         }
+
         console.log("$response", $response);
         if (typeof label == "undefined") {
             $knowl = $response;
@@ -68,7 +66,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             // this makes it possible to reference a header from somewhere else by ID
             // and insert it here including the text below the header.
             $knowl = $("<div>");
-            var $start = $response;
+            var $start = $response.find("*[label='" + label + "']");
             $knowl.append($start.clone());
             var endtag = $start.tag();
             $start.nextUntil(endtag).each(function (idx) {
@@ -283,7 +281,6 @@ var collscientiae = {
             // init array with itself
             var doc_id = $("meta[name='doc_id']").attr("value")
             parents = new Array(doc_id);
-            // console.log("init: ", parents)
         }
 
         $where.each(function () {
@@ -300,7 +297,6 @@ var collscientiae = {
             if (typeof limit !== "undefined") {
                 limit = parseInt(limit);
             }
-
 
             // TODO check circular based on include_id only -> maybe include label?
             if(parents.some(function(p) { return p == include_id})) {
