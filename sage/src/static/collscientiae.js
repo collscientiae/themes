@@ -44,21 +44,17 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     var process_response = function(responseText, from_cache) {
         "use strict";
         from_cache = from_cache === "cached";
-        console.log("from_cache:", from_cache);
         var $knowl, $response;
 
         if (from_cache) {
             $response = $("<section>").addClass("content").html(responseText);
-            // console.log("$response_cached : ", $response.html());
         } else {
             $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
-            // console.log("$response_uncached : ", $response.html());
             collscientiae.storage[url] = $response.html();
         }
 
-        console.log("$response", $response);
         if (typeof label == "undefined") {
-            $knowl = $response;
+            $target.html($response.html());
         } else {
             // the following is actually simple: clone a list of siblings
             // from the match (e.g. h1 header and below: div, div, h2, div, ...)
@@ -70,14 +66,15 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             $knowl.append($start.clone());
             var endtag = $start.tag();
             $start.nextUntil(endtag).each(function (idx) {
-                // console.log(idx, $(this).html());
                 if (typeof limit == "undefined" || idx < limit) {
                     $knowl.append($(this).clone());
                 }
             });
+            $target.html($knowl.html());
         }
-        $target.html($knowl);
-        $target.each(callback, [responseText, "success", undefined]);
+        if (from_cache) {
+            $target.each(callback, [responseText, "success", undefined]);
+        }
     };
 
     if (collscientiae.storage.getItem(url)) {
@@ -110,7 +107,6 @@ var collscientiae = {
                 console.log("clearing local storage");
                 storage.clear();
             }
-            console.log("storage: ", storage);
             storage["DOC_ROOT_HASH"] = rhash;
             console.log("storage: DOC_ROOT_HASH = " + storage["DOC_ROOT_HASH"]);
             collscientiae.storage = storage;
@@ -230,8 +226,7 @@ var collscientiae = {
             $output.addClass("loading");
             $knowl.hide();
 
-            // Get code from server.
-            console.log("loadPartial: ID=" + knowl_id);
+            // Get data from server.
             $output.loadPartial(knowl_id, undefined, undefined,
                 function (response, status, xhr) {
                     'use strict';
@@ -279,7 +274,7 @@ var collscientiae = {
         }
         if (typeof parents === "undefined") {
             // init array with itself
-            var doc_id = $("meta[name='doc_id']").attr("value")
+            var doc_id = $("meta[name='doc_id']").attr("value");
             parents = new Array(doc_id);
         }
 
@@ -310,7 +305,7 @@ var collscientiae = {
                 return;
             }
 
-            console.log("include_id: ", include_id, " label:", label, " limit: " + limit);
+            console.log("loadPartial()", include_id, " label:", label, " limit:", limit);
             $this.loadPartial(include_id, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
@@ -322,9 +317,9 @@ var collscientiae = {
                         collscientiae.create_sagecell_links($this);
                         collscientiae.process_mathjax($this);
                         // need to create a shallow copy of it!
-                        parents = parents.slice();
-                        parents.push(include_id);
-                        collscientiae.include($this, parents);
+                        var parents2 = parents.slice();
+                        parents2.push(include_id);
+                        collscientiae.include($this, parents2);
                     }
                 }
             );
