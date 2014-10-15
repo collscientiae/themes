@@ -30,29 +30,45 @@ jQuery.fn.tag = function () {
 
 jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     'use strict';
-    var response, self = this;
-    var url = url = "../" + part_id + ".html";
+    var response;
+    var $target = this;
+    var url = "../" + part_id + ".html";
     var selector = "section.content";
     if (typeof label !== "undefined") {
         selector += " [label='" + label + "']";
     }
 
-    // If we have elements to modify, make the request
-    if (self.length == 0) {
+    // only make requests if necessary
+    if ($target.length == 0) {
         return this;
     }
 
-    jQuery.ajax({
-        url: url,
-        dataType: "html"
-    }).done(function (responseText) {
-        // Save response for use in complete callback
-        response = arguments;
+    // this function does the magic, after either the html is downloaded or coming from cache
+    var process_response = function(responseText, from_cache) {
+        "use strict";
+        from_cache = from_cache === "cached";
+        console.log("from_cache:", from_cache);
+        var $knowl, $response ;
+
+        console.log("responseText:", responseText);
+        $response = $(jQuery.parseHTML(responseText)); // BUG HERE
+        console.log("$response1 : ", $response);
+        collscientiae.storage[url] = $response.html();
+
+        if (!from_cache) {
+            $response = $response.find(selector);
+        }
+        console.log("$response", $response);
         if (typeof label == "undefined") {
-            var $knowl = $(jQuery.parseHTML(responseText)).find(selector);
+            $knowl = $response;
         } else {
-            var $knowl = $("<div>");
-            var $start = $(jQuery.parseHTML(responseText)).find(selector);
+            // the following is actually simple: clone a list of siblings
+            // from the match (e.g. h1 header and below: div, div, h2, div, ...)
+            // until either there is yet again a h1 header OR a limit is reached.
+            // this makes it possible to reference a header from somewhere else by ID
+            // and insert it here including the text below the header.
+            $knowl = $("<div>");
+            var $start = $response;
             $knowl.append($start.clone());
             var endtag = $start.tag();
             $start.nextUntil(endtag).each(function (idx) {
@@ -62,10 +78,24 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
                 }
             });
         }
-        self.html($knowl);
-    }).complete(callback && function (jqXHR, status) {
-        self.each(callback, response || [jqXHR.responseText, status, jqXHR]);
-    });
+        $target.html($knowl);
+        $target.each(callback, [responseText, "success", undefined]);
+    };
+
+    if (collscientiae.storage.getItem(url)) {
+        console.log("cache hit", url);
+        process_response(collscientiae.storage[url], "cached");
+    } else {
+        console.log("cache miss", url);
+        jQuery.ajax({
+            url: url,
+            dataType: "html"
+        })
+        .done(process_response)
+        .complete(callback && function (jqXHR, status) {
+            $target.each(callback, response || [jqXHR.responseText, status, jqXHR]);
+        });
+    }
     return this;
 };
 
@@ -75,19 +105,16 @@ var collscientiae = {
     "init": function () {
         'use strict';
         { // init storage (clear storage, if root hash is different)
-            var storage = $.initNamespaceStorage("collscientiae").localStorage;
+
+            var storage = window.localStorage || {};
             var rhash = $("meta[name='doc_root_hash']").attr("value");
-            if (typeof rhash !== "undefined" && storage.get("DOC_ROOT_HASH") != rhash) {
+            if (typeof rhash !== "undefined" && storage["DOC_ROOT_HASH"] != rhash) {
                 console.log("clearing local storage");
-                storage.removeAll();
-                $.removeAllStorages();
-                // re-init explicitly
-                storage = $.initNamespaceStorage("collscientiae").localStorage;
+                storage.clear();
             }
-            console.log("storage: all initialized namespaces: ", $.namespaceStorages);
-            console.log("storage: known keys: " + storage.keys());
-            storage.set("DOC_ROOT_HASH", rhash);
-            console.log("storage: DOC_ROOT_HASH = " + storage.get("DOC_ROOT_HASH"));
+            console.log("storage: ", storage);
+            storage["DOC_ROOT_HASH"] = rhash;
+            console.log("storage: DOC_ROOT_HASH = " + storage["DOC_ROOT_HASH"]);
             collscientiae.storage = storage;
         }
         {   // activate sage cells
@@ -185,15 +212,14 @@ var collscientiae = {
                 $link.parents().eq(1).after($kwrapped);
             } else if ($link.parent().is("li")) {
                 $link.parent().after($knowl);
-            }
-            // the following is implemented stupidly, but I had to do it quickly.
-            // someone please replace it with an appropriate loop -- DF
-            // the '.is("p")' is for the first paragraph of a theorem or proof
-            //also, after you close the knowl, it still has a shaded background
-            else if ($link.parent().parent().is("li")) {
+
+                // the following is implemented stupidly, but I had to do it quickly.
+                // someone please replace it with an appropriate loop -- DF
+                // the '.is("p")' is for the first paragraph of a theorem or proof
+                //also, after you close the knowl, it still has a shaded background
+            } else if ($link.parent().parent().is("li")) {
                 $link.parent().parent().after($knowl);
-            }
-            else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
+            } else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
                 $link.parent().after($knowl);
             } else if ($link.parent().parent().css('display') == "block" || $link.parent().parent().is("p")) {
                 $link.parent().parent().after($knowl);
@@ -257,7 +283,7 @@ var collscientiae = {
             // init array with itself
             var doc_id = $("meta[name='doc_id']").attr("value")
             parents = new Array(doc_id);
-            console.log("init: ", parents)
+            // console.log("init: ", parents)
         }
 
         $where.each(function () {
