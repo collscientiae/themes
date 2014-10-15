@@ -67,25 +67,20 @@ section.outro
 
 // ==============
 
-header
-  nav#menu
-    ul
-      margin: 0
-      padding: 0
-
-    a
-      display: block
-      margin-bottom: 10px
-      padding: $x 0
-      text-align: center
-      text-decoration: none
-      font-weight: bold
+nav#menu
+  > a
+    display: block
+    margin: $x 0
+    padding: $x
+    text-align: center
+    text-decoration: none
+    font-weight: bold
+    color: $col1l
+    background: $col1d
+    &:visited
       color: $col3l
-      &:visited
-        color: $col3l
-      &:hover
-        color: $col3l
-        background: $col1d
+    &:hover
+      color: white
       background: $col1
 
 #breadcrum
@@ -160,7 +155,7 @@ article > section
   +narrowpaddingonsmallscreen
 
 header
-  border-bottom: $x solid $col1
+  border-bottom: $x/2 solid $col1
   display: block
 
 footer,
@@ -363,13 +358,9 @@ header
     nav#menu
       a
         float: left
-        width: 27%
-        margin: 0 1.7%
-        padding: 25px 2%
-        margin-bottom: 0
-      li:first-child a
+      &:first-child a
         margin-left: 0
-      li:last-child a
+      &:last-child a
         margin-right: 0
 
 
@@ -388,7 +379,6 @@ header
     float: left
   header > nav#menu
     float: right
-    width: 38%
 
 
 @media only screen and (min-width: $screen-large)

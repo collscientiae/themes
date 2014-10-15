@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<article>
 <section class="content">
-    {% for name, href in links %}
-    <ul>
-        <li><a href='{{ href }}'>{{ name }}</a></li>
-    </ul>
-    {% endfor %}
+{% for name, href in links %}
+<ul>
+    <li><a href='{{ href }}'>{{ name }}</a></li>
+</ul>
+{% endfor %}
 </section>
+</article>
 {% endblock %}

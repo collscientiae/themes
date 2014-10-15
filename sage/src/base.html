@@ -26,13 +26,7 @@
     {% block header %}
         {% block title %}<h1>{{ title }}</h1>{% endblock %}
     <nav id="menu">
-        <ul>
-            <li><a href="{{ 'hashtag/index.html'|prefix }}">Hashtags</a></li>
-            <li><a href="index.html">HOME</a></li>
-            {% if level == 1 %}
-            <li><a href="../index.html">UP</a></li>
-            {% endif %}
-        </ul>
+        <a href="{{ 'hashtag/index.html'|prefix }}">#hashtags</a>
     </nav>
     {% endblock %}
 </header>
