@@ -41,16 +41,23 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     }
 
     // this function does the magic, after either the html is downloaded or coming from cache
-    var process_response = function(responseText, from_cache) {
+    var process_response = function (responseText, from_cache) {
         "use strict";
         from_cache = from_cache === "cached";
-        var $knowl, $response;
+        var $snippet, $response;
 
         if (from_cache) {
             $response = $("<section>").addClass("content").html(responseText);
         } else {
             $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
-            collscientiae.storage[url] = $response.html();
+            try {
+                collscientiae.storage.setItem(url, $response.html());
+            } catch (e) {
+                //if (e == QUOTA_EXCEEDED_ERR) {
+                // quota exceed -> clear all and re-init. TODO: LRU cache
+                collscientiae.storage.clear();
+                //}
+            }
         }
 
         if (typeof label == "undefined") {
@@ -61,35 +68,36 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             // until either there is yet again a h1 header OR a limit is reached.
             // this makes it possible to reference a header from somewhere else by ID
             // and insert it here including the text below the header.
-            $knowl = $("<div>");
+            $snippet = $("<div>");
             var $start = $response.find("*[label='" + label + "']");
-            $knowl.append($start.clone());
+            $snippet.append($start.clone());
             var endtag = $start.tag();
             $start.nextUntil(endtag).each(function (idx) {
                 if (typeof limit == "undefined" || idx < limit) {
-                    $knowl.append($(this).clone());
+                    $snippet.append($(this).clone());
                 }
             });
-            $target.html($knowl.html());
+            $target.html($snippet.html());
         }
         if (from_cache) {
             $target.each(callback, [responseText, "success", undefined]);
         }
     };
 
-    if (collscientiae.storage.getItem(url)) {
+    var cached_data = collscientiae.storage.getItem(url);
+    if (cached_data) {
         console.log("cache hit", url);
-        process_response(collscientiae.storage[url], "cached");
+        process_response(cached_data, "cached");
     } else {
         console.log("cache miss", url);
         jQuery.ajax({
             url: url,
             dataType: "html"
         })
-        .done(process_response)
-        .complete(callback && function (jqXHR, status) {
-            $target.each(callback, response || [jqXHR.responseText, status, jqXHR]);
-        });
+            .done(process_response)
+            .complete(callback && function (jqXHR, status) {
+                $target.each(callback, response || [jqXHR.responseText, status, jqXHR]);
+            });
     }
     return this;
 };
@@ -97,66 +105,74 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
 var collscientiae = {
     "knowl_id_counter": 0,
     "storage": undefined,
-    "init": function () {
+    "init_storage": function () {
+        // init storage (clear storage, if root hash is different)
         'use strict';
-        { // init storage (clear storage, if root hash is different)
-
-            var storage = window.localStorage || {};
-            var rhash = $("meta[name='doc_root_hash']").attr("value");
-            if (typeof rhash !== "undefined" && storage["DOC_ROOT_HASH"] != rhash) {
-                console.log("clearing local storage");
-                storage.clear();
-            }
-            storage["DOC_ROOT_HASH"] = rhash;
-            console.log("storage: DOC_ROOT_HASH = " + storage["DOC_ROOT_HASH"]);
-            collscientiae.storage = storage;
+        var storage = window.localStorage || {};
+        var rhash = $('meta[name="doc_root_hash"]').attr("value");
+        if (typeof rhash !== "undefined" && storage["DOC_ROOT_HASH"] != rhash) {
+            console.log("clearing local storage");
+            storage.clear();
         }
-        {   // activate sage cells
-            var $body = $("body");
-            $body.on("click", "a.activate_cell", function (event) {
-                'use strict';
-                event.preventDefault();
-                var cell_id = $(this).attr("target");
-                var $activate_link = $(this);
-                $activate_link.text("loading ...");
-                $activate_link.removeAttr("target");
-                collscientiae.sagecellify(cell_id, function () {
-                    $activate_link.hide();
-                });
+        storage["DOC_ROOT_HASH"] = rhash;
+        console.log("storage: DOC_ROOT_HASH = " + storage["DOC_ROOT_HASH"]);
+        collscientiae.storage = storage;
+    },
+    "init_sage_cells": function ($body) {
+        // activate sage cells
+        'use strict';
+        $body.on("click", "a.activate_cell", function (event) {
+            'use strict';
+            event.preventDefault();
+            var $activate_link = $(this);
+            var cell_id = $activate_link.attr("target");
+            $activate_link.text("loading ...");
+            $activate_link.removeAttr("target");
+            collscientiae.sagecellify(cell_id, function () {
+                $activate_link.hide();
             });
-        }
+        });
+    },
+    "init_knowl_links": function ($body) {
+        // handle clicks on knowls
+        "use strict";
+        $body.on("click", "*[knowl]", function (event) {
+            'use strict';
+            event.preventDefault();
+            collscientiae.handle_knowl($(this));
+        });
 
-        {   // handle clicks on knowls
-            $body.on("click", "*[knowl]", function (event) {
-                'use strict';
-                event.preventDefault();
-                var $knowl = $(this);
-                collscientiae.handle_knowl($knowl);
-            });
-
-            // highlight knowl output on hover over knowl link
-            $body.on("mouseenter mouseleave", "*[knowl]", function(evt) {
-                'use strict';
-                var $this = $(this);
-                var uid = $this.attr("knowl-uid");
-                if (typeof uid !== "undefined") {
-                    var hover = evt.type == "mouseenter";
-                    $this.toggleClass("hover", hover);
-                    $('#kuid-' + uid).toggleClass("hover", hover);
-                }
-            });
-
-            // highlight originating knowl link when mouse is inside an actual knowl
-            $body.on("mouseenter mouseleave", "div.knowl", function(evt) {
-                'use strict';
-                var $this = $(this);
-                var uid = $this.attr("id").substring(5);
+        // highlight knowl output on hover over knowl link
+        $body.on("mouseenter mouseleave", "*[knowl]", function (evt) {
+            'use strict';
+            var $this = $(this);
+            var uid = $this.attr("knowl-uid");
+            if (typeof uid !== "undefined") {
                 var hover = evt.type == "mouseenter";
                 $this.toggleClass("hover", hover);
-                $('*[knowl-uid=' + uid + ']').toggleClass("hover", hover);
-            });
-        }
-        collscientiae.create_sagecell_links($("section.content"));
+                $('#kuid-' + uid).toggleClass("hover", hover);
+            }
+        });
+
+        // highlight originating knowl link when mouse is inside an actual knowl
+        $body.on("mouseenter mouseleave", "div.knowl", function (evt) {
+            'use strict';
+            var $this = $(this);
+            var uid = $this.attr("id").substring(5);
+            var hover = evt.type == "mouseenter";
+            $this.toggleClass("hover", hover);
+            $('*[knowl-uid=' + uid + ']').toggleClass("hover", hover);
+        });
+    },
+    "init": function () {
+        'use strict';
+        var $body = $("body");
+        collscientiae.init_storage();
+        collscientiae.init_sage_cells($body);
+        collscientiae.init_knowl_links($body);
+        var section_content = $('section.content');
+        collscientiae.create_sagecell_links(section_content);
+        collscientiae.include(section_content);
     },
     "handle_knowl": function ($link) {
         'use strict';
@@ -245,7 +261,7 @@ var collscientiae = {
                         $link.addClass("active hover");
                     }
                     collscientiae.create_sagecell_links($output);
-                    collscientiae.process_mathjax($output, function() {
+                    collscientiae.process_mathjax($output, function () {
                         $knowl.slideDown("slow");
                     });
                     collscientiae.include($output);
@@ -253,7 +269,7 @@ var collscientiae = {
             );
         }
     },
-    "process_mathjax": function($where, callback) {
+    "process_mathjax": function ($where, callback) {
         'use strict';
         if (window.MathJax != undefined) {
             MathJax.Hub.Queue(['Typeset', MathJax.Hub, $where.get(0)]);
@@ -272,16 +288,23 @@ var collscientiae = {
         } else {
             $where = $where.find("div[include]");
         }
-        if (typeof parents === "undefined") {
-            // init array with itself
-            var doc_id = $("meta[name='doc_id']").attr("value");
-            parents = new Array(doc_id);
-        }
 
         $where.each(function () {
             'use strict';
 
             var $this = $(this);
+
+            // if no parents set -> we are in the inital call of a possible recursive loop
+            if (typeof parents === "undefined") {
+                // init parents array with document id, unless inside a knowl
+                if ($this.parents().filter("div.knowl").length == 0) {
+                    var doc_id = $("meta[name='doc_id']").attr("value");
+                    parents = new Array(doc_id);
+                } else {
+                    parents = new Array();
+                }
+            }
+
             if ($this.attr("status") == "done") {
                 return;
             }
@@ -294,7 +317,9 @@ var collscientiae = {
             }
 
             // TODO check circular based on include_id only -> maybe include label?
-            if(parents.some(function(p) { return p == include_id})) {
+            if (parents.some(function (p) {
+                    return p == include_id
+                })) {
                 console.log("Circular import detected: ", include_id, "parents:", parents);
                 $this.html($("<span>")
                     .addClass("circular")
@@ -316,7 +341,8 @@ var collscientiae = {
                         $this.attr("status", "done");
                         collscientiae.create_sagecell_links($this);
                         collscientiae.process_mathjax($this);
-                        // need to create a shallow copy of it!
+                        // need to create a shallow copy of it and rename it
+                        // (name clash of scopes, what a buggy language!)
                         var parents2 = parents.slice();
                         parents2.push(include_id);
                         collscientiae.include($this, parents2);
@@ -325,9 +351,9 @@ var collscientiae = {
             );
         });
     },
-    "create_sagecell_links": function($block) {
+    "create_sagecell_links": function ($block) {
         'use strict';
-        $block.find("code[mode]").each(function() {
+        $block.find("code[mode]").each(function () {
             'use strict';
             var $this = $(this);
             var cell_id = $this.attr("id");
@@ -406,7 +432,6 @@ function initSageCell() {
 
 
 $(collscientiae.init);
-$(function() { collscientiae.include($("section.content")) });
 $(initMathjax);
 $(initSageCell);
 $(googleAnalytics);
