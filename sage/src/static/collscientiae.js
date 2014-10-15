@@ -317,9 +317,7 @@ var collscientiae = {
             }
 
             // TODO check circular based on include_id only -> maybe include label?
-            if (parents.some(function (p) {
-                    return p == include_id
-                })) {
+            if (parents.some(function (p) { return p == include_id; })) {
                 console.log("Circular import detected: ", include_id, "parents:", parents);
                 $this.html($("<span>")
                     .addClass("circular")

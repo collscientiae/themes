@@ -65,32 +65,79 @@ section.content
 section.outro
   background: $col2l
 
-/* ==============
- *  MOBILE: Menu
- * ==============
+// ==============
 
-nav ul
-  margin: 0
-  padding: 0
+header
+  nav#menu
+    ul
+      margin: 0
+      padding: 0
 
-nav a
-  display: block
-  margin-bottom: 10px
-  padding: $x 0
-  text-align: center
-  text-decoration: none
-  font-weight: bold
-  color: $col3l
-  &:visited
-    color: $col3l
-  &:hover
-    color: $col3l
+    a
+      display: block
+      margin-bottom: 10px
+      padding: $x 0
+      text-align: center
+      text-decoration: none
+      font-weight: bold
+      color: $col3l
+      &:visited
+        color: $col3l
+      &:hover
+        color: $col3l
+        background: $col1d
+      background: $col1
+
+#breadcrum
+  //@include clearfix
+  padding: $x 3*$x $x 0
+  display: inline-block
+  overflow: hidden
+  font-size: 1.5em
+
+  > a
+    line-height: 3*$x
+    padding: 0 $x 0 (3*$x)
+    position: relative
+    display: block
+    float: left
     background: $col1d
-  background: $col1
+    color: white
+    font-weight: bold
 
-/* Sage Cell Overrides */
-.sagecell_sessionOutput
-  border: 1px solid gray
+  // > a:last-child
+  //  padding-right: 2 * $x
+
+  > a:first-child
+    padding-left: $x
+
+  > a.active,
+  > a:hover
+    background: $col1l
+    color: black
+
+  > a.active:after,
+  > a:hover:after
+    background: $col1l
+
+  > a:after
+    content: ""
+    position: absolute
+    background: $col1d
+    top: 0
+    right: -1.5 * $x
+    width: 3 * $x
+    height: 3 * $x
+    transform: scale(0.707) rotate(45deg)
+    z-index: 1
+    // border: 1px solid red
+    box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
+    border-radius: 0 0px 0 100px
+
+  > a:last-child:after
+    box-shadow: none
+    // content: none
+
 
 /* ==============
  * Main
@@ -308,21 +355,22 @@ p > *[knowl]
 /* ==========================================================================
  * Media Queries
  * ==========================================================================
-
-@media only screen and (min-width: $screen-small)
-  /* ====================
-   *  INTERMEDIATE: Menu
-   * ====================
-  nav a
-    float: left
-    width: 27%
-    margin: 0 1.7%
-    padding: 25px 2%
-    margin-bottom: 0
-  nav li:first-child a
-    margin-left: 0
-  nav li:last-child a
-    margin-right: 0
+header
+  @media only screen and (min-width: $screen-small)
+    /* ====================
+     *  INTERMEDIATE: Menu
+     * ====================
+    nav#menu
+      a
+        float: left
+        width: 27%
+        margin: 0 1.7%
+        padding: 25px 2%
+        margin-bottom: 0
+      li:first-child a
+        margin-left: 0
+      li:last-child a
+        margin-right: 0
 
 
 @media only screen and (min-width: $screen-medium)
@@ -338,7 +386,7 @@ p > *[knowl]
   header > h1
     bottom: 0
     float: left
-  header > nav
+  header > nav#menu
     float: right
     width: 38%
 
