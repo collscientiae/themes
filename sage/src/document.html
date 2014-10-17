@@ -1,19 +1,6 @@
 {% extends 'base.html' %}
 {% from "macros.html" import document_list %}
 
-
-{% block title %}
-<nav id="breadcrum">
-<a href="../index.html">&#8984;</a>
-<a href="../{{  doc.namespace }}/index.html">{{ doc.namespace|title }}</a>
-{% for name, link in doc.breadcrum() %}
-    <a href="{{ link }}.html"
-    {% if loop.last -%}class="active"{%- endif -%}
-    >{{ name }}</a>
-{%  endfor %}
-</nav>
-{% endblock %}
-
 {% block content %}
 <article>
 <section class="intro">

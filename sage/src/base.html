@@ -13,7 +13,7 @@
     <meta name="doc_id" value="{{ doc.namespace }}/{{ doc.docid }}" />
     {%- endif %}
     {% set title = title|default("Index") %}
-    <title>{%- if title %}{{ title }} - {% endif -%}CollScientia</title>
+    <title>{%- if title %}{{ title }} - {% endif -%}CollScientiae</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
 {#  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -23,12 +23,25 @@
 <body>
 
 <header>
-    {% block header %}
-        {% block title %}<h1>{{ title }}</h1>{% endblock %}
+{% block header %}
+    <nav id="breadcrum">
+    <a href="{{  'index.html' | prefix }}">&#8984;</a>
+    {%  if namespace is defined -%}
+        <a href="../{{  namespace }}/index.html">{{ namespace|title }}</a>
+    {%- endif %}
+    {% if breadcrum is defined -%}
+    {% for name, link in breadcrum %}
+        <a href="{{ link }}.html">{{ name }}</a>
+        {#   {% if loop.last -%}class="active"{%- endif -%} #}
+
+    {%  endfor %}
+    {%- endif %}
+    </nav>
+
     <nav id="menu">
         <a href="{{ 'hashtag/index.html'|prefix }}">#hashtags</a>
     </nav>
-    {% endblock %}
+{% endblock %}
 </header>
 
 {% block content %}
