@@ -16,6 +16,10 @@ a:visited
   color: $col1
   text-decoration: none
 
+article
+  a:hover
+    text-decoration: underline
+
 .round
   +border-radius($x)
 
@@ -30,8 +34,6 @@ body
   // line-height: 1.1
   margin: 0 auto
   padding: 0
-  
-  min-height: 100%
 
   //@media only screen and (min-width: 1200px)
   max-width: 1200px
@@ -60,6 +62,7 @@ section.intro
   background: $col2l
 
 section.content
+  min-height: 60vh
   background: $col3l
 
 section.outro
@@ -140,18 +143,7 @@ nav#menu
     box-shadow: none
     // content: none
 
-
-/* ==============
- * Main
- * ==============
-
-.main
-  padding: 30px 0
-
-.main article h1
-  font-size: 2em
-
-.main aside
+article aside
   color: white
   padding: 0px 5% 10px
 
@@ -194,9 +186,6 @@ footer
 footer a
   padding: $x
 
-article > section.content
-  min-height: 20 * $x
-
 a.activate_cell
   cursor: pointer
 
@@ -208,10 +197,10 @@ a.activate_cell
   li
     padding: $x/2 0
     list-style: none
-    > span
+    > a > span
       display: inline-block
       width: 1em
-    &.dir > span:before
+    &.dir > a > span:before
       content: "\2295" !important
 
 .modules
