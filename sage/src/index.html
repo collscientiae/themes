@@ -3,7 +3,7 @@
 {% block content %}
 <article>
 <section class="content">
-{% for name, href in links %}
+{% for name, href in links|sort %}
 <ul>
     <li><a href='{{ href }}'>{{ name }}</a></li>
 </ul>
