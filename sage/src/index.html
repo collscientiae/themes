@@ -3,11 +3,14 @@
 {% block content %}
 <article>
 <section class="content">
-{% for name, href in links|sort %}
-<ul>
-    <li><a href='{{ href }}'>{{ name }}</a></li>
-</ul>
+<ul id="index">
+{% for name, href, type in links|sort %}
+    <li class="{{ type }}">
+        <span></span>
+        <a href='{{ href }}'>{{ name }}</a>
+    </li>
 {% endfor %}
+</ul>
 </section>
 </article>
 {% endblock %}
