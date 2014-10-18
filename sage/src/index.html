@@ -7,6 +7,9 @@
 {% for entry in index %}
 <li class="{{ entry.type }}">
     <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
+    {%- if entry.description != None -%}
+        : {{  entry.description }}
+    {%- endif -%}
 </li>
 {% endfor %}
 </ul>
