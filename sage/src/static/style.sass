@@ -89,13 +89,12 @@ nav#menu
       background: $col1
 
 #breadcrum
-  //@include clearfix
   padding: $x 3*$x $x 0
   display: inline-block
   overflow: hidden
 
   > a
-    font-size: 1em
+    font-size: 1.5em
     line-height: 3*$x
     padding: 0 $x 0 (3*$x)
     position: relative
@@ -105,6 +104,8 @@ nav#menu
     color: white
     font-weight: bold
     white-space: nowrap
+    @media only screen and (max-width: $screen-medium)
+      font-size: 1em
 
   > a:first-child,
   > a:last-child
@@ -201,7 +202,10 @@ a.activate_cell
       display: inline-block
       width: 1em
     &.dir > a > span:before
-      content: "\2295" !important
+      content: "\2295"
+    &.hashtag > a > span:before
+      content: "#"
+
 
 .modules
   display: table

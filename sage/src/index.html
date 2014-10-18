@@ -4,10 +4,10 @@
 <article>
 <section class="content">
 <ul id="index">
-{% for name, href, type in links|sort %}
-    <li class="{{ type }}">
-        <a href='{{ href }}'><span></span>{{ name }}</a>
-    </li>
+{% for entry in index %}
+<li class="{{ entry.type }}">
+    <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
+</li>
 {% endfor %}
 </ul>
 </section>

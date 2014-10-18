@@ -23,11 +23,16 @@
     }
 }());
 
+/* $el.tag() gives you the lowerase tag name */
 jQuery.fn.tag = function () {
     'use strict';
     return this.prop("tagName").toLowerCase();
 };
 
+/* $el.loadPartial is used to retrive (a possibly cached) HTML fragment from the server
+   and replaces the $el's innerHTML with it. Additionally, one can specify a #label
+   and a limit (numeric). This is used to just insert a heading with its sub-paragraphs.
+ */
 jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     'use strict';
     var response;
@@ -51,11 +56,17 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
         } else {
             $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
             try {
-                collscientiae.storage.setItem(url, $response.html());
+                collscientiae.storage[url] = $response.html();
             } catch (e) {
-                //if (e == QUOTA_EXCEEDED_ERR) {
+                //if (e == QUOTA_EXCEEDED_ERR) { // some browsers do not have this error?
                 // quota exceed -> clear all and re-init. TODO: LRU cache
-                collscientiae.storage.clear();
+                try {
+                    // the storage could be a {} dict as fallback.
+                    // ignore error -> init_storage resets it anyways.
+                    collscientiae.storage.clear();
+                } finally {
+                    collscientiae.init_storage();
+                }
                 //}
             }
         }
@@ -84,7 +95,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
         }
     };
 
-    var cached_data = collscientiae.storage.getItem(url);
+    var cached_data = collscientiae.storage[url];
     if (cached_data) {
         console.log("cache hit", url);
         process_response(cached_data, "cached");
