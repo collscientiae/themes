@@ -4,7 +4,7 @@
 <article>
 <section class="content">
 <ul id="index">
-{% for entry in index %}
+{% for entry in index|sort(attribute="title") %}
 <li class="{{ entry.type }}">
     <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
     {%- if entry.description != None -%}
