@@ -9,14 +9,15 @@
     <meta name="google_analytics" account="{{ google_analytics }}" />
     {%- endif %}
     <meta name="doc_root_hash" value="{{ doc_root_hash }}" />
-    {% if doc is defined -%}
+    {%- if doc is defined -%}
     <meta name="doc_id" value="{{ doc.namespace }}/{{ doc.docid }}" />
     {%- endif %}
+    <meta name="DC.date" content="{{ creation_date }}" scheme="W3CDTF"/>
     <title>{%- if title %}{{ title }} - {% endif -%}CollScientiae</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
-    {#  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
+    {#-  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    {# https://www.google.com/fonts#UsePlace:use/Collection:Lato:400,400italic,700,700italic|Ubuntu+Mono:400,700,400italic,700italic #}
+    {#- https://www.google.com/fonts#UsePlace:use/Collection:Lato:400,400italic,700,700italic|Ubuntu+Mono:400,700,400italic,700italic #}
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Ubuntu+Mono:400,700,400italic,700italic' rel='stylesheet' type='text/css' />
 </head>
 <body>
@@ -46,10 +47,12 @@
 {% endblock %}
 
 <footer>
+<div>
 {% for entry in footer %}
 <a href="{{ entry.href }}">{{ entry.title }}</a>
 {% if not loop.last -%}|{%- endif %}
 {% endfor %}
+</div>
 </footer>
 
 <script src='{{ "static/collscientiae.js"|prefix }}' type="text/javascript"></script>
