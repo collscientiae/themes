@@ -26,7 +26,7 @@
 {% block header %}
     <nav id="breadcrum">
     <a href="{{  'index.html' | prefix }}"><span>&#8984;</span></a>
-    {%  if namespace is defined -%}
+    {%  if namespace is defined and namespace is not none -%}
         <a href="../{{  namespace }}/index.html">{{ namespace|title }}</a>
     {%- endif %}
     {% if breadcrum is defined -%}
