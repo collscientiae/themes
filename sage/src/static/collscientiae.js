@@ -203,6 +203,13 @@ var collscientiae = {
         // knowl element is included (e.g. inside a <h1> tag) (sibling in DOM)
         var idtag = "id='" + output_id.substring(1) + "'";
         //var kid = "id='kuid-" + uid + "'";
+
+        var label = $link.attr("label");
+        var limit = $link.attr("limit");
+        if (typeof limit !== "undefined") {
+            limit = parseInt(limit);
+        }
+
         // if we already have the content, toggle visibility
         if ($output_id.length > 0) {
             $("#kuid-" + uid).slideToggle("fast");
@@ -254,7 +261,7 @@ var collscientiae = {
             $knowl.hide();
 
             // Get data from server.
-            $output.loadPartial(knowl_id, undefined, undefined,
+            $output.loadPartial(knowl_id, label, limit,
                 function (response, status, xhr) {
                     'use strict';
                     $output.removeClass("loading");
