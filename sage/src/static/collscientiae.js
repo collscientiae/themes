@@ -55,20 +55,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             $response = $("<section>").addClass("content").html(responseText);
         } else {
             $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
-            try {
-                collscientiae.storage[url] = $response.html();
-            } catch (e) {
-                //if (e == QUOTA_EXCEEDED_ERR) { // some browsers do not have this error?
-                // quota exceed -> clear all and re-init. TODO: LRU cache
-                try {
-                    // the storage could be a {} dict as fallback.
-                    // ignore error -> init_storage resets it anyways.
-                    collscientiae.storage.clear();
-                } finally {
-                    collscientiae.init_storage();
-                }
-                //}
-            }
+            collscientiae.store(url, $response);
         }
 
         if (typeof label == "undefined") {
@@ -129,6 +116,21 @@ var collscientiae = {
         console.log("storage: DOC_ROOT_HASH = " + storage["DOC_ROOT_HASH"]);
         collscientiae.storage = storage;
     },
+    "store": function(key, $element) {
+        try {
+            collscientiae.storage[key] = $element.html();
+        } catch (e) {
+            //if (e == QUOTA_EXCEEDED_ERR) { // some browsers do not have this error?
+            // quota exceed -> clear all and re-init. TODO: LRU cache
+            try {
+                // the storage could be a {} dict as fallback.
+                // ignore error -> init_storage resets it anyways.
+                collscientiae.storage.clear();
+            } finally {
+                collscientiae.init_storage();
+            }
+        }
+    },
     "init_sage_cells": function ($body) {
         // activate sage cells
         'use strict';
@@ -181,9 +183,11 @@ var collscientiae = {
         collscientiae.init_storage();
         collscientiae.init_sage_cells($body);
         collscientiae.init_knowl_links($body);
-        var section_content = $('section.content');
-        collscientiae.create_sagecell_links(section_content);
-        collscientiae.include(section_content);
+        var $section_content = $('section.content');
+        var url = window.location.href.split("/").slice(-2).join("/");
+        collscientiae.store("../" + url, $section_content);
+        collscientiae.create_sagecell_links($section_content);
+        collscientiae.include($section_content);
     },
     "handle_knowl": function ($link) {
         'use strict';
