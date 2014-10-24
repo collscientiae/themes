@@ -187,8 +187,24 @@ footer
 footer > div
   padding: $x
 
-a.activate_cell
+code > pre
+  border: 1px solid $col2
+  padding: $x/2
+  +round-top($x/4)
+  +round-bottom-right($x/4)
+
+
+a.activate_cell,
+.knowl-output a.activate_cell
   cursor: pointer
+  display: inline-block
+  margin-top: -1px
+  z-index: 1
+  padding: $x/2
+  border: 1px solid $col2
+  border-top: 0
+  +round-bottom($x/4)
+  background: $col3l
 
 /* MODULES INDEX */
 
@@ -247,18 +263,6 @@ $kx: $x/2
 $kcol: $col3
 $kcold: $col3d
 
-.knowl-content
-  padding: $kx $kx 0 $kx
-
-.knowl-content h1
-  margin: 0px 0px $kx 0px
-
-.knowl-content h2
-  margin: 0px 0px $kx/2 0px
-
-.knowl p
-  margin-bottom: 0
-  margin-top: $kx
 
 *[knowl]
   display: inline
@@ -313,31 +317,32 @@ p > *[knowl]
   padding: 0 $kx $kx $kx
   margin:
     top: 0
-    bottom: 0px
-    right: 0px
+    bottom: 0
+    right: 0
+
+  h1
+    margin: 2*$kx 0 (-$kx) 0
+    color: $kcold
+  h2
+    margin: $kx 0 (-$kx) 0
+    color: $kcold
+  a
+    display: inline
+
+  &.loading
+    color: grey
+    font-style: italic
+    font-size: small
 
 .knowl-output .knowl-output,
 .knowl-output .knowl-output.loading
   margin-left: 0
   margin-right: 0
 
-.knowl-output.loading
-  color: grey
-  font-style: italic
-  font-size: small
 
-.knowl-output h1,
-.knowl-output h2
-  margin: 5px 0
-
-.knowl-output h1
-  color: #006
-
-.knowl-output h2
-  color: #006
-
-.knowl-output a
-  display: inline
+//.knowl-output h1,
+//.knowl-output h2
+//  margin: 5px 0
 
 .knowl-footer
   text-align: right
