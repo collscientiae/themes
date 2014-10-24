@@ -3,16 +3,23 @@
 {% block content %}
 <article>
 <section class="content">
-<ul id="index">
-{% for entry in index|sort(attribute="title") %}
-<li class="{{ entry.type }}">
-    <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
-    {%- if entry.description != None -%}
-        : {{  entry.description }}
-    {%- endif -%}
-</li>
+
+{% for group in index|groupby('namespace') %}
+    {% if group.grouper != none %}
+        <h2>{{ group.grouper|title }}</h2>
+    {% endif %}
+    <ul id="index">
+    {% for entry in group.list|sort(attribute="title") %}
+    <li class="{{ entry.type }}">
+        <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
+        {%- if entry.description != None -%}
+            : {{  entry.description }}
+        {%- endif -%}
+    </li>
+    {% endfor %}
+    </ul>
 {% endfor %}
-</ul>
+
 </section>
 </article>
 {% endblock %}
