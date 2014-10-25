@@ -460,6 +460,29 @@ function initSageCell() {
     });
 }
 
+// extending Prism.js for sage and r
+
+Prism.languages.python['function'] = /\b([a-zA-Z_]+)(?=\()\b/g;
+
+Prism.languages.sage= {
+	'comment': {
+		pattern: /(^|[^\\])#.*?(\r?\n|$)/g,
+		lookbehind: true
+	},
+    'function': Prism.languages.python['function'],
+	'string': /"""[\s\S]+?"""|("|')(\\?.)*?\1/g,
+	'keyword' : /\b(as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|pass|print|raise|return|try|while|with|yield|var)\b/g,
+	'boolean' : /\b(True|False)\b/g,
+	'number' : /\b-?(0x)?\d*\.?[\da-f]+\b/g,
+	'operator' : /[-+]{1,2}|=?&lt;|=?&gt;|!|={1,2}|(&){1,2}|(&amp;){1,2}|\|?\||\?|\*|\/|~|\^|%|\b(or|and|not)\b/g,
+	'ignore' : /&(lt|gt|amp);/gi,
+	'punctuation' : /[{}[\];(),.:<>]/g
+};
+
+Prism.languages.r = Prism.languages.extend('clike', {
+	'function': /\b([a-zA-Z.]+)(?=\()\b/g,
+	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?|NA|-?Infinity)\b/g
+});
 
 $(collscientiae.init);
 $(initMathjax);
