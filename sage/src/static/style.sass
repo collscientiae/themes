@@ -298,7 +298,7 @@ $kcold: $col3d
   border-bottom: 1px dotted $kcol
   color: $kcold
   cursor: pointer
-  +round-top($kx / 2)
+  +round($kx / 2)
   margin: 3px 0 0 0
   +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
@@ -329,6 +329,9 @@ div.knowl
       border-color: $kcold
     > div.knowl-footer
       background-color: $kcold
+
+p + div.knowl
+  margin-top: -$x
 
 //div > *[knowl],
 //p > *[knowl]

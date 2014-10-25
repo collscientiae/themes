@@ -145,6 +145,28 @@ var collscientiae = {
                 $activate_link.hide();
             });
         });
+
+        // highlight sagecells on hover over activation link
+        $body.on("mouseenter mouseleave", "a.activate_cell", function (evt) {
+            'use strict';
+            var $this = $(this);
+            var cellid = $this.attr("target");
+            if (typeof cellid !== "undefined") {
+                var hover = evt.type == "mouseenter";
+                $this.toggleClass("hover", hover);
+                $('#' + cellid).toggleClass("hover", hover);
+            }
+        });
+
+        // highlight originating activation button when mouse is inside a sagecell
+        $body.on("mouseenter mouseleave", "div.sagecell_init > code", function (evt) {
+            'use strict';
+            var $this = $(this).parent();
+            var cellid = $this.attr("id");
+            var hover = evt.type == "mouseenter";
+            $this.toggleClass("hover", hover);
+            $('a.activate_cell[target="' + cellid + '"]').toggleClass("hover", hover);
+        });
     },
     "init_knowl_links": function ($body) {
         // handle clicks on knowls
