@@ -1,0 +1,169 @@
+/* http://prismjs.com/download.html?themes=prism-coy&languages=markup+css+clike+javascript
+/**
+ * prism.js Coy theme for JavaScript, CoffeeScript, CSS and HTML
+ * Based on https://github.com/tshedor/workshop-wp-theme (Example: http://workshop.kansan.com/category/sessions/basics or http://workshop.timshedor.com/category/sessions/basics);
+ * @author Tim  Shedor
+
+code[class*="language-"]
+  color: black
+  +monospace
+  direction: ltr
+  text-align: left
+  white-space: pre
+  word-spacing: normal
+  word-break: normal
+  //line-height: 1
+  -moz-tab-size: 4
+  -o-tab-size: 4
+  tab-size: 4
+  -webkit-hyphens: none
+  -moz-hyphens: none
+  -ms-hyphens: none
+  hyphens: none
+
+pre[class*="language-"]
+  color: black
+  +monospace
+  direction: ltr
+  text-align: left
+  white-space: pre
+  word-spacing: normal
+  word-break: normal
+  //line-height: 1
+  -moz-tab-size: 4
+  -o-tab-size: 4
+  tab-size: 4
+  -webkit-hyphens: none
+  -moz-hyphens: none
+  -ms-hyphens: none
+  hyphens: none
+  position: relative
+  margin: .5em 0
+  //-webkit-box-shadow: -1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf
+  //-moz-box-shadow: -1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf
+  //box-shadow: -1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf
+  border-left: 10px solid $col3d
+  //background-color: #fdfdfd
+  //background-image: -webkit-linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%)
+  //background-image: -moz-linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%)
+  //background-image: -ms-linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%)
+  //background-image: -o-linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%)
+  //background-image: linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%)
+  //background-size: 3em 3em
+  background-origin: content-box
+  overflow: visible
+  max-height: 30em
+
+/* Code blocks
+
+code[class*="language"]
+  max-height: inherit
+  height: 100%
+  //padding: 0 1em
+  display: block
+  overflow: auto
+
+/* Margin bottom to accomodate shadow
+
+\:not(pre) > code[class*="language-"], pre[class*="language-"]
+  background-color: #fdfdfd
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  //margin-bottom: 1em
+
+/* Inline code
+
+\:not(pre) > code[class*="language-"]
+  position: relative
+  //padding: .2em
+  //-webkit-border-radius: 0.3em
+  //-moz-border-radius: 0.3em
+  //-ms-border-radius: 0.3em
+  //-o-border-radius: 0.3em
+  //border-radius: 0.3em
+  color: $col_dark
+  //border: 1px solid rgba(0, 0, 0, 0.1)
+
+pre[class*="language-"]
+  &:before, &:after
+    content: ''
+    z-index: -2
+    display: block
+    position: absolute
+    bottom: 0.75em
+    left: 0.18em
+    width: 40%
+    height: 20%
+    -webkit-box-shadow: 0px 13px 8px #979797
+    -moz-box-shadow: 0px 13px 8px #979797
+    box-shadow: 0px 13px 8px #979797
+    -webkit-transform: rotate(-2deg)
+    -moz-transform: rotate(-2deg)
+    -ms-transform: rotate(-2deg)
+    -o-transform: rotate(-2deg)
+    transform: rotate(-2deg)
+
+\:not(pre) > code[class*="language-"]:after, pre[class*="language-"]:after
+  right: 0.75em
+  left: auto
+  -webkit-transform: rotate(2deg)
+  -moz-transform: rotate(2deg)
+  -ms-transform: rotate(2deg)
+  -o-transform: rotate(2deg)
+  transform: rotate(2deg)
+
+.token
+  &.comment, &.block-comment, &.prolog, &.doctype, &.cdata
+    color: #7D8B99
+  &.punctuation
+    color: $col_dark
+  &.property, &.tag, &.boolean, &.number, &.function-name, &.constant, &.symbol, &.deleted
+    color: darkgreen
+  &.selector, &.attr-name, &.function, &.builtin, &.inserted
+    color: darkgreen
+  &.string, &.char
+    color: darkred
+  &.operator, &.entity, &.url, &.variable
+    color: $col_dark
+    //background: rgba(255, 255, 255, 0.5)
+  &.atrule, &.attr-value, &.keyword, &.class-name
+    color: darkviolet
+  &.regex, &.important
+    color: #e90
+
+.language-css .token.string, .style .token.string
+  color: #a67f59
+  background: rgba(255, 255, 255, 0.5)
+
+.token
+  &.important
+    font-weight: normal
+  &.entity
+    cursor: help
+
+.namespace
+  opacity: .7
+
+@media screen and (max-width: 767px)
+  pre[class*="language-"]
+    &:before, &:after
+      bottom: 14px
+      -webkit-box-shadow: none
+      -moz-box-shadow: none
+      box-shadow: none
+
+/* Plugin styles
+
+.token
+  &.tab:not(:empty):before, &.cr:before, &.lf:before
+    color: #e0d7d1
+
+/* Plugin styles: Line Numbers
+
+pre[class*="language-"].line-numbers
+  padding-left: 0
+  code
+    padding-left: 3.8em
+  .line-numbers-rows
+    left: 0

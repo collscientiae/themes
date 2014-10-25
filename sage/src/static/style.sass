@@ -7,6 +7,7 @@
 @import global
 @import normalize
 @import boilerplate
+@import prism
 
 /* ==========================================================================
  * MAIN PART STARTS HERE
@@ -207,15 +208,19 @@ footer
 footer > div
   padding: $x
 
-code > pre
-  border: 1px solid $col2
-  padding: $x/2
-  //@include clearfix
-code[mode] > pre
-  +round-top($x/4)
-  +round-bottom-right($x/4)
-code:not([mode]) > pre
-  +round($x/4)
+div[mode]
+  @include clearfix
+div
+  > code
+    border: 1px solid $col2
+    padding: $x/2
+div[mode]
+  > code
+    +round-top($x/4)
+    +round-bottom-right($x/4)
+div:not([mode])
+  > code
+    +round($x/4)
 
 
 
@@ -345,11 +350,14 @@ div.knowl
     bottom: 0
     right: 0
 
+  div + a.activate_cell
+    margin-bottom: $kx
+
   h1
-    margin: 2*$kx 0 (-$kx) 0
+    margin: 2*$kx 0 0 0
     color: $kcold
   h2
-    margin: $kx 0 (-$kx) 0
+    margin: $kx 0 0 0
     color: $kcold
   a
     display: inline

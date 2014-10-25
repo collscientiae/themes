@@ -187,6 +187,7 @@ var collscientiae = {
         var url = window.location.href.split("/").slice(-2).join("/");
         collscientiae.store("../" + url, $section_content);
         collscientiae.create_sagecell_links($section_content);
+        collscientiae.highlight_code($section_content);
         collscientiae.include($section_content);
     },
     "handle_knowl": function ($link) {
@@ -286,10 +287,18 @@ var collscientiae = {
                     collscientiae.process_mathjax($output, function () {
                         $knowl.slideDown("slow");
                     });
+                    collscientiae.highlight_code($output);
                     collscientiae.include($output);
                 }
             );
         }
+    },
+    "highlight_code": function($where) {
+        "use strict";
+        console.log("highlight code", $where)
+        $where.find("div[mode]>code").each(function () {
+            Prism.highlightElement($(this)[0]);
+         });
     },
     "process_mathjax": function ($where, callback) {
         'use strict';
@@ -361,6 +370,7 @@ var collscientiae = {
                         $this.attr("status", "done");
                         collscientiae.create_sagecell_links($this);
                         collscientiae.process_mathjax($this);
+                        collscientiae.highlight_code($this);
                         // need to create a shallow copy of it and rename it
                         // (name clash of scopes, what a buggy language!)
                         var parents2 = parents.slice();
@@ -373,9 +383,9 @@ var collscientiae = {
     },
     "create_sagecell_links": function ($block) {
         'use strict';
-        $block.find("code[mode]").each(function () {
+        $block.find("code[type='text/x-sage']").each(function () {
             'use strict';
-            var $this = $(this);
+            var $this = $(this).parent();
             var cell_id = $this.attr("id");
             var $a = $("<a>")
                 .attr("class", "activate_cell")
