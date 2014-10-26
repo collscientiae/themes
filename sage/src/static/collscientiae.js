@@ -239,7 +239,7 @@ var collscientiae = {
 
         // if we already have the content, toggle visibility
         if ($output_id.length > 0) {
-            $("#kuid-" + uid).slideToggle("fast");
+            $("#kuid-" + uid).slideToggle("slow");
             $link.toggleClass("active");
 
             // otherwise download it or get it from the cache
@@ -317,7 +317,6 @@ var collscientiae = {
     },
     "highlight_code": function($where) {
         "use strict";
-        console.log("highlight code", $where)
         $where.find("div[mode]>code").each(function () {
             Prism.highlightElement($(this)[0]);
          });
@@ -412,7 +411,7 @@ var collscientiae = {
             var $a = $("<a>")
                 .attr("class", "activate_cell")
                 .attr("target", cell_id)
-                .text("activate cell");
+                .text("Activate Code-Cell");
             $this.after($a);
         });
     },
@@ -453,14 +452,15 @@ function initMathjax() {
 
 function googleAnalytics() {
     'use strict';
-    var uaid = document.querySelector("meta[name='google_analytics']").account;
+    var uaid = $("meta[name='google_analytics']").first().attr("account");
     if (uaid !== null) {
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
             }, i[r].l = 1 * new Date();
-            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a = s.createElement(o);
+            m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)

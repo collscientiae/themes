@@ -3,7 +3,6 @@
  *! draws bits and pieces from git.io/normalize and http://h5bp.com/ (both MIT License)
  */
 
-
 @import global
 @import normalize
 @import boilerplate
@@ -18,9 +17,9 @@ a:visited
   color: $col1
   text-decoration: none
 
-//article
-//  a:hover
-//    text-decoration: underline
+section
+  a:hover
+    color: $col1d
 
 .round
   +round($x)
@@ -67,8 +66,22 @@ section.intro
   background: $col2l
 
 section.content
-  min-height: 60vh
+  min-height: 50vh
   background: $col3l
+
+  div[mode]
+    @include clearfix
+  div
+    > code
+      border: 1px solid $col2
+      padding: $x/2
+  div[mode]
+    > code
+      +round-top($x/4)
+      +round-bottom-right($x/4)
+  div:not([mode])
+    > code
+      +round($x/4)
 
 section.outro
   background: $col2l
@@ -188,8 +201,6 @@ header,
 footer
   @include clearfix
 
-
-
 header > h1,
 footer
   color: $col1
@@ -204,25 +215,10 @@ header > h1
 
 footer
   min-height: 5 * $x
-
-footer > div
-  padding: $x
-
-div[mode]
-  @include clearfix
-div
-  > code
-    border: 1px solid $col2
-    padding: $x/2
-div[mode]
-  > code
-    +round-top($x/4)
-    +round-bottom-right($x/4)
-div:not([mode])
-  > code
-    +round($x/4)
-
-
+  a:hover
+    color: $col1l
+  > div
+    padding: $x
 
 a.activate_cell,
 .knowl-output a.activate_cell
@@ -234,6 +230,7 @@ a.activate_cell,
   border: 1px solid $col2
   border-top: 0
   +round-bottom($x/4)
+  margin-bottom: $x
 
 /* MODULES INDEX */
 
@@ -294,12 +291,17 @@ $kcold: $col3d
 
 
 *[knowl]
-  display: inline
+  display: inline-block
   border-bottom: 1px dotted $kcol
   color: $kcold
   cursor: pointer
-  +round($kx / 2)
-  margin: 3px 0 0 0
+  +round-top($kx / 2)
+  padding:
+    left: 2px
+    right: 2px
+  margin:
+    left: -2px
+    right: -2px
   +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
   &:hover,
@@ -307,8 +309,8 @@ $kcold: $col3d
     border-bottom: 1px solid $kcol
     background: $kcol
     color: black
-    padding: 0
-    margin: 0 0 0 0
+    //padding: 0
+    //margin: 0 0 0 0
 
   &.active
     padding:
