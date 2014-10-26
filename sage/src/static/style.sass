@@ -28,7 +28,7 @@ html
   padding: 0
   margin: 0
   overflow: scroll
-  @include media(medium)
+  @include media(max-medium)
     overflow: auto
 
 body
@@ -42,11 +42,11 @@ body
   //@media only screen and (min-width: 1200px)
   max-width: 1200px
 
-  @include media(medium)
+  @include media(max-medium)
     padding: 0
     margin: 0
 
-  @include media(narrow)
+  @include media(max-narrow)
     padding: 0
     margin: 0
 
@@ -127,7 +127,7 @@ nav#menu
     color: white
     font-weight: bold
     white-space: nowrap
-    @include media(medium)
+    @include media(max-medium)
       font-size: 1em
 
   > a:first-child,
@@ -173,7 +173,7 @@ article aside
 
 article > section
   padding: $x $x
-  @include media(medium)
+  @include media(max-medium)
     padding-top: $x
   +narrowpaddingonsmallscreen
 
@@ -254,12 +254,12 @@ a.activate_cell,
 
 .modules
   display: table
-  @include media(narrow)
+  @include media(max-narrow)
     display: block
 
 .modules > div
   display: table-row
-  @include media(medium)
+  @include media(max-medium)
     display: block
     margin: 0
 
@@ -268,7 +268,7 @@ a.activate_cell,
   padding-top: $x
   &:nth-child(2)
     padding-left: $x
-  @include media(medium)
+  @include media(max-medium)
     display: block
     &:nth-child(2)
       padding-left: 2 * $x
@@ -295,7 +295,7 @@ $kcold: $col3d
 
 *[knowl]
   display: inline-block
-  border-bottom: 1px dotted $kcol
+  border-bottom: 1px dotted $kcold
   color: $kcold
   cursor: pointer
   +round-top($kx / 2)
@@ -305,11 +305,11 @@ $kcold: $col3d
   margin:
     left: -2px
     right: -2px
-  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
+  +transition-knowl
 
   &:hover,
   &.active
-    border-bottom: 1px solid $kcol
+    border-bottom-color: $kcol
     background: $kcol
     color: black
     //padding: 0
@@ -328,7 +328,7 @@ $kcold: $col3d
 div.knowl
   > .knowl-output,
   > div.knowl-footer
-    +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
+    +transition-knowl
   &.hover // class hover, set by JS
     > .knowl-output
       border-color: $kcold
@@ -360,12 +360,22 @@ p + div.knowl
   div + a.activate_cell
     margin-bottom: $kx
 
-  h1
+  > h1,
+  > h2,
+  > h3
+    color: $kcol
+    +transition-knowl
+  > h1
     margin: 2*$kx 0 0 0
-    color: $kcold
-  h2
+  > h2
     margin: $kx 0 0 0
-    color: $kcold
+  > h2
+    margin: $kx * .75 0 0 0
+  &:hover
+    > h1,
+    > h2,
+    > h3
+      color: $kcold
   a
     display: inline
 

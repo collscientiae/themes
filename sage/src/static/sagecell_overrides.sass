@@ -1,16 +1,19 @@
 @import global
 
+div.sagecell_init > code,
+a.activate_cell
+  +transition-knowl
+
 div.sagecell_init.hover > code,
 a.activate_cell.hover
   border-color: $col1d
-  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 a.activate_cell.hover
   color: $col1d
 
 code.sagecell
   margin-top: $x
   display: block
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     display: block
   @include clearfix
 
@@ -45,7 +48,7 @@ div.sagecell_input button.sagecell_evalButton
 .sagecell_output_elements
   width: 49%
   padding-top: 0
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     display: block
     width: inherit
 

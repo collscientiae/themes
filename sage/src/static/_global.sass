@@ -38,7 +38,7 @@ $screen-large: 1140px
   font-family: "Ubuntu Mono", monospace
 
 =media($media)
-  @if $media == narrow
+  @if $media == max-narrow
     @media only screen and (max-width: $screen-small)
       @content
 
@@ -46,7 +46,7 @@ $screen-large: 1140px
     @media only screen and (min-width: $screen-small)
       @content
 
-  @else if $media == medium
+  @else if $media == max-medium
     //@media only screen and (min-width: $screen-small + 1) and (max-width: $screen-large - 1)
     @media only screen and (max-width: $screen-medium)
       @content
@@ -55,7 +55,7 @@ $screen-large: 1140px
     @media only screen and (min-width: $screen-medium)
       @content
 
-  @else if $media == wide
+  @else if $media == min-wide
     @media only screen and (min-width: $screen-large)
       @content
 
@@ -103,7 +103,10 @@ $screen-large: 1140px
   -moz-transition: $style
   -o-transition: $style
   -ms-transition: $style
-  transition: $style    
+  transition: $style
+
+=transition-knowl
+  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
 // that's a mixin and below a placeholder via %
 // ALWAYS use it as @extend %clearfix, not as an include!
