@@ -62,23 +62,15 @@ textarea
   color: $col_dark
 
 // add class .hover to :hover
-.hover
-  @extend a:hover
+// .hover
+//  @extend a:hover
 
 section.intro
   background: $col2l
 
 section.content
   min-height: 50vh
-  background: $col3l
-
-  div.sagecell_init
-    @include clearfix
-    > code
-      border: 1px solid $col2
-      padding: $x/2
-      +round-top($x/4)
-      +round-bottom-right($x/4)
+  background: white // $col3l
   div:not([mode])
     > code
       +round($x/4)
@@ -86,7 +78,28 @@ section.content
 section.outro
   background: $col2l
 
-// ==============
+// =========== sagecell basics
+
+div.sagecell_init
+  @include clearfix
+  > code
+    border: 1px solid $col2
+    padding: $x/2
+    +round-top($x/4)
+    +round-bottom-right($x/4)
+
+  //> code,
+  //a.activate_cell
+  //  +transition-knowl
+
+div.sagecell_init.hover > code,
+a.activate_cell.hover
+  border-color: $col1d !important
+a.activate_cell.hover
+  color: $col1d !important
+
+
+// ==============  nav#menu
 
 nav#menu
   @include media(min-medium)
@@ -256,13 +269,18 @@ a.activate_cell,
       display: block
       margin: 0
 
-  > div > div:not(.knowl)
-    display: table-cell
-    padding:
-      top: $x/2
-      bottom: $x/2
+  > div
+    > div:not(.knowl)
+      display: table-cell
+      padding:
+        top: $x/2
+        bottom: $x/2
+    > div:first-child > a
+      display: block
+      min-width: 15vw
     &:nth-child(2)
       padding-left: 2 * $x
+      width: 100%
     @include media(max-medium)
       display: block
       &:nth-child(2)
@@ -290,7 +308,7 @@ span.circular
       font-weight: bold
 
 /*
- * KNOWLS
+ * ================= KNOWLS
  */
 
 $kx: $x/2
@@ -332,6 +350,9 @@ $kcold: $col3d
     background: $kcold
     border-color: $kcold
 
+p + div.knowl
+  margin-top: -$x
+
 div.knowl
   > .knowl-output,
   > div.knowl-footer
@@ -342,80 +363,77 @@ div.knowl
     > div.knowl-footer
       background-color: $kcold
 
-p + div.knowl
-  margin-top: -$x
+  > .knowl-error
+    color: red
+    border-bottom: 0
 
-//div > *[knowl],
-//p > *[knowl]
-//  position: relative
+  > .knowl-output
+    background: $col3l
+    border: $kx solid $kcol
+    border-top-width: 1px
+    +round-bottom($kx)
+    overflow-y: auto
+    max-height: 75vh
+    // knowl inside knowl!
+    .knowl-output
+      max-height: 50vh
+    padding: 0 $kx 0 $kx
+    margin:
+      top: 0
+      bottom: 0
+      right: 0
 
-.knowl-error
-  color: red
-  border-bottom: 0
+    div + a.activate_cell
+      margin-bottom: $kx
 
-.knowl-output
-  background: $col3l
-  border: $kx solid $kcol
-  border-top-width: 1px
-  +round-bottom($kx)
-  padding: 0 $kx 0 $kx
-  margin:
-    top: 0
-    bottom: 0
-    right: 0
-
-  div + a.activate_cell
-    margin-bottom: $kx
-
-  > h1,
-  > h2,
-  > h3
-    color: $kcol
-    +transition-knowl
-  > h1
-    margin: 2*$kx 0 0 0
-  > h2
-    margin: $kx 0 0 0
-  > h2
-    margin: $kx * .75 0 0 0
-  &:hover
     > h1,
     > h2,
     > h3
-      color: $kcold
-  a
-    display: inline
+      color: $kcol
+      +transition-knowl
+    > h1
+      margin: 2*$kx 0 0 0
+    > h2
+      margin: $kx 0 0 0
+    > h2
+      margin: $kx * .75 0 0 0
+    &:hover
+      > h1,
+      > h2,
+      > h3
+        color: $kcold
+    //a
+    //  display: inline
 
-  &.loading
-    color: grey
-    font-style: italic
-    font-size: small
+    &.loading
+      color: grey
+      font-style: italic
+      font-size: small
 
-// nested knowls
-.knowl-output
-  .knowl-output,
-  .knowl-output.loading
-    margin-left: 0
-    margin-right: 0
+    // nested knowls
+    .knowl-output,
+    .knowl-output.loading
+      margin-left: 0
+      margin-right: 0
 
-.knowl-footer
-  text-align: right
-  height: $kx + 2px
-  position: relative
-  bottom: $kx + 2px
-  font:
-    weight: bold
-    size: $kx + 3
-  line-height: $kx + 1px
-  background: $kcol
-  color: white
-  padding: 0 $kx
-  margin:  0 $kx
-  & a
+  .knowl-footer
+    text-align: right
+    height: $kx + 2px
+    position: relative
+    bottom: $kx + 2px
+    font:
+      weight: bold
+      size: $kx + 3
+    line-height: $kx + 1px
+    background: $kcol
     color: white
-  & a:hover
-    background: none
-    color: lightgray
+    padding: 0 $kx
+    margin:  0 $kx
+    & a
+      color: white
+    & a:hover
+      background: none
+      color: lightgray
 
 /* ==========================================================================
  * Helper classes

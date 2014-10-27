@@ -39,6 +39,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
     var $target = this;
     var url = "../" + part_id + ".html";
     var selector_outer = "section.content";
+    console.log("loadPartial: part_id", part_id, "label", label, "limit", limit);
 
     // only make requests if necessary
     if ($target.length == 0) {
@@ -58,7 +59,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             collscientiae.store(url, $response);
         }
 
-        if (typeof label == "undefined") {
+        if (typeof label == "undefined" && typeof limit == "undefined") {
             $target.html($response.html());
         } else {
             // the following is actually simple: clone a list of siblings
@@ -67,14 +68,24 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
             // this makes it possible to reference a header from somewhere else by ID
             // and insert it here including the text below the header.
             $snippet = $("<div>");
-            var $start = $response.find("*[label='" + label + "']");
+            var $start;
+            if (typeof label == "undefined") {
+                $start = $response.children().first();
+            } else {
+                $start = $response.find("*[label='" + label + "']");
+            }
+            // console.log("$start", $start);
             $snippet.append($start.clone());
             var endtag = $start.tag();
             $start.nextUntil(endtag).each(function (idx) {
+                // console.log("limit loop: idx", idx);
                 if (typeof limit == "undefined" || idx < limit) {
                     $snippet.append($(this).clone());
                 }
             });
+            if (typeof label == "undefined") {
+                $snippet.append($("<div>").text("..."));
+            }
             $target.html($snippet.html());
         }
         if (from_cache) {
@@ -103,6 +114,16 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
 var collscientiae = {
     "knowl_id_counter": 0,
     "storage": undefined,
+    "clear_cache": function() {
+        "use strict";
+        try {
+            // the storage could be a {} dict as fallback.
+            // ignore error -> init_storage resets it anyways.
+            collscientiae.storage.clear();
+        } finally {
+            collscientiae.init_storage();
+        }
+    },
     "init_storage": function () {
         // init storage (clear storage, if root hash is different)
         'use strict';
@@ -122,13 +143,7 @@ var collscientiae = {
         } catch (e) {
             //if (e == QUOTA_EXCEEDED_ERR) { // some browsers do not have this error?
             // quota exceed -> clear all and re-init. TODO: LRU cache
-            try {
-                // the storage could be a {} dict as fallback.
-                // ignore error -> init_storage resets it anyways.
-                collscientiae.storage.clear();
-            } finally {
-                collscientiae.init_storage();
-            }
+            collscientiae.clear_cache();
         }
     },
     "init_sage_cells": function ($body) {
