@@ -67,6 +67,12 @@ textarea
 
 section.intro
   background: $col2l
+  position: relative
+  > a#source
+    font-size: 75%
+    position: absolute
+    top: $x
+    right: $x
 
 section.content
   min-height: 50vh
@@ -269,33 +275,33 @@ a.activate_cell,
       display: block
       margin: 0
 
-  > div
-    > div:not(.knowl)
-      display: table-cell
-      padding:
-        top: $x/2
-        bottom: $x/2
-    > div:first-child > a
-      display: block
-      min-width: 15vw
-    &:nth-child(2)
-      padding-left: 2 * $x
-      width: 100%
-    @include media(max-medium)
-      display: block
+
+    > div
+      @include media(max-medium) // TODO FIX THIS
+        display: block
+        &:nth-child(2)
+          padding-left: 2 * $x
+          padding-top: inherit
+
+      &:not(.knowl)
+        display: table-cell
+        padding:
+          top: $x/2
+          bottom: $x/2
+      &:first-child > a
+        display: block
+        min-width: 15vw
       &:nth-child(2)
         padding-left: 2 * $x
-        padding-top: inherit
-    &:first-child > a
-      display: block
-    &.dir,
-    &.hashtag
-      > a > span:before
-        padding-right: $x / 2
-    &.dir > a > span:before
-      content: "\2295"
-    &.hashtag > a > span:before
-      content: "#"
+        width: 100%
+      &.dir,
+      &.hashtag
+        > a > span:before
+          padding-right: $x / 2
+      &.dir > a > span:before
+        content: "\2295"
+      &.hashtag > a > span:before
+        content: "#"
 
 span.circular
   border: 1px solid red

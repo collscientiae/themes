@@ -7,13 +7,17 @@
 {% if doc.subtitle -%}
     <div class="subtitle">{{ doc.subtitle }}</div>
 {%- endif %}
-    {% if doc.abstract %}
+{% if doc.abstract %}
     <div class="abstract">{{ doc.abstract }}</div>
-    {% endif %}
+{% endif %}
+    <a id="source" href="{{ doc.docid }}.txt">Source</a>
 </section>
 
 <section class="content">
 {{ doc.output }}
+</section>
+
+<section class="footer">
 </section>
 
 <section class="outro">
