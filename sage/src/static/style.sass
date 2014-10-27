@@ -27,7 +27,7 @@ section
 html
   padding: 0
   margin: 0
-  overflow: scroll
+  overflow-y: scroll
   @include media(max-medium)
     overflow: auto
 
@@ -72,14 +72,11 @@ section.content
   min-height: 50vh
   background: $col3l
 
-  div[mode]
+  div.sagecell_init
     @include clearfix
-  div
     > code
       border: 1px solid $col2
       padding: $x/2
-  div[mode]
-    > code
       +round-top($x/4)
       +round-bottom-right($x/4)
   div:not([mode])
@@ -237,42 +234,44 @@ a.activate_cell,
 
 /* MODULES INDEX */
 
-#index
-  list-style: none
-  padding: 0
-  li
-    padding: $x/2 0
-    list-style: none
-    > a > span
-      display: inline-block
-      width: 1em
-    &.dir > a > span:before
-      content: "\2295"
-    &.hashtag > a > span:before
-      content: "#"
+//#index
+//  list-style: none
+//  padding: 0
+//  li
+//    padding: $x/2 0
+//    list-style: none
+//    > a > span
+//      display: inline-block
+//      width: 1em
 
 
-.modules
+.indextable
   display: table
   @include media(max-narrow)
     display: block
 
-.modules > div
-  display: table-row
-  @include media(max-medium)
-    display: block
-    margin: 0
+  > div
+    display: table-row
+    @include media(max-medium)
+      display: block
+      margin: 0
 
-.modules > div > div
-  display: table-cell
-  padding-top: $x
-  &:nth-child(2)
-    padding-left: $x
-  @include media(max-medium)
-    display: block
+  > div > div:not(.knowl)
+    display: table-cell
+    padding-top: $x
     &:nth-child(2)
       padding-left: 2 * $x
-      padding-top: inherit
+    @include media(max-medium)
+      display: block
+      &:nth-child(2)
+        padding-left: 2 * $x
+        padding-top: inherit
+    &:first-child > a
+      display: block
+    &.dir > a > span:before
+      content: "\2295"
+    &.hashtag > a > span:before
+      content: "#"
 
 span.circular
   border: 1px solid red
@@ -305,6 +304,8 @@ $kcold: $col3d
   margin:
     left: -2px
     right: -2px
+  &:first-child
+    margin-left: 0
   +transition-knowl
 
   &:hover,

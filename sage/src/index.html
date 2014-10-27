@@ -8,16 +8,21 @@
     {% if group.grouper != none %}
         <h2>{{ group.grouper|title }}</h2>
     {% endif %}
-    <ul id="index">
-    {% for entry in group.list|sort(attribute="title") %}
-    <li class="{{ entry.type }}">
-        <a href='{{ entry.href }}'><span></span>{{ entry.title }}</a>
-        {%- if entry.description != None -%}
-            : {{  entry.description }}
-        {%- endif -%}
-    </li>
-    {% endfor %}
-    </ul>
+    <div class="indextable">
+        {% for entry in group.list|sort(attribute="title") %}
+        <div>
+            <div class="{{ entry.type }}">
+                <a href='{{ entry.href }}.html'><span></span>{{ entry.title }}</a>
+            </div>
+            {%- if entry.description != None -%}
+                <div>{{  entry.description }}</div>
+            {%- endif -%}
+            {%- if entry.type == "dir" -%}
+                <div><a knowl="{{ namespace }}/{{ entry.href }}">Show {{  entry.title }} index</a></div>
+            {%- endif -%}
+        </div>
+        {% endfor %}
+    </div>
 {% endfor %}
 
 </section>

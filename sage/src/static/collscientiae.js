@@ -274,13 +274,18 @@ var collscientiae = {
                 //also, after you close the knowl, it still has a shaded background
             } else if ($link.parent().parent().is("li")) {
                 $link.parent().parent().after($knowl);
-            } else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
-                $link.parent().after($knowl);
-            } else if ($link.parent().parent().css('display') == "block" || $link.parent().parent().is("p")) {
-                $link.parent().parent().after($knowl);
+                /* } else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
+                 $link.parent().after($knowl);
+                 } else if ($link.parent().parent().css('display') == "block" || $link.parent().parent().is("p")) {
+                 $link.parent().parent().after($knowl); */
+            } else if ($link.parent().parent().parent().hasClass("indextable")) {
+                // The case, where knowls are used in indextables
+                $link.after($knowl);
             } else {
-                $link.parent().parent().parent().after($knowl);
+                //$link.parent().parent().parent().after($knowl);
+                $link.parent().after($knowl);
             }
+
 
             var $output = $knowl.find(output_id);
             //var $knowl = $("#kuid-" + uid);
@@ -441,7 +446,7 @@ function initMathjax() {
         "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
         "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
         "  asciimath2jax: { delimiters: [['\\\'\\\'','\\\'\\\'']]  },\n" +
-        "  TeX: {extensions: ['autoload-all.js']}\n" +
+        "  TeX: {extensions: ['autoload-all.js'], equationNumbers: { autoNumber: 'AMS' } }\n" +
         "});";
     head.appendChild(script);
     script = document.createElement("script");
