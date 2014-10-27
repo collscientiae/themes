@@ -258,7 +258,9 @@ a.activate_cell,
 
   > div > div:not(.knowl)
     display: table-cell
-    padding-top: $x
+    padding:
+      top: $x/2
+      bottom: $x/2
     &:nth-child(2)
       padding-left: 2 * $x
     @include media(max-medium)
@@ -268,6 +270,10 @@ a.activate_cell,
         padding-top: inherit
     &:first-child > a
       display: block
+    &.dir,
+    &.hashtag
+      > a > span:before
+        padding-right: $x / 2
     &.dir > a > span:before
       content: "\2295"
     &.hashtag > a > span:before
@@ -352,7 +358,7 @@ p + div.knowl
   border: $kx solid $kcol
   border-top-width: 1px
   +round-bottom($kx)
-  padding: 0 $kx $kx $kx
+  padding: 0 $kx 0 $kx
   margin:
     top: 0
     bottom: 0

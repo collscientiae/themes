@@ -174,7 +174,13 @@ var collscientiae = {
         $body.on("click", "*[knowl]", function (event) {
             'use strict';
             event.preventDefault();
-            collscientiae.handle_knowl($(this));
+            var $this = $(this);
+            if (event.shiftKey) {
+                // shift-knowl-click opens it like a usual link
+                window.location.href = "../" + $this.attr("knowl") + ".html";
+            } else {
+                collscientiae.handle_knowl($this);
+            }
         });
 
         // highlight knowl output on hover over knowl link
