@@ -1,11 +1,12 @@
 /*
  *! collscientiae style
  *! draws bits and pieces from git.io/normalize and http://h5bp.com/ (both MIT License)
-
+ */
 
 @import global
 @import normalize
 @import boilerplate
+@import prism
 
 /* ==========================================================================
  * MAIN PART STARTS HERE
@@ -16,16 +17,19 @@ a:visited
   color: $col1
   text-decoration: none
 
-//article
-//  a:hover
-//    text-decoration: underline
+section
+  a:hover
+    color: $col1d
 
 .round
-  +border-radius($x)
+  +round($x)
 
 html
   padding: 0
   margin: 0
+  overflow: scroll
+  @include media(max-medium)
+    overflow: auto
 
 body
   +sans-serif
@@ -38,13 +42,16 @@ body
   //@media only screen and (min-width: 1200px)
   max-width: 1200px
 
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     padding: 0
     margin: 0
 
-  @media only screen and (max-width: $screen-small)
+  @include media(max-narrow)
     padding: 0
     margin: 0
+
+  @include media(min-medium)
+    +shadow(0 5px 10px #aaa)
 
 
 html,
@@ -52,7 +59,7 @@ button,
 input,
 select,
 textarea
-  color: #222
+  color: $col_dark
 
 // add class .hover to :hover
 .hover
@@ -62,8 +69,22 @@ section.intro
   background: $col2l
 
 section.content
-  min-height: 60vh
+  min-height: 50vh
   background: $col3l
+
+  div[mode]
+    @include clearfix
+  div
+    > code
+      border: 1px solid $col2
+      padding: $x/2
+  div[mode]
+    > code
+      +round-top($x/4)
+      +round-bottom-right($x/4)
+  div:not([mode])
+    > code
+      +round($x/4)
 
 section.outro
   background: $col2l
@@ -71,6 +92,8 @@ section.outro
 // ==============
 
 nav#menu
+  @include media(min-medium)
+    float: right
   > a
     display: block
     margin: $x 0
@@ -104,7 +127,7 @@ nav#menu
     color: white
     font-weight: bold
     white-space: nowrap
-    @media only screen and (max-width: $screen-medium)
+    @include media(max-medium)
       font-size: 1em
 
   > a:first-child,
@@ -150,13 +173,22 @@ article aside
 
 article > section
   padding: $x $x
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     padding-top: $x
   +narrowpaddingonsmallscreen
 
 header
   border-bottom: $x/2 solid $col1
   display: block
+  @include media(min-narrow)
+    nav#menu
+      a
+        float: left
+      &:first-child a
+        margin-left: 0
+      &:last-child a
+        margin-right: 0
+
 
 footer,
 article aside
@@ -170,7 +202,7 @@ article aside
 
 header,
 footer
-  @extend .wrapper
+  @include clearfix
 
 header > h1,
 footer
@@ -180,15 +212,28 @@ footer
 header > h1
   padding: $x 0 0 0
   margin: 0 0 $x $x
+  @include media(min-medium)
+    bottom: 0
+    float: left
 
 footer
   min-height: 5 * $x
+  a:hover
+    color: $col1l
+  > div
+    padding: $x
 
-footer > div
-  padding: $x
-
-a.activate_cell
+a.activate_cell,
+.knowl-output a.activate_cell
   cursor: pointer
+  display: inline-block
+  margin-top: -1px
+  z-index: 1
+  padding: $x/2
+  border: 1px solid $col2
+  border-top: 0
+  +round-bottom($x/4)
+  margin-bottom: $x
 
 /* MODULES INDEX */
 
@@ -209,12 +254,12 @@ a.activate_cell
 
 .modules
   display: table
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-narrow)
     display: block
 
 .modules > div
   display: table-row
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     display: block
     margin: 0
 
@@ -223,7 +268,7 @@ a.activate_cell
   padding-top: $x
   &:nth-child(2)
     padding-left: $x
-  @media only screen and (max-width: $screen-medium)
+  @include media(max-medium)
     display: block
     &:nth-child(2)
       padding-left: 2 * $x
@@ -247,42 +292,35 @@ $kx: $x/2
 $kcol: $col3
 $kcold: $col3d
 
-.knowl-content
-  padding: $kx $kx 0 $kx
-
-.knowl-content h1
-  margin: 0px 0px $kx 0px
-
-.knowl-content h2
-  margin: 0px 0px $kx/2 0px
-
-.knowl p
-  margin-bottom: 0
-  margin-top: $kx
 
 *[knowl]
-  display: inline
-  border-bottom: 1px dotted $kcol
+  display: inline-block
+  border-bottom: 1px dotted $kcold
   color: $kcold
   cursor: pointer
   +round-top($kx / 2)
-  margin: 3px 0 0 0
-  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
+  padding:
+    left: 2px
+    right: 2px
+  margin:
+    left: -2px
+    right: -2px
+  +transition-knowl
 
   &:hover,
   &.active
-    border-bottom: 1px solid $kcol
+    border-bottom-color: $kcol
     background: $kcol
     color: black
-    padding: 0
-    margin: 0 0 0 0
+    //padding: 0
+    //margin: 0 0 0 0
 
   &.active
     padding:
       left: .5em
       right: .5em
 
-  &.hover
+  &.hover // class hover, set by JS
     color: white
     background: $kcold
     border-color: $kcold
@@ -290,16 +328,19 @@ $kcold: $col3d
 div.knowl
   > .knowl-output,
   > div.knowl-footer
-    +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
-  &.hover
+    +transition-knowl
+  &.hover // class hover, set by JS
     > .knowl-output
       border-color: $kcold
     > div.knowl-footer
       background-color: $kcold
 
-div > *[knowl],
-p > *[knowl]
-  position: relative
+p + div.knowl
+  margin-top: -$x
+
+//div > *[knowl],
+//p > *[knowl]
+//  position: relative
 
 .knowl-error
   color: red
@@ -313,31 +354,42 @@ p > *[knowl]
   padding: 0 $kx $kx $kx
   margin:
     top: 0
-    bottom: 0px
-    right: 0px
+    bottom: 0
+    right: 0
 
-.knowl-output .knowl-output,
-.knowl-output .knowl-output.loading
-  margin-left: 0
-  margin-right: 0
+  div + a.activate_cell
+    margin-bottom: $kx
 
-.knowl-output.loading
-  color: grey
-  font-style: italic
-  font-size: small
+  > h1,
+  > h2,
+  > h3
+    color: $kcol
+    +transition-knowl
+  > h1
+    margin: 2*$kx 0 0 0
+  > h2
+    margin: $kx 0 0 0
+  > h2
+    margin: $kx * .75 0 0 0
+  &:hover
+    > h1,
+    > h2,
+    > h3
+      color: $kcold
+  a
+    display: inline
 
-.knowl-output h1,
-.knowl-output h2
-  margin: 5px 0
+  &.loading
+    color: grey
+    font-style: italic
+    font-size: small
 
-.knowl-output h1
-  color: #006
-
-.knowl-output h2
-  color: #006
-
-.knowl-output a
-  display: inline
+// nested knowls
+.knowl-output
+  .knowl-output,
+  .knowl-output.loading
+    margin-left: 0
+    margin-right: 0
 
 .knowl-footer
   text-align: right
@@ -357,49 +409,6 @@ p > *[knowl]
   & a:hover
     background: none
     color: lightgray
-
-
-/* ==========================================================================
- * Media Queries
- * ==========================================================================
-header
-  @media only screen and (min-width: $screen-small)
-    /* ====================
-     *  INTERMEDIATE: Menu
-     * ====================
-    nav#menu
-      a
-        float: left
-      &:first-child a
-        margin-left: 0
-      &:last-child a
-        margin-right: 0
-
-
-@media only screen and (min-width: $screen-medium)
-  /* ====================
-   *  WIDE: CSS3 Effects
-   * ====================
-  body
-    +shadow(0 5px 10px #aaa)
-
-  header,
-  footer
-    +clearfix
-  header > h1
-    bottom: 0
-    float: left
-  header > nav#menu
-    float: right
-
-
-@media only screen and (min-width: $screen-large)
-  /* ===============
-   *  Maximal Width
-   * ===============
-  .wrapper
-    margin: 0 auto
-    +clearfix
 
 /* ==========================================================================
  * Helper classes
@@ -431,18 +440,6 @@ header
 .invisible
   visibility: hidden
 
-/*
- *.clearfix:before,
- *.clearfix:after
- *  content: " "
- *  display: table
- *
- *.clearfix:after
- *  clear: both
- *
- *.clearfix
- *  *zoom: 1
- */
 
 /* ==========================================================================
  * Print styles

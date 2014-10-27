@@ -145,6 +145,28 @@ var collscientiae = {
                 $activate_link.hide();
             });
         });
+
+        // highlight sagecells on hover over activation link
+        $body.on("mouseenter mouseleave", "a.activate_cell", function (evt) {
+            'use strict';
+            var $this = $(this);
+            var cellid = $this.attr("target");
+            if (typeof cellid !== "undefined") {
+                var hover = evt.type == "mouseenter";
+                $this.toggleClass("hover", hover);
+                $('#' + cellid).toggleClass("hover", hover);
+            }
+        });
+
+        // highlight originating activation button when mouse is inside a sagecell
+        $body.on("mouseenter mouseleave", "div.sagecell_init > code", function (evt) {
+            'use strict';
+            var $this = $(this).parent();
+            var cellid = $this.attr("id");
+            var hover = evt.type == "mouseenter";
+            $this.toggleClass("hover", hover);
+            $('a.activate_cell[target="' + cellid + '"]').toggleClass("hover", hover);
+        });
     },
     "init_knowl_links": function ($body) {
         // handle clicks on knowls
@@ -187,6 +209,7 @@ var collscientiae = {
         var url = window.location.href.split("/").slice(-2).join("/");
         collscientiae.store("../" + url, $section_content);
         collscientiae.create_sagecell_links($section_content);
+        collscientiae.highlight_code($section_content);
         collscientiae.include($section_content);
     },
     "handle_knowl": function ($link) {
@@ -216,7 +239,7 @@ var collscientiae = {
 
         // if we already have the content, toggle visibility
         if ($output_id.length > 0) {
-            $("#kuid-" + uid).slideToggle("fast");
+            $("#kuid-" + uid).slideToggle("slow");
             $link.toggleClass("active");
 
             // otherwise download it or get it from the cache
@@ -286,10 +309,17 @@ var collscientiae = {
                     collscientiae.process_mathjax($output, function () {
                         $knowl.slideDown("slow");
                     });
+                    collscientiae.highlight_code($output);
                     collscientiae.include($output);
                 }
             );
         }
+    },
+    "highlight_code": function($where) {
+        "use strict";
+        $where.find("div[mode]>code").each(function () {
+            Prism.highlightElement($(this)[0]);
+         });
     },
     "process_mathjax": function ($where, callback) {
         'use strict';
@@ -361,6 +391,7 @@ var collscientiae = {
                         $this.attr("status", "done");
                         collscientiae.create_sagecell_links($this);
                         collscientiae.process_mathjax($this);
+                        collscientiae.highlight_code($this);
                         // need to create a shallow copy of it and rename it
                         // (name clash of scopes, what a buggy language!)
                         var parents2 = parents.slice();
@@ -373,14 +404,14 @@ var collscientiae = {
     },
     "create_sagecell_links": function ($block) {
         'use strict';
-        $block.find("code[mode]").each(function () {
+        $block.find("code[type='text/x-sage']").each(function () {
             'use strict';
-            var $this = $(this);
+            var $this = $(this).parent();
             var cell_id = $this.attr("id");
             var $a = $("<a>")
                 .attr("class", "activate_cell")
                 .attr("target", cell_id)
-                .text("activate cell");
+                .text("Activate Code-Cell");
             $this.after($a);
         });
     },
@@ -421,14 +452,15 @@ function initMathjax() {
 
 function googleAnalytics() {
     'use strict';
-    var uaid = document.querySelector("meta[name='google_analytics']").account;
+    var uaid = $("meta[name='google_analytics']").first().attr("account");
     if (uaid !== null) {
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
             }, i[r].l = 1 * new Date();
-            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a = s.createElement(o);
+            m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
@@ -450,6 +482,29 @@ function initSageCell() {
     });
 }
 
+// extending Prism.js for sage and r
+
+Prism.languages.python['function'] = /\b([a-zA-Z_]+)(?=\()\b/g;
+
+Prism.languages.sage= {
+	'comment': {
+		pattern: /(^|[^\\])#.*?(\r?\n|$)/g,
+		lookbehind: true
+	},
+    'function': Prism.languages.python['function'],
+	'string': /"""[\s\S]+?"""|("|')(\\?.)*?\1/g,
+	'keyword' : /\b(as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|pass|print|raise|return|try|while|with|yield|var)\b/g,
+	'boolean' : /\b(True|False)\b/g,
+	'number' : /\b-?(0x)?\d*\.?[\da-f]+\b/g,
+	'operator' : /[-+]{1,2}|=?&lt;|=?&gt;|!|={1,2}|(&){1,2}|(&amp;){1,2}|\|?\||\?|\*|\/|~|\^|%|\b(or|and|not)\b/g,
+	'ignore' : /&(lt|gt|amp);/gi,
+	'punctuation' : /[{}[\];(),.:<>]/g
+};
+
+Prism.languages.r = Prism.languages.extend('clike', {
+	'function': /\b([a-zA-Z.]+)(?=\()\b/g,
+	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?|NA|-?Infinity)\b/g
+});
 
 $(collscientiae.init);
 $(initMathjax);

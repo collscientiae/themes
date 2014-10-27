@@ -7,6 +7,7 @@ $x: 16px
 
 // colors
 $col_base: #5c5ccc
+$col_dark: #222
 
 $col1:  adjust_hue($col_base, 0)
 $col1d: darken($col1, 30)
@@ -36,27 +37,61 @@ $screen-large: 1140px
 =monospace
   font-family: "Ubuntu Mono", monospace
 
-=border-radius($radius)
+=media($media)
+  @if $media == max-narrow
+    @media only screen and (max-width: $screen-small)
+      @content
+
+  @else if $media == min-narrow
+    @media only screen and (min-width: $screen-small)
+      @content
+
+  @else if $media == max-medium
+    //@media only screen and (min-width: $screen-small + 1) and (max-width: $screen-large - 1)
+    @media only screen and (max-width: $screen-medium)
+      @content
+
+  @else if $media == min-medium
+    @media only screen and (min-width: $screen-medium)
+      @content
+
+  @else if $media == min-wide
+    @media only screen and (min-width: $screen-large)
+      @content
+
+=round($radius)
   -webkit-border-radius: $radius
   -moz-border-radius:    $radius
   -ms-border-radius:     $radius
   border-radius:         $radius
 
-=round-bottom($radius)
-  border-bottom-left-radius:           $radius
-  -moz-border-radius-bottomleft:       $radius
-  -webkit-border-bottom-left-radius:   $radius
-  border-bottom-right-radius:          $radius
-  -moz-border-radius-bottomright:      $radius
-  -webkit-border-bottom-right-radius:  $radius
-
-=round-top($radius)
+=round-top-left($radius)
   border-top-left-radius:           $radius
   -moz-border-radius-topleft:       $radius
   -webkit-border-top-left-radius:   $radius
+
+=round-top-right($radius)
   border-top-right-radius:          $radius
   -moz-border-radius-topright:      $radius
   -webkit-border-top-right-radius:  $radius
+
+=round-bottom-left($radius)
+  border-bottom-left-radius:           $radius
+  -moz-border-radius-bottomleft:       $radius
+  -webkit-border-bottom-left-radius:   $radius
+
+=round-bottom-right($radius)
+  border-bottom-right-radius:           $radius
+  -moz-border-radius-bottomright:       $radius
+  -webkit-border-bottom-right-radius:   $radius
+
+=round-bottom($radius)
+  @include round-bottom-left($radius)
+  @include round-bottom-right($radius)
+
+=round-top($radius)
+  @include round-top-left($radius)
+  @include round-top-right($radius)
 
 =shadow($style)
   -webkit-box-shadow:  $style
@@ -68,7 +103,10 @@ $screen-large: 1140px
   -moz-transition: $style
   -o-transition: $style
   -ms-transition: $style
-  transition: $style    
+  transition: $style
+
+=transition-knowl
+  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
 
 // that's a mixin and below a placeholder via %
 // ALWAYS use it as @extend %clearfix, not as an include!
