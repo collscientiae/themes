@@ -104,8 +104,12 @@ $screen-large: 1140px
   -ms-transition: $style
   transition: $style
 
+$animation-1: .3s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+
 =transition-knowl
-  +transition(all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95))
+  +transition(color #{$animation-1})
+  +transition(background #{$animation-1})
+  +transition(border #{$animation-1})
 
 =shadow($style)
   -webkit-box-shadow:  $style
@@ -114,6 +118,9 @@ $screen-large: 1140px
 
 =shadow-normal
   +shadow(0 5px 10px #aaa)
+
+=shadow-strong
+  +shadow(0 5px 10px #666)
 
 // that's a mixin and below a placeholder via %
 // ALWAYS use it as @extend %clearfix, not as an include!
