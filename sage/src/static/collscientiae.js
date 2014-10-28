@@ -57,6 +57,7 @@ jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
         } else {
             $response = $(jQuery.parseHTML(responseText)).find(selector_outer);
             collscientiae.store(url, $response);
+            collscientiae.update_ui();
         }
 
         if (typeof label == "undefined" && typeof limit == "undefined") {
@@ -123,6 +124,7 @@ var collscientiae = {
         } finally {
             collscientiae.init_storage();
         }
+        collscientiae.update_ui();
     },
     "init_storage": function () {
         // init storage (clear storage, if root hash is different)
@@ -232,6 +234,12 @@ var collscientiae = {
         collscientiae.create_sagecell_links($section_content);
         collscientiae.highlight_code($section_content);
         collscientiae.include($section_content);
+        collscientiae.update_ui();
+    },
+    "update_ui": function() {
+        'use strict';
+        // this updates various dynamic elements on the website
+        $("#cache_size").text(collscientiae.storage.length);
     },
     "handle_knowl": function ($link) {
         'use strict';

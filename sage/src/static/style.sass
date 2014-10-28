@@ -33,6 +33,7 @@ html
 
 body
   +sans-serif
+  color: $col_dark
   font:
     size: 100%
   // line-height: 1.1
@@ -67,12 +68,6 @@ textarea
 
 section.intro
   background: $col2l
-  position: relative
-  > a#source
-    font-size: 75%
-    position: absolute
-    top: $x
-    right: $x
 
 section.content
   min-height: 50vh
@@ -83,6 +78,12 @@ section.content
 
 section.outro
   background: $col2l
+  position: relative
+  > a#source
+    font-size: 75%
+    position: absolute
+    bottom: $x
+    right: $x
 
 // =========== sagecell basics
 
@@ -127,6 +128,20 @@ nav#menu
       color: white
       background: $col1
 
+=triangle
+  content: ""
+  position: absolute
+  background: $col1d
+  top: 0
+  right: -1.5 * $x
+  width: 3 * $x
+  height: 3 * $x
+  transform: scale(0.707) rotate(45deg)
+  z-index: 1
+  // border: 1px solid red
+  box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
+  border-radius: 0 0px 0 100px
+
 #breadcrum
   padding: $x 3*$x $x 0
   display: inline-block
@@ -166,18 +181,7 @@ nav#menu
     background: $col1l
 
   > a:after
-    content: ""
-    position: absolute
-    background: $col1d
-    top: 0
-    right: -1.5 * $x
-    width: 3 * $x
-    height: 3 * $x
-    transform: scale(0.707) rotate(45deg)
-    z-index: 1
-    // border: 1px solid red
-    box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
-    border-radius: 0 0px 0 100px
+    +triangle
 
   > a:last-child:after
     box-shadow: none
@@ -266,6 +270,7 @@ a.activate_cell,
 
 .indextable
   display: table
+  margin-left: -$x
   @include media(max-narrow)
     display: block
 
@@ -285,12 +290,25 @@ a.activate_cell,
 
       &:not(.knowl)
         display: table-cell
-        padding:
-          top: $x/2
-          bottom: $x/2
       &:first-child > a
         display: block
-        min-width: 15vw
+        position: relative
+        white-space: nowrap
+        line-height: 3*$x
+        //min-width: 15vw
+
+        font-size: 115%
+        padding: 0 (3 * $x) 0 $x
+        min-width: 5 * $x
+        margin-right: 2 * $x
+        &:hover
+          background: $col1l
+        &:after
+          +triangle
+          box-shadow: none
+          background-color: transparent
+        &:hover:after
+          background-color: $col1l
       &:nth-child(2)
         padding-left: 2 * $x
         width: 100%
@@ -324,8 +342,8 @@ $kcold: $col3d
 
 *[knowl]
   display: inline-block
-  border-bottom: 1px dotted $kcold
-  color: $kcold
+  border-bottom: 1px dotted $kcol
+  color: $col_dark
   cursor: pointer
   +round-top($kx / 2)
   padding:

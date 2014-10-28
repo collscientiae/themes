@@ -9,17 +9,21 @@ $x: 16px
 $col_base: #5c5ccc
 $col_dark: #222
 
+$adj_up: 35
+$adj_dn: 30
+$adj_hue: -35
+
 $col1:  adjust_hue($col_base, 0)
-$col1d: darken($col1, 30)
-$col1l: lighten($col1, 30)
+$col1d: darken($col1, $adj_dn)
+$col1l: lighten($col1, $adj_up)
 
-$col2:  adjust_hue($col_base, -30)
-$col2d: darken($col2, 30)
-$col2l: lighten($col2, 30)
+$col2:  adjust_hue($col_base, $adj_hue)
+$col2d: darken($col2, $adj_dn)
+$col2l: lighten($col2, $adj_up)
 
-$col3:  adjust_hue($col_base, -90)
-$col3d: darken($col3, 30)
-$col3l: lighten($col3, 30)
+$col3:  adjust_hue($col_base, 3 * $adj_hue)
+$col3d: darken($col3, $adj_dn)
+$col3l: lighten($col3, $adj_up)
 
 // @media
 $screen-small: 480px

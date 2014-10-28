@@ -10,17 +10,14 @@
 {% if doc.abstract %}
     <div class="abstract">{{ doc.abstract }}</div>
 {% endif %}
-    <a id="source" href="{{ doc.docid }}.txt">Source</a>
 </section>
 
 <section class="content">
 {{ doc.output }}
 </section>
 
-<section class="footer">
-</section>
-
 <section class="outro">
+<a id="source" href="{{ doc.docid }}.txt">Source</a>
 {{  document_list("See also", seealso) }}
 {{  document_list("Mentioned in", backlinks) }}
 </section>

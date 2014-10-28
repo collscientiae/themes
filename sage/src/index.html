@@ -20,9 +20,8 @@
                 <div><a knowl="{{ namespace }}/{{ entry.href }}">Show Index</a>
             {%- else -%}
                 <div>
-                {% set descr = entry.description or "show" -%}
-                {{ descr }}
-                <a knowl="{{ namespace }}/{{ entry.href }}" limit="3">&#8650;</a>
+                {% set descr = entry.description or "preview" -%}
+                <a knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</a> {# &#8650; #}
             {%- endif %}
 {#                <a href='{{ entry.href }}.html'>open</a>#}
             </div>

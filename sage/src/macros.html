@@ -1,5 +1,5 @@
 {% macro document_list(title, documents) -%}
-{%- if documents|length > 0 -%}
+{%- if documents != none and documents|length > 0 -%}
     <h2>{{  title }}</h2>
     <ul>
     {% for d in documents %}
