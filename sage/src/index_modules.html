@@ -9,7 +9,7 @@
     <div>
         <div>
             {% set lp = module.landing_page or "index" %}
-            <a href="{{ module.namespace }}/{{ lp }}.html">{{ module.name }}</a>
+            <a href="{{ module.namespace|lower }}/{{ lp }}.html">{{ module.name }}</a>
         </div>
         <div>
             {{ module.description }}

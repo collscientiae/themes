@@ -27,9 +27,15 @@
 <nav id="breadcrum">
     <a href="{{  'index.html' | prefix }}"><span>&#8984;</span></a>
     {%  if namespace is defined and namespace is not none -%}
-        <a href="../{{  namespace }}/index.html">{{ namespace|title }}</a>
+        <a href="../{{ namespace|lower }}/index.html">
+        {%- if namespace == "hashtag" -%}
+            #
+        {%- else -%}
+            {{ namespace|title }}
+        {%- endif -%}
+        </a>
     {%- endif %}
-    {% if breadcrum is defined -%}
+    {% if breadcrum is defined and breadcrum != none -%}
     {% for name, link in breadcrum %}
         <a href="{{ link }}.html">{{ name }}</a>
     {%  endfor %}
