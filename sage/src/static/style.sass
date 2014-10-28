@@ -52,7 +52,7 @@ body
     margin: 0
 
   @include media(min-medium)
-    +shadow(0 5px 10px #aaa)
+    +shadow-normal
 
 
 html,
@@ -378,34 +378,36 @@ p + div.knowl
   margin-top: -$x
 
 div.knowl
-  > .knowl-output,
-  > div.knowl-footer
-    +transition-knowl
+  +shadow-normal
+  +round-bottom($kx)
+  +transition-knowl
+  border: $kx solid $kcol
+  border-top-width: 1px
+  border-bottom-width: $kx + 3px
+  background: $col3l
+
+  //> .knowl-output,
+  //> div.knowl-footer
+  //&:hover,
   &.hover // class hover, set by JS
-    > .knowl-output
-      border-color: $kcold
+    border-color: $kcold
     > div.knowl-footer
-      background-color: $kcold
+      //background-color: $kcold
+      color: lightgray
+
 
   > .knowl-error
     color: red
     border-bottom: 0
 
   > .knowl-output
-    background: $col3l
-    border: $kx solid $kcol
-    border-top-width: 1px
-    +round-bottom($kx)
     overflow-y: auto
     max-height: 75vh
     // knowl inside knowl!
     .knowl-output
       max-height: 50vh
     padding: 0 $kx 0 $kx
-    margin:
-      top: 0
-      bottom: 0
-      right: 0
+    margin: 0
 
     div + a.activate_cell
       margin-bottom: $kx
@@ -444,20 +446,17 @@ div.knowl
     text-align: right
     height: $kx + 2px
     position: relative
-    bottom: $kx + 2px
+    bottom: - $kx
     font:
       weight: bold
       size: $kx + 3
-    line-height: $kx + 1px
-    background: $kcol
+    line-height: $kx + 4px
+    background: transparent
     color: white
     padding: 0 $kx
-    margin:  0 $kx
+    margin:  0
     & a
       color: white
-    & a:hover
-      background: none
-      color: lightgray
 
 /* ==========================================================================
  * Helper classes
