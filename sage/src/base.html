@@ -25,9 +25,9 @@
 <header>
 {% block header %}
 <nav id="breadcrum">
-    <a href="{{  'index.html' | prefix }}"><span>&#8984;</span></a>
+    <a href="{{ 'index.html' | prefix }}"><span>&#8984;</span></a>
     {%  if namespace is defined and namespace is not none -%}
-        <a href="../{{ namespace|lower }}/index.html">
+        <a href="{{ namespace|lower|prefix }}/index.html">
         {%- if namespace == "hashtag" -%}
             #
         {%- else -%}
@@ -43,6 +43,7 @@
 </nav>
 
 <nav id="menu">
+    {% block inmenu %}{% endblock %}
     <a href="{{ 'hashtag/index.html'|prefix }}">#</a>
 </nav>
 {% endblock %}

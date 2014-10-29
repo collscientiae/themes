@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% from "macros.html" import document_list %}
 
+{% set left = "&lArr;" %}
+{% set right = "&rArr;" %}
+
+{% block inmenu %}
+{% if doc.prev != none %}
+<a href="{{ doc.prev.namespace|prefix }}/{{ doc.prev.docid }}.html">{{ left }}</a>
+{% else %}
+{{ left }}
+{% endif %}
+{% if doc.next != none %}
+<a href="{{ doc.next.namespace|prefix }}/{{ doc.next.docid }}.html">{{ right }}</a>
+{% else %}
+{{ right }}
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <article>
 <section class="intro">
