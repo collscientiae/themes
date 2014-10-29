@@ -335,6 +335,10 @@ $kx: $x/2
 $kcol: $col3
 $kcold: $col3d
 
+=knowl-link-hover
+  color: white !important
+  background: $kcold  !important
+  border-color: $kcold !important
 
 *[knowl]
   display: inline-block
@@ -342,7 +346,8 @@ $kcold: $col3d
   color: $col_dark
   cursor: pointer
   +round-top($kx / 2)
-  +transition-knowl
+  +transition(color #{$animation-1})
+  +transition(background #{$animation-1})
   padding:
     left: 2px
     right: 2px
@@ -352,22 +357,17 @@ $kcold: $col3d
   &:first-child
     margin-left: 0
 
-  &.active
-    border-bottom-color: $kcol
-    background: $kcol
-    color: black
-    //padding: 0
-    //margin: 0 0 0 0
+  &:hover
+    +knowl-link-hover
 
   &.active
+    border-color: transparent
+    background: $kcol
     padding:
       left: .5em
       right: .5em
-
-  &.hover // class hover, set by JS
-    color: white
-    background: $kcold
-    border-color: $kcold
+    &.hover // class hover, set by JS
+      +knowl-link-hover
 
 p + div.knowl
   margin-top: -$x
@@ -380,6 +380,7 @@ div.knowl
   border-top-width: 1px
   border-bottom-width: $kx + 3px
   background: $col3l
+  margin-bottom: $x
 
   //> .knowl-output,
   //> div.knowl-footer
@@ -387,9 +388,8 @@ div.knowl
   &.hover // class hover, set by JS
     border-color: $kcold
     +shadow-normal
-    > div.knowl-footer
-      //background-color: $kcold
-      color: lightgray
+    > div.knowl-footer > a
+      color: white
 
 
   > .knowl-error
@@ -448,11 +448,11 @@ div.knowl
       size: $kx + 3
     line-height: $kx + 4px
     background: transparent
-    color: white
     padding: 0 $kx
     margin:  0
     & a
       color: white
+      +transition(color #{$animation-1})
 
 /* ==========================================================================
  * Helper classes
