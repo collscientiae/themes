@@ -3,7 +3,7 @@
     <h2>{{  title }}</h2>
     <ul>
     {% for d in documents %}
-        <li><a href="../{{ d.namespace }}/{{ d.docid }}.html">{{ d.title }}</a></li>
+        <li><a href="../{{ d.namespace|lower }}/{{ d.docid }}.html">{{ d.title }}</a></li>
     {% endfor %}
     </ul>
 {%- endif -%}
