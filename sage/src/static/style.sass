@@ -346,8 +346,8 @@ $kcold: $col3d
   color: $col_dark
   cursor: pointer
   +round-top($kx / 2)
-  +transition(color #{$animation-1})
-  +transition(background #{$animation-1})
+  +transition(color #{$animation-knowl})
+  +transition(background #{$animation-knowl})
   padding:
     left: 2px
     right: 2px
@@ -412,7 +412,7 @@ div.knowl
     > h2,
     > h3
       color: $kcol
-      //+transition-knowl
+      +transition(color #{$animation-knowl})
     > h1
       margin: 2*$kx 0 0 0
     > h2
@@ -452,7 +452,7 @@ div.knowl
     margin:  0
     & a
       color: white
-      +transition(color #{$animation-1})
+      +transition(color #{$animation-knowl})
 
 /* ==========================================================================
  * Helper classes
