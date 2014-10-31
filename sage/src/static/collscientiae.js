@@ -77,14 +77,19 @@ jQuery.fn.loadPartial = function (url, label, limit, callback) {
             // console.log("$start", $start);
             $snippet.append($start.clone());
             var endtag = $start.tag();
+            var idx_last = -1;
+            var idx_all = -1;
             $start.nextUntil(endtag).each(function (idx) {
                 // console.log("limit loop: idx", idx);
                 if (typeof limit == "undefined" || idx < limit) {
                     $snippet.append($(this).clone());
+                    idx_last = idx;
                 }
+                idx_all = idx;
             });
-            if (typeof label == "undefined") {
-                $snippet.append($("<div>").text("..."));
+            if (idx_last < idx_all) {
+                var link_to_url = $("<a>").attr("href", url).text("read more ...");
+                $snippet.append($("<div>").html(link_to_url));
             }
             $target.html($snippet.html());
         }

@@ -24,7 +24,7 @@
 
 <header>
 {% block header %}
-<nav id="breadcrum">
+<nav id="breadcrumb">
     <a href="{{ 'index.html' | prefix }}"><span>&#8984;</span></a>
     {%  if namespace is defined and namespace is not none -%}
         <a href="{{ namespace|lower|prefix }}/index.html">
@@ -35,8 +35,8 @@
         {%- endif -%}
         </a>
     {%- endif %}
-    {% if breadcrum is defined and breadcrum != none -%}
-    {% for name, link in breadcrum %}
+    {% if breadcrumb is defined and breadcrumb != none -%}
+    {% for name, link in breadcrumb %}
         <a href="{{ link }}.html">{{ name }}</a>
     {%  endfor %}
     {%- endif %}
