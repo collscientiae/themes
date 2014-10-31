@@ -31,7 +31,8 @@
         {%- if namespace == "hashtag" -%}
             #
         {%- else -%}
-            {{ namespace|title }}
+            {% set ns_title = module.name or namespace|title %}
+            {{ ns_title }}
         {%- endif -%}
         </a>
     {%- endif %}
