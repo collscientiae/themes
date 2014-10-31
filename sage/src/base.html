@@ -67,6 +67,17 @@ cache size: <span id="cache_size"></span>
 </div>
 </footer>
 
+
+{% if module is defined and module != none and module.latex_macros != none %}
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+TeX: { Macros: {
+{{ module.latex_macros }}
+} }
+})
+</script>
+{% endif %}
+
 <script src='{{ "static/prism.js"|prefix }}' type="text/javascript"></script>
 <script src='{{ "static/collscientiae.js"|prefix }}' type="text/javascript"></script>
 <script src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
