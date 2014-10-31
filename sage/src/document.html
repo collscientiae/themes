@@ -6,12 +6,14 @@
 
 {% block inmenu %}
 {% if doc.prev != none %}
-<a href="{{ doc.prev.namespace|lower|prefix }}/{{ doc.prev.docid }}.html">{{ left }}</a>
+<a href="{{ doc.prev.namespace|lower|prefix }}/{{ doc.prev.docid }}.html"
+   title="{{ doc.prev.title }}">{{ left }}</a>
 {% else %}
 {{ left }}
 {% endif %}
 {% if doc.next != none %}
-<a href="{{ doc.next.namespace|lower|prefix }}/{{ doc.next.docid }}.html">{{ right }}</a>
+<a href="{{ doc.next.namespace|lower|prefix }}/{{ doc.next.docid }}.html"
+    title="{{ doc.next.title }}">{{ right }}</a>
 {% else %}
 {{ right }}
 {% endif %}
