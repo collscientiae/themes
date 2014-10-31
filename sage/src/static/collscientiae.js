@@ -33,13 +33,12 @@ jQuery.fn.tag = function () {
    and replaces the $el's innerHTML with it. Additionally, one can specify a #label
    and a limit (numeric). This is used to just insert a heading with its sub-paragraphs.
  */
-jQuery.fn.loadPartial = function (part_id, label, limit, callback) {
+jQuery.fn.loadPartial = function (url, label, limit, callback) {
     'use strict';
     var response;
     var $target = this;
-    var url = "../" + part_id + ".html";
     var selector_outer = "section.content";
-    console.log("loadPartial: part_id", part_id, "label", label, "limit", limit);
+    console.log("loadPartial: url", url, "label", label, "limit", limit);
 
     // only make requests if necessary
     if ($target.length == 0) {
@@ -254,7 +253,14 @@ var collscientiae = {
         var uid = $link.attr("knowl-uid");
         var output_id = '#knowl-output-' + uid;
         var $output_id = $(output_id);
-        var url = "../" + knowl_id + ".html";
+        var url;
+        if (knowl_id.indexOf("/") >= 0) {
+            // If there is a slash, it's because this is the namespace prefix
+            url = "../" + knowl_id + ".html";
+        } else {
+            url = "./" + knowl_id + ".html";
+        }
+        console.log("knowl url: ", url);
         // create the element for the content, insert it after the one where the
         // knowl element is included (e.g. inside a <h1> tag) (sibling in DOM)
         var idtag = "id='" + output_id.substring(1) + "'";
@@ -322,7 +328,7 @@ var collscientiae = {
             $knowl.hide();
 
             // Get data from server.
-            $output.loadPartial(knowl_id, label, limit,
+            $output.loadPartial(url, label, limit,
                 function (response, status, xhr) {
                     'use strict';
                     $output.removeClass("loading");
@@ -414,8 +420,9 @@ var collscientiae = {
                 return;
             }
 
-            console.log("loadPartial()", include_id, " label:", label, " limit:", limit);
-            $this.loadPartial(include_id, label, limit,
+            var url = "../" + include_id + ".html";
+            console.log("loadPartial()", url, " label:", label, " limit:", limit);
+            $this.loadPartial(url, label, limit,
                 function (response, status, xhr) {
                     if (status == "error") {
                         var msg = "Includes Error: ";
