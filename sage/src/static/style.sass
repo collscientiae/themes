@@ -69,6 +69,20 @@ textarea
 section.intro
   background: $col2l
 
+  > .abstract:before
+    content: "Abstract."
+    color: gray
+    padding-right: $x
+
+  > .abstract
+    font-style: italic
+
+  > .subtitle
+    font-weight: bold
+
+  > .subtitle + .abstract
+    margin-top: $x
+
 section.content
   min-height: 50vh
   background: white // $col3l
@@ -104,49 +118,52 @@ a.activate_cell.hover
 
 // ==============  nav#menu
 
+$nav-scale: 1
+
 nav#menu
+  padding: $x 0
   @include media(min-medium)
     float: right
   > a
     display: block
-    margin: $x 0
-    padding: $x
-    line-height: $x
-    font-size: 1.5em
+    padding: 0
+    line-height: 2*$x
+    width: 2 * $x
+    height: 2 * $x
+    margin: 0
+    font-size: 200%
     text-align: center
     text-decoration: none
     font-weight: bold
-    color: $col1l
+    color: white
     background: $col1d
-    &:visited
-      color: $col3l
     &:hover
-      color: white
-      background: $col1
+      color: black
+      background: $col1l
 
 =triangle
   content: ""
   position: absolute
   background: $col1d
   top: 0
-  right: -1.5 * $x
-  width: 3 * $x
-  height: 3 * $x
+  right: -1 * $x
+  width: 2 * $x
+  height: 2 * $x
   transform: scale(0.707) rotate(45deg)
   z-index: 1
   // border: 1px solid red
   box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
-  border-radius: 0 0px 0 100px
+  border-radius: 0 0 0 100px
 
 #breadcrumb
-  padding: $x 3*$x $x 0
+  padding: $x 2*$x $x 0
   display: inline-block
   overflow: hidden
 
   > a
-    font-size: 1.5em
-    line-height: 3*$x
-    padding: 0 $x 0 (3*$x)
+    font-size: 150%
+    line-height: 2*$x
+    padding: 0 $x 0 (2*$x)
     position: relative
     display: block
     float: left
@@ -162,7 +179,7 @@ nav#menu
     font-size: 1.5em
 
   > a:first-child
-    padding-left: 1.5 * $x
+    padding-left: $x
     > span
       display: inline-block
       transform: rotate(45deg) scale(1.5)
@@ -290,7 +307,7 @@ a.activate_cell,
         display: block
         position: relative
         white-space: nowrap
-        line-height: 3*$x
+        line-height: 2*$x
         //min-width: 15vw
 
         font-size: 115%
@@ -331,7 +348,7 @@ span.circular
  * ================= KNOWLS
  */
 
-$kx: $x/2
+$kx: $x/4
 $kcol: $col3
 $kcold: $col3d
 
