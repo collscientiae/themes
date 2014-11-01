@@ -72,7 +72,7 @@ section.intro
   > .abstract:before
     content: "Abstract."
     color: gray
-    padding-right: $x
+    padding-right: $x / 2
 
   > .abstract
     font-style: italic
@@ -81,7 +81,7 @@ section.intro
     font-weight: bold
 
   > .subtitle + .abstract
-    margin-top: $x
+    margin-top: $x / 2
 
 section.content
   min-height: 50vh
@@ -90,7 +90,26 @@ section.content
     > code
       +round($x/4)
 
+  > p
+    margin-bottom: $x / 2
+  > p + div.knowl
+    margin-top: -$x/2
+
 section.outro
+
+  > div
+    display: table
+    > div
+      display: table-row
+      > div
+        display: table-cell
+        padding-bottom: $x/2
+        &:first-child
+          font-weight: bold
+          padding-right: $x
+      &:last-child
+        > div
+          padding-bottom: 0
   background: $col2l
   position: relative
   > a#source
@@ -225,7 +244,7 @@ header
 
 footer,
 article aside
-  border-top: $x solid $col1
+  border-top: $x/2 solid $col1
 
 header,
 footer,
@@ -250,11 +269,13 @@ header > h1
     float: left
 
 footer
-  min-height: 5 * $x
+  // min-height: 2 * $x
   a:hover
     color: $col1l
   > div
-    padding: $x
+    padding: $x ($x/2) 0 $x
+    &:last-child
+      padding-bottom: $x
 
 a.activate_cell,
 .knowl-output a.activate_cell
@@ -295,6 +316,7 @@ a.activate_cell,
 
 
     > div
+      border-bottom: 1px solid white
       @include media(max-medium) // TODO FIX THIS
         display: block
         &:nth-child(2)
@@ -304,6 +326,8 @@ a.activate_cell,
       &:not(.knowl)
         display: table-cell
       &:first-child > a
+        background: $col1
+        color: white
         display: block
         position: relative
         white-space: nowrap
@@ -315,13 +339,13 @@ a.activate_cell,
         min-width: 5 * $x
         margin-right: 2 * $x
         &:hover
-          background: $col1l
+          background: $col1d
         &:after
           +triangle
           box-shadow: none
-          background-color: transparent
+          background-color: $col1
         &:hover:after
-          background-color: $col1l
+          background-color: $col1d
       &:nth-child(2)
         padding-left: 2 * $x
         width: 100%
@@ -351,6 +375,7 @@ span.circular
 $kx: $x/4
 $kcol: $col3
 $kcold: $col3d
+$kcoll: $col3l
 
 =knowl-link-hover
   color: white !important
@@ -363,8 +388,7 @@ $kcold: $col3d
   color: $col_dark
   cursor: pointer
   +round-top($kx / 2)
-  +transition(color #{$animation-knowl})
-  +transition(background #{$animation-knowl})
+  +transition(color #{$animation-knowl}, background #{$animation-knowl}, padding #{$animation-knowl}, border-bottom #{$animation-knowl})
   padding:
     left: 2px
     right: 2px
@@ -386,18 +410,20 @@ $kcold: $col3d
     &.hover // class hover, set by JS
       +knowl-link-hover
 
-p + div.knowl
-  margin-top: -$x
+// p + div.knowl
+//  margin-top: -$x / 2
+
 
 div.knowl
   // +shadow-normal
   +round-bottom($kx)
   +transition-knowl
   +transition(border-color #{$animation-knowl})
+
   border: $kx solid $kcol
   border-top-width: 1px
   border-bottom-width: $kx + 3px
-  background: $col3l
+  background: $kcoll
   margin-bottom: $x
 
   //> .knowl-output,
@@ -408,7 +434,6 @@ div.knowl
     +shadow-normal
     > div.knowl-footer > a
       color: white
-
 
   > .knowl-error
     color: red
@@ -442,8 +467,11 @@ div.knowl
       > h2,
       > h3
         color: $kcold
-    //a
-    //  display: inline
+
+    > p
+      padding-bottom: $x / 2
+    > p:first-child
+      padding-top: $x / 2
 
     &.loading
       color: grey
@@ -455,6 +483,9 @@ div.knowl
     .knowl-output.loading
       margin-left: 0
       margin-right: 0
+
+    .indextable > div > div
+      border-bottom: 1px solid $kcoll
 
   .knowl-footer
     text-align: right
@@ -546,3 +577,5 @@ div.knowl
   h2,
   h3
     page-break-after: avoid
+
+

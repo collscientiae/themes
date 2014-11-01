@@ -1,10 +1,13 @@
 {% macro document_list(title, documents) -%}
 {%- if documents != none and documents|length > 0 -%}
-    <h2>{{  title }}</h2>
-    <ul>
+<div>
+    <div>{{  title }}</div>
+    <div>
     {% for d in documents %}
-        <li><a href="../{{ d.namespace|lower }}/{{ d.docid }}.html">{{ d.title }}</a></li>
+        <a href="../{{ d.namespace|lower }}/{{ d.docid }}.html">{{ d.title }}</a>
+        {%- if not loop.last -%}, {% endif -%}
     {% endfor %}
-    </ul>
+    </div>
+</div>
 {%- endif -%}
 {%- endmacro %}

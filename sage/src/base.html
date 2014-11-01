@@ -13,7 +13,7 @@
     <meta name="doc_id" value="{{ doc.namespace }}/{{ doc.docid }}" />
     {%- endif %}
     <meta name="DC.date" content="{{ creation_date }}" scheme="W3CDTF"/>
-    <title>{%- if title %}{{ title }} - {% endif -%}CollScientiae</title>
+    <title>{%- if title is defined -%}{{ title }} - {% endif -%}CollScientiae</title>
     <link href='{{ "static/style.css"|prefix }}' type="text/css" rel="stylesheet" />
     {#-  for reasons I don't know, jquery needs to be on top (otherwise sagecell doesn't work properly) #}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
