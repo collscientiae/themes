@@ -301,11 +301,13 @@ var collscientiae = {
             // check, if the knowl is inside a td or th in a table.
             // otherwise assume its properly sitting inside a <div> or <p>
             if ($link.parent().is("td") || $link.parent().is("th")) {
+                console.log("knowl link: case 'parent.is(td or th)'");
                 // assume we are in a td or th tag, go 2 levels up
                 var cols = $link.parent().parent().children().length;
                 var $kwrapped = $("<tr>").append($("<td>").attr("colspan", cols).append($knowl));
                 $link.parents().eq(1).after($kwrapped);
             } else if ($link.parent().is("li")) {
+                console.log("knowl link: case 'parent.is(li)'");
                 $link.parent().after($knowl);
 
                 // the following is implemented stupidly, but I had to do it quickly.
@@ -313,6 +315,7 @@ var collscientiae = {
                 // the '.is("p")' is for the first paragraph of a theorem or proof
                 //also, after you close the knowl, it still has a shaded background
             } else if ($link.parent().parent().is("li")) {
+                console.log("knowl link: case 'parent.parent.is(li)'");
                 $link.parent().parent().after($knowl);
                 /* } else if ($link.parent().css('display') == "block" || $link.parent().is("p")) {
                  $link.parent().after($knowl);
@@ -320,8 +323,10 @@ var collscientiae = {
                  $link.parent().parent().after($knowl); */
             } else if ($link.parent().parent().parent().hasClass("indextable")) {
                 // The case, where knowls are used in indextables
-                $link.after($knowl);
+                console.log("knowl link: case 'indextable'");
+                $link.parent().parent().after($knowl);
             } else {
+                console.log("knowl link: else case");
                 //$link.parent().parent().parent().after($knowl);
                 $link.parent().after($knowl);
             }

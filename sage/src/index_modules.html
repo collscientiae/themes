@@ -5,15 +5,11 @@
 <section class="content">
 <div class="indextable">
     {% for module in modules %}
-    <div>
-        <div>
-            {% set lp = module.landing_page or "index" %}
-            <a href="{{ module.namespace|lower }}/{{ lp }}.html">{{ module.name }}</a>
-        </div>
-        <div>
-            {{ module.description }}
-        </div>
-    </div>
+        {% set lp = module.landing_page or "index" %}
+        <a href="{{ module.namespace|lower }}/{{ lp }}.html">
+            <div>{{ module.name }}</div>
+            <div>{{ module.description }}</div>
+        </a>
     {% endfor %}
 </div>
 </section>

@@ -7,32 +7,27 @@
 <div class="indextable">
 {% for group in index|groupby('group') %}
     {% if group.grouper != none %}
-    <div>
-       <div><h1>{{ group.grouper|title }}</h1></div>
-    </div>
+    <h1>{{ group.grouper|title }}</h1>
     {% endif %}
 
-      {% for T in entrytypes %}
+    {% for T in entrytypes %}
         {% for entry in group.list|indexsort %}
         {% if entry.type == T %}
-        <div>
-            <div class="{{ entry.type }}">
-                <a href='{{ entry.href }}.html'><span></span>{{ entry.title }}</a>
-            </div>
+            <a class="{{ entry.type }}"
+               href='{{ entry.href }}.html'>
+                <div><span></span>{{ entry.title }}</div>
+
             {%- if entry.type == "dir" -%}
-                <div><a knowl="{{ namespace }}/{{ entry.href }}">Show Index</a></div>
+                <div><div knowl="{{ namespace }}/{{ entry.href }}">Show Index</div></div>
             {%- else -%}
-                <div>
                 {% set descr = entry.description or "preview" -%}
-                <a knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</a> {# &#8650; #}
-                </div>
+                <div><div knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div></div> {# &#8650; #}
             {%- endif %}
+            </a>
             {# <a href='{{ entry.href }}.html'>open</a> #}
-        </div>
         {% endif %}
         {% endfor %}
-      {% endfor %}
-
+    {% endfor %}
 {% endfor %}
 </div>
 

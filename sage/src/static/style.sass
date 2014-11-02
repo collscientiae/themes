@@ -248,7 +248,6 @@ header
       &:last-child a
         margin-right: 0
 
-
 footer,
 article aside
   border-top: $x/2 solid $col1
@@ -280,9 +279,11 @@ footer
   a:hover
     color: $col1l
   > div
-    padding: $x ($x/2) 0 $x
+    padding: $x $x 0 $x
     &:last-child
       padding-bottom: $x
+    & + div
+      padding-top: $x / 2
 
 a.activate_cell,
 .knowl-output a.activate_cell
@@ -308,82 +309,91 @@ a.activate_cell,
 //      display: inline-block
 //      width: 1em
 
-div.knowl > .knowl-output > .indextable
-  display: table
-  > div
-    display: table-row
-    > div
+div.knowl
+  > .knowl-output
+    > .indextable
       padding-top: $x/2
-      &:first-child > a
-        line-height: $x
+      > a
+        & > div:first-child
+          line-height: $x
+          padding-top: 0
+        & > div:nth-child(2)
+          line-height: $x - 1px
+          margin-bottom: 1px
         font-size: 100%
         padding-right: $x
         min-width: 3*$x
 
-        +triangle(1)
+        +triangle(2)
         &:after
           box-shadow: none
 
 
 .indextable
-  display: table
-  margin-left: -$x
-  @include media(max-narrow)
-    display: block
+  margin: 0 auto 0 2*$x
+  width: 75%
 
-  > div
-    display: table-row
-    @include media(max-medium)
-      display: block
-      margin: 0
+  > div.knowl
+    border: 0
+    > .knowl-output
+      background: $col1l
+      +round-bottom($kx)
+      padding-bottom: $kx
+    > .knowl-footer
+      display: none
 
+  > h1,
+  > h2
+    padding-left: $x
 
-    > div
-      border-bottom: 1px solid white
-      @include media(max-medium) // TODO FIX THIS
-        display: block
-        &:nth-child(2)
-          padding-left: 2 * $x
-          padding-top: inherit
-
-      // &:not(.knowl)
-      display: table-cell
-      > h1,
-      > h2
-        padding-left: $x
-
-      &:first-child > a
-        background: $col1
+  > a
+    border-bottom: 1px solid white
+    line-height: $x
+    & > div:first-child
+      font-size: 125%
+      padding-top: $x
+    & > div:nth-child(2)
+      font-size: 100%
+      margin-bottom: $x
+      overflow: hidden
+      max-width: 100%
+      > div[knowl]
         color: white
-        display: block
-        position: relative
-        white-space: nowrap
-        line-height: 2*$x
-        //min-width: 15vw
+        border-bottom-color: $col1d
+        &:hover,
+        &.active
+          background: $col1 !important
+          border-bottom-color: $col1d !important
 
-        font-size: 115%
-        padding: 0 (3 * $x) 0 $x
-        min-width: 5 * $x
-        margin-right: 2 * $x
-        &:hover
-          background: $col1d
-        +triangle(2)
-        &:after
-          box-shadow: none
-      &:nth-child(2)
-        padding-left: 2 * $x
-        width: 100%
-      &.dir,
-      &.hashtag
-        > a > span:before
-          padding-right: $x / 2
-      &.dir > a > span:before
-        content: "\2295"
-      &.hashtag > a > span:before
-        content: "#"
+    background: $col1
+    color: white
+    display: block
+    position: relative
+    white-space: nowrap
+    //min-width: 15vw
 
-  > .knowlcontainer > div.knowl
-    column-span: all
+    padding: 0 (2 * $x) 0 $x
+    min-width: 3 * $x
+    //margin-right: 2 * $x
+    +triangle(4)
+    &:hover
+      background: $col1d
+      color: white
+      +shadow-normal
+    &:after
+      box-shadow: none
+    //&:nth-child(2)
+    //  padding-left: 2 * $x
+    //  width: 100%
+    &.dir,
+    &.hashtag
+      > div:first-child > span
+        padding-right: $x / 2
+    &.dir > div:first-child > span:before
+      content: "\2295"
+    &.hashtag > div:first-child > span:before
+      content: "#"
+
 
 span.circular
   border: 1px solid red
@@ -398,11 +408,6 @@ span.circular
 /*
  * ================= KNOWLS
  */
-
-$kx: $x/4
-$kcol: $col3
-$kcold: $col3d
-$kcoll: $col3l
 
 =knowl-link-hover
   color: white !important
