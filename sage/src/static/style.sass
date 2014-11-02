@@ -160,19 +160,23 @@ nav#menu
       color: black
       background: $col1l
 
-=triangle
-  content: ""
-  position: absolute
-  background: $col1d
-  top: 0
-  right: -1 * $x
-  width: 2 * $x
-  height: 2 * $x
-  transform: scale(0.707) rotate(45deg)
-  z-index: 1
-  // border: 1px solid red
-  box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
-  border-radius: 0 0 0 100px
+=triangle($size)
+  &:after
+    content: ""
+    position: absolute
+    background: $col1
+    top: 0
+    right: - ($size/2) * $x
+    width: $size * $x
+    height: $size * $x
+    transform: scale(0.707) rotate(45deg)
+    z-index: 1
+    // border: 1px solid red
+    box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
+    border-radius: 0 0 0 100px
+
+  &:hover:after
+    background-color: $col1d
 
 #breadcrumb
   padding: $x 2*$x $x 0
@@ -208,12 +212,15 @@ nav#menu
     background: $col1
     // color: black
 
-  > a:last-child:after,
-  > a:hover:after
+  > a:last-child:after
     background: $col1
 
-  > a:after
-    +triangle
+  > a
+    +triangle(2)
+    &:after
+      background: $col1d
+    &:hover:after
+      background: $col1
 
   > a:last-child:after
     box-shadow: none
@@ -224,7 +231,7 @@ article aside
   padding: 0px 5% 10px
 
 article > section
-  padding: $x $x
+  padding: $x/2 $x
   @include media(max-medium)
     padding-top: $x
   +narrowpaddingonsmallscreen
@@ -301,6 +308,22 @@ a.activate_cell,
 //      display: inline-block
 //      width: 1em
 
+div.knowl > .knowl-output > .indextable
+  display: table
+  > div
+    display: table-row
+    > div
+      padding-top: $x/2
+      &:first-child > a
+        line-height: $x
+        font-size: 100%
+        padding-right: $x
+        min-width: 3*$x
+
+        +triangle(1)
+        &:after
+          box-shadow: none
+
 
 .indextable
   display: table
@@ -323,8 +346,12 @@ a.activate_cell,
           padding-left: 2 * $x
           padding-top: inherit
 
-      &:not(.knowl)
-        display: table-cell
+      // &:not(.knowl)
+      display: table-cell
+      > h1,
+      > h2
+        padding-left: $x
+
       &:first-child > a
         background: $col1
         color: white
@@ -340,12 +367,9 @@ a.activate_cell,
         margin-right: 2 * $x
         &:hover
           background: $col1d
+        +triangle(2)
         &:after
-          +triangle
           box-shadow: none
-          background-color: $col1
-        &:hover:after
-          background-color: $col1d
       &:nth-child(2)
         padding-left: 2 * $x
         width: 100%
@@ -357,6 +381,9 @@ a.activate_cell,
         content: "\2295"
       &.hashtag > a > span:before
         content: "#"
+
+  > .knowlcontainer > div.knowl
+    column-span: all
 
 span.circular
   border: 1px solid red

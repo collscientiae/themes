@@ -22,9 +22,8 @@
 {% block content %}
 <article>
 <section class="intro">
-{% if doc.subtitle -%}
-    <div class="subtitle">{{ doc.subtitle }}</div>
-{%- endif %}
+{% set T = doc.subtitle or doc.title -%}
+<div class="subtitle">{{ T }}</div>
 {% if doc.abstract %}
     <div class="abstract">{{ doc.abstract }}</div>
 {% endif %}
