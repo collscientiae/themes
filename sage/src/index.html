@@ -15,13 +15,13 @@
         {% if entry.type == T %}
             <a class="{{ entry.type }}"
                href='{{ entry.href }}.html'>
-                <div><span></span>{{ entry.title }}</div>
+                <div class="title"><span></span>{{ entry.title }}</div>
 
             {%- if entry.type == "dir" -%}
-                <div><div knowl="{{ namespace }}/{{ entry.href }}">Show Index</div></div>
+                <div class="descr"><div knowl="{{ namespace }}/{{ entry.href }}">Show Index</div></div>
             {%- else -%}
                 {% set descr = entry.description or "preview" -%}
-                <div><div knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div></div> {# &#8650; #}
+                <div class="descr"><div knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div></div> {# &#8650; #}
             {%- endif %}
             </a>
             {# <a href='{{ entry.href }}.html'>open</a> #}

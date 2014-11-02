@@ -7,8 +7,9 @@
     {% for module in modules %}
         {% set lp = module.landing_page or "index" %}
         <a href="{{ module.namespace|lower }}/{{ lp }}.html">
-            <div>{{ module.name }}</div>
-            <div>{{ module.description }}</div>
+            <img />
+            <div class="title">{{ module.name }}</div>
+            <div class="descr">{{ module.description }}</div>
         </a>
     {% endfor %}
 </div>

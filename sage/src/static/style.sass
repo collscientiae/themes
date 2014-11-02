@@ -92,8 +92,6 @@ section.content
 
   > p
     margin-bottom: $x / 2
-  > p + div.knowl
-    margin-top: -$x/2
 
 section.outro
 
@@ -328,10 +326,10 @@ div.knowl
         &:after
           box-shadow: none
 
-
 .indextable
   margin: 0 auto 0 2*$x
   width: 75%
+  position: relative
 
   > div.knowl
     border: 0
@@ -349,10 +347,10 @@ div.knowl
   > a
     border-bottom: 1px solid white
     line-height: $x
-    & > div:first-child
+    & > div.title
       font-size: 125%
       padding-top: $x
-    & > div:nth-child(2)
+    & > div.descr
       font-size: 100%
       margin-bottom: $x
       overflow: hidden
@@ -372,14 +370,17 @@ div.knowl
     white-space: nowrap
     //min-width: 15vw
 
-    padding: 0 (2 * $x) 0 $x
+    padding: 0 (2 * $x) 0 (4 * $x)
+    &.file,
+    &.dir,
+    &.hashtag
+      padding-left: $x
     min-width: 3 * $x
     //margin-right: 2 * $x
     +triangle(4)
     &:hover
       background: $col1d
       color: white
-      +shadow-normal
     &:after
       box-shadow: none
     //&:nth-child(2)
@@ -393,6 +394,17 @@ div.knowl
       content: "\2295"
     &.hashtag > div:first-child > span:before
       content: "#"
+
+
+  > a > img
+    position: absolute
+    left: $x
+    margin-top: $x
+    margin-right: $x
+    display: block
+    background: $col3d
+    height: 2*$x
+    width: 2*$x
 
 
 span.circular
@@ -442,14 +454,12 @@ span.circular
     &.hover // class hover, set by JS
       +knowl-link-hover
 
-// p + div.knowl
-//  margin-top: -$x / 2
-
+p + div.knowl
+  margin-top: -$x/2
 
 div.knowl
   // +shadow-normal
   +round-bottom($kx)
-  +transition-knowl
   +transition(border-color #{$animation-knowl})
 
   border: $kx solid $kcol
