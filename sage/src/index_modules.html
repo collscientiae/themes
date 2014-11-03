@@ -3,11 +3,15 @@
 {% block content %}
 <article>
 <section class="content">
-<div class="indextable">
+<div class="indextable modules">
     {% for module in modules %}
         {% set lp = module.landing_page or "index" %}
         <a href="{{ module.namespace|lower }}/{{ lp }}.html">
-            <img />
+            {% if module.icon %}
+                <img src="{{ module.namespace|lower|prefix }}/{{ module.icon }}"/>
+            {% else %}
+                <span class="noicon">&#8984;</span>
+            {% endif %}
             <div class="title">{{ module.name }}</div>
             <div class="descr">{{ module.description }}</div>
         </a>

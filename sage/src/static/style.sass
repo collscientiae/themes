@@ -345,47 +345,49 @@ div.knowl
     padding-left: $x
 
   > a
-    border-bottom: 1px solid white
-    line-height: $x
-    & > div.title
-      font-size: 125%
-      padding-top: $x
-    & > div.descr
+    border: 3px solid $col1
+    margin-bottom: 3px
+    // line-height: $x
+    height: 3*$x
+    > div.title
+      font-size: 135%
+      padding-top: $x / 2
+    > div.descr
       font-size: 100%
-      margin-bottom: $x
+      margin-top: $x/2
       overflow: hidden
       max-width: 100%
+      white-space: normal
       > div[knowl]
-        color: white
-        border-bottom-color: $col1d
+        color: $col_dark
+        border-bottom-color: $col1
         &:hover,
         &.active
           background: $col1 !important
           border-bottom-color: $col1d !important
 
-    background: $col1
-    color: white
+    background: white
+    color: $col_dark
     display: block
     position: relative
     white-space: nowrap
-    //min-width: 15vw
+    padding: 0 (2 * $x) 0 (5 * $x)
 
-    padding: 0 (2 * $x) 0 (4 * $x)
     &.file,
     &.dir,
     &.hashtag
       padding-left: $x
     min-width: 3 * $x
     //margin-right: 2 * $x
-    +triangle(4)
+    +triangle(3)
     &:hover
-      background: $col1d
-      color: white
+      background: $col1l
+      &:after
+        background: $col1l
     &:after
-      box-shadow: none
-    //&:nth-child(2)
-    //  padding-left: 2 * $x
-    //  width: 100%
+      // box-shadow:
+      background: white
+      box-shadow: 3px -3px 0 3px $col1
     &.dir,
     &.hashtag
       > div:first-child > span
@@ -395,16 +397,41 @@ div.knowl
     &.hashtag > div:first-child > span:before
       content: "#"
 
+  &.modules > a
+    +triangle(4)
+    height: 4*$x
+    > div.title
+      padding-top: $x
+    // why do I have to repeat this here?
+    &:hover
+      background: $col1l
+      &:after
+        background: $col1l
+    &:after
+      background: white
+      box-shadow: 3px -3px 0 3px $col1
 
-  > a > img
+  > a > img,
+  > a > span
     position: absolute
-    left: $x
-    margin-top: $x
-    margin-right: $x
+    left: $x/2
+    margin-top: $x/2
+    margin-right: $x/2
+    background: transparent
     display: block
-    background: $col3d
-    height: 2*$x
-    width: 2*$x
+    height: 3*$x
+    width: 3*$x
+    &.noicon
+      transform: rotate(45deg)
+      line-height: 3*$x
+      font-size: 3*$x
+      padding-left: $x/2
+      padding-top: $x/2
+      margin-top: 0
+      margin-right: 0
+      left: $x/2
+      top: 0
+
 
 
 span.circular
