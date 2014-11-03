@@ -2,6 +2,9 @@
 
 {% block content %}
 <article>
+{% if intro != none %}
+<section class="intro">{{ intro }}</section>
+{% endif %}
 <section class="content">
 <div class="indextable modules">
     {% for module in modules %}
