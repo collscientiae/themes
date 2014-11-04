@@ -118,11 +118,14 @@ $animation-knowl: .3s cubic-bezier(0.445, 0.05, 0.55, 0.95)
   -moz-box-shadow:  $style
   box-shadow: $style
 
+=shadow-flat
+  +shadow(0 3px 8px #ccc)
+
 =shadow-normal
   +shadow(0 5px 10px #aaa)
 
 =shadow-strong
-  +shadow(0 5px 10px #666)
+  +shadow(0 6px 11px #666)
 
 // that's a mixin and below a placeholder via %
 // ALWAYS use it as @extend %clearfix, not as an include!

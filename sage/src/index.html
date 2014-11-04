@@ -17,15 +17,19 @@
             <a class="{{ entry.type }}"
                href='{{ entry.href }}.html'>
                 <div class="title"><span></span>{{ entry.title }}</div>
-                <div class="expand" knowl="{{ namespace }}/{{ entry.href }}">expand</div>
-            {%- else -%}
-                <a class="{{ entry.type }}"
-                   href='{{ entry.href }}.html'>
-                    <div class="title"><span></span>{{ entry.title }}</div>
-                {% set descr = entry.description or "preview" -%}
-                <div class="descr" knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div> {# &#8650; #}
-            {%- endif %}
+                <div class="expand" knowl="{{ namespace }}/{{ entry.href }}">&#8650;</div>
             </a>
+            {%- else -%}
+            <a class="{{ entry.type }}"
+               href='{{ entry.href }}.html'>
+                <div class="title"><span></span>{{ entry.title }}</div>
+                {% if entry.description != none -%}
+                    <div class="descr">{{ entry.description }}</div>
+                {% endif %}
+                <div class="expand" knowl="{{ namespace }}/{{ entry.href }}" limit="3">&#8650;</div>
+            </a>
+            {%- endif %}
+
             {# <a href='{{ entry.href }}.html'>open</a> #}
         {% endif %}
         {% endfor %}

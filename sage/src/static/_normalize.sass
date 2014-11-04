@@ -87,8 +87,8 @@ body
 /**
  * Address `outline` inconsistency between Chrome and other browsers.
 
-a:focus
-  outline: thin dotted
+// a:focus
+//   outline: thin dotted
 
 /**
  * Improve readability when focused and also mouse hovered in all browsers.
@@ -430,10 +430,12 @@ input[type="search"]::-webkit-search-decoration
 /**
  * Remove inner padding and border in Firefox 3+.
 
-button::-moz-focus-inner,
-input::-moz-focus-inner
+*::-moz-focus-inner
   border: 0
   padding: 0
+
+*:focus
+  outline: none
 
 /**
  * 1. Remove default vertical scrollbar in IE 6/7/8/9.
