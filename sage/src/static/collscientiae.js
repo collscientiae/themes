@@ -321,7 +321,7 @@ var collscientiae = {
                  $link.parent().after($knowl);
                  } else if ($link.parent().parent().css('display') == "block" || $link.parent().parent().is("p")) {
                  $link.parent().parent().after($knowl); */
-            } else if ($link.closest(".indextable").length != 0) {
+            } else if ($link.parent().parent().hasClass("indextable")) {
                 // The case, where knowls are used in indextables
                 console.log("knowl link: case 'indextable'");
                 $link.after($knowl);
