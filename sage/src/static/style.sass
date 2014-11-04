@@ -155,8 +155,8 @@ nav#menu
     color: white
     background: $col1d
     &:hover
-      color: black
-      background: $col1l
+      color: white
+      background: $col1
 
 =triangle($size)
   &:after
@@ -349,9 +349,9 @@ section.content > .indextable
     padding-left: $x
 
   > h1
-    font-size: $x
-  > h2
     font-size: $x * .75
+  > h2
+    font-size: $x * .66
 
   > a
     border: none
@@ -364,7 +364,7 @@ section.content > .indextable
     color: $col_dark
     display: block
     position: relative
-    white-space: nowrap
+    // white-space: nowrap
     padding: 0 (1 * $x) 0 (5 * $x)
 
     > div.title
@@ -383,9 +383,8 @@ section.content > .indextable
 
     &:hover
       // background: $col_lightgray
-      top: -1px
       color: $col_dark
-      +shadow-flat
+      +shadow-normal
 
     > div.expand
       font-size: $x
@@ -510,24 +509,25 @@ p + div.knowl
   margin-top: -$x/2
 
 div.knowl
-  // +shadow-normal
-  +round-bottom($kx)
+  +round($kx)
   +transition(border-color #{$animation-knowl})
 
-  border: $kx solid $kcol
-  border-top-width: 1px
-  border-bottom-width: $kx + 3px
-  background: $kcoll
+  border: 1px solid white
+  &.hover
+    border: 1px solid $kcold
+  //border: $kx solid $kcol
+  //border-top-width: 1px
+  //border-bottom-width: $kx + 3px
+  background: white
   margin-bottom: $x
 
   //> .knowl-output,
   //> div.knowl-footer
   //&:hover,
   &.hover // class hover, set by JS
-    border-color: $kcold
     +shadow-normal
-    > div.knowl-footer > a
-      color: white
+    // > div.knowl-footer > a
+    //  color: white
 
   > .knowl-error
     color: red
@@ -578,21 +578,24 @@ div.knowl
       margin-left: 0
       margin-right: 0
 
-  .knowl-footer
+  > .knowl-footer
     text-align: right
     height: $kx + 2px
     position: relative
-    bottom: - $kx
+    bottom: 3px
     font:
       weight: bold
-      size: $kx + 2
+      size: $kx + 3
     // line-height: $kx + 4px
     background: transparent
-    padding: 0 $kx
+    padding: 0 $kx+2
     margin:  0
-    & a
+    > a
       color: white
       +transition(color #{$animation-knowl})
+  &.hover > .knowl-footer > a
+    color: $kcold
+
 
 /* ==========================================================================
  * Helper classes
