@@ -209,9 +209,9 @@ var collscientiae = {
             'use strict';
             var $this = $(this);
             var uid = $this.attr("knowl-uid");
+            var hover = evt.type == "mouseenter";
+            $this.toggleClass("hover", hover);
             if (typeof uid !== "undefined") {
-                var hover = evt.type == "mouseenter";
-                $this.toggleClass("hover", hover);
                 $('#kuid-' + uid).toggleClass("hover", hover);
             }
         });
@@ -466,8 +466,34 @@ var collscientiae = {
             $this.after($a);
         });
     },
+    "sagecell_activated": false,
     "sagecellify": function (cell_id, callback) {
         'use strict';
+        if (!collscientiae.sagecell_activated) {
+            // lazy-load the sagecell.js script and call the called function again.
+            $.getScript("http://sagecell.sagemath.org/embedded_sagecell.js")
+            .done(
+                function() {
+                    sagecell.loadMathJax = false;
+                    sagecell.init(function () {
+                        $('<link/>', {
+                           rel: 'stylesheet',
+                           type: 'text/css',
+                           href: "../static/sagecell_overrides.css"
+                        }).appendTo('head');
+                    });
+                    collscientiae.sagecellify(cell_id, callback);
+                }
+            )
+            .fail(function() {
+                    console.log("failed to load sagecell.js script");
+                    collscientiae.sagecell_activated=false;
+                }
+            );
+            collscientiae.sagecell_activated=true;
+            // the init callback above calls this again!
+            return;
+        }
         var $cell = $("#" + cell_id);
         sagecell.makeSagecell({
             inputLocation: $cell.get(0),
@@ -523,15 +549,6 @@ function googleAnalytics() {
     }
 }
 
-function initSageCell() {
-    'use strict';
-    sagecell.loadMathJax = false;
-    sagecell.init(function () {
-        document.head.appendChild(
-            sagecell.util.createElement("link",
-                {rel: "stylesheet", href: "../static/sagecell_overrides.css"}));
-    });
-}
 
 // extending Prism.js for sage and r
 
@@ -559,5 +576,4 @@ Prism.languages.r = Prism.languages.extend('clike', {
 
 $(collscientiae.init);
 $(initMathjax);
-$(initSageCell);
 $(googleAnalytics);
