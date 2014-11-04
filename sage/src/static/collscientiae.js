@@ -226,12 +226,24 @@ var collscientiae = {
             $('*[knowl-uid=' + uid + ']').toggleClass("hover", hover);
         });
     },
+    "init_indexdir": function($body) {
+        // this redirects the click on the directory "icon" to the drop-down knowl handler
+        "use strict";
+        $body.on("click", "div.indextable > a.dir > div.title > div:first-child", function(evt) {
+           "use strict";
+            evt.preventDefault();
+            var $this = $(this);
+            console.log("click", $this.next());
+            $this.parent().next().trigger("click");
+        });
+    },
     "init": function () {
         'use strict';
         var $body = $("body");
         collscientiae.init_storage();
         collscientiae.init_sage_cells($body);
         collscientiae.init_knowl_links($body);
+        collscientiae.init_indexdir($body);
         var $section_content = $('section.content');
         var url = window.location.href.split("/").slice(-2).join("/");
         collscientiae.store("../" + url, $section_content);

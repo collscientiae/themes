@@ -346,7 +346,8 @@ section.content > .indextable
 
   > h1,
   > h2
-    padding-left: $x
+    margin: $x 0 0 0
+    padding-left: $x/2
 
   > h1
     font-size: $x * .75
@@ -380,7 +381,7 @@ section.content > .indextable
     &.file,
     &.dir,
     &.hashtag
-      padding-left: $x
+      padding-left: $x/2
 
     &:hover
       // background: $col_lightgray
@@ -416,11 +417,16 @@ section.content > .indextable
 
     &.dir,
     &.hashtag
-      > div:first-child > span
+      > div:first-child
+        padding-left: $x/2
+      > div:first-child > div
         padding-right: $x / 2
-    &.dir > div:first-child > span:before
+        display: inline-block
+        position: relative
+        left: -$x/2
+    &.dir > div:first-child > div:before
       content: "\2295"
-    &.hashtag > div:first-child > span:before
+    &.hashtag > div:first-child > div:before
       content: "#"
     &.dir
       //height: $x

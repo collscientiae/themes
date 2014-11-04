@@ -16,7 +16,7 @@
             {%- if entry.type == "dir" -%}
             <a class="{{ entry.type }}"
                href='{{ entry.href }}.html'>
-                <div class="title"><span></span>{{ entry.title }}</div>
+                <div class="title"><div></div>{{ entry.title }}</div>
                 <div class="expand" knowl="{{ namespace }}/{{ entry.href }}">&#8650;</div>
             </a>
             {%- else -%}
