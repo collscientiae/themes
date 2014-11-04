@@ -322,12 +322,9 @@ div.knowl
         padding-right: $x
         min-width: 3*$x
 
-        +triangle(2)
-        &:after
-          box-shadow: none
 
 .indextable
-  margin: 0 auto 0 2*$x
+  margin: 0 auto
   width: 75%
   position: relative
 
@@ -345,10 +342,19 @@ div.knowl
     padding-left: $x
 
   > a
-    border: 3px solid $col1
-    margin-bottom: 3px
-    // line-height: $x
+    border: none
+    margin: $x/2 0
     height: 3*$x
+    min-width: 3 * $x
+    background: white
+    +shadow-normal
+    +round($x/4)
+    color: $col_dark
+    display: block
+    position: relative
+    white-space: nowrap
+    padding: 0 (1 * $x) 0 (5 * $x)
+
     > div.title
       font-size: 135%
       padding-top: $x / 2
@@ -360,35 +366,21 @@ div.knowl
       white-space: normal
       > div[knowl]
         color: $col_dark
-        border-bottom-color: $col1
+        border-bottom-color: $col1 !important
         &:hover,
         &.active
           background: $col1 !important
           border-bottom-color: $col1d !important
 
-    background: white
-    color: $col_dark
-    display: block
-    position: relative
-    white-space: nowrap
-    padding: 0 (2 * $x) 0 (5 * $x)
-
     &.file,
     &.dir,
     &.hashtag
       padding-left: $x
-    min-width: 3 * $x
-    //margin-right: 2 * $x
-    +triangle(3)
     &:hover
-      background: $col1l
+      // background: $col_lightgray
+      top: -1px
       color: $col_dark
-      &:after
-        background: $col1l
-    &:after
-      // box-shadow:
-      background: white
-      box-shadow: 3px -3px 0 3px $col1
+      +shadow-strong
     &.dir,
     &.hashtag
       > div:first-child > span
@@ -397,20 +389,22 @@ div.knowl
       content: "\2295"
     &.hashtag > div:first-child > span:before
       content: "#"
+    &.dir
+      height: $x
+      position: relative
+      > div
+        font-size: .75 * $x
+        padding-top: 0
+      > div.expand
+        display: inline
+        position: absolute
+        right: $x
+        top: 0
 
   &.modules > a
-    +triangle(4)
     height: 4*$x
     > div.title
       padding-top: $x
-    // why do I have to repeat this here?
-    &:hover
-      background: $col1l
-      &:after
-        background: $col1l
-    &:after
-      background: white
-      box-shadow: 3px -3px 0 3px $col1
 
   > a > img,
   > a > span

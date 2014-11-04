@@ -13,15 +13,17 @@
     {% for T in entrytypes %}
         {% for entry in group.list|indexsort %}
         {% if entry.type == T %}
+            {%- if entry.type == "dir" -%}
             <a class="{{ entry.type }}"
                href='{{ entry.href }}.html'>
                 <div class="title"><span></span>{{ entry.title }}</div>
-
-            {%- if entry.type == "dir" -%}
-                <div class="descr"><div knowl="{{ namespace }}/{{ entry.href }}">Show Index</div></div>
+                <div class="expand" knowl="{{ namespace }}/{{ entry.href }}">expand</div>
             {%- else -%}
+                <a class="{{ entry.type }}"
+                   href='{{ entry.href }}.html'>
+                    <div class="title"><span></span>{{ entry.title }}</div>
                 {% set descr = entry.description or "preview" -%}
-                <div class="descr"><div knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div></div> {# &#8650; #}
+                <div class="descr" knowl="{{ namespace }}/{{ entry.href }}" limit="3">{{ descr }}</div> {# &#8650; #}
             {%- endif %}
             </a>
             {# <a href='{{ entry.href }}.html'>open</a> #}
