@@ -113,7 +113,7 @@ section.outro
   > a#source
     font-size: 75%
     position: absolute
-    bottom: $x
+    bottom: 0
     right: $x
 
 // =========== sagecell basics
@@ -356,16 +356,16 @@ section.content > .indextable
   > a
     border: none
     margin: $x/2 0
-    min-height: 3*$x
+    min-height: 2 * $x
     min-width: 3 * $x
     background: white
-    // +shadow-flat
     +round($x/4)
+    //+animate(box-shadow)
     color: $col_dark
     display: block
     position: relative
     // white-space: nowrap
-    padding: 0 (1 * $x) 0 (5 * $x)
+    padding: 0 0 0 (5 * $x)
 
     > div.title
       font-size: .75 * $x
@@ -375,6 +375,7 @@ section.content > .indextable
       overflow: hidden
       max-width: 100%
       white-space: normal
+      padding-bottom: $x/2
 
     &.file,
     &.dir,
@@ -388,12 +389,14 @@ section.content > .indextable
 
     > div.expand
       font-size: $x
-      vertical-align: top
+      // vertical-align: top
       display: inline
       position: absolute
       right: 0px
       top: 0px
       color: $col1
+      vertical-align: middle
+      line-height: 2*$x
       &[knowl]
         border: 0
         padding-left: $x/2
@@ -401,7 +404,7 @@ section.content > .indextable
         +round-top-right($x/4)
         +round-bottom-left($x/4)
         color: $col1
-        height: $x * 1.25
+        height: $x * 2
         background: none !important
 
         // border-bottom-color: $col1 !important
@@ -421,7 +424,7 @@ section.content > .indextable
       content: "#"
     &.dir
       //height: $x
-      min-height: 2 * $x
+      min-height: 1.5 * $x
       padding-top: $x/2
       position: relative
       > div.title
@@ -473,17 +476,17 @@ span.circular
  */
 
 =knowl-link-hover
-  color: white !important
-  background: $kcold  !important
+  color: white
   border-color: $kcold !important
+  +round($kx/2)
 
 *[knowl]
   display: inline-block
   border-bottom: 1px dashed $kcol
   color: $col_dark
   cursor: pointer
-  +round-top($kx / 2)
-  +transition(color #{$animation-knowl}, background #{$animation-knowl}, padding #{$animation-knowl}, border-bottom #{$animation-knowl})
+  //+round-top($kx / 2)
+  +transition(color #{$animation-knowl}, background #{$animation-knowl}, padding #{$animation-knowl}, border-bottom #{$animation-knowl}, border-radius #{$animation-knowl})
   padding:
     left: 2px
     right: 2px
@@ -493,25 +496,25 @@ span.circular
   &:first-child
     margin-left: 0
 
-  &:hover
+  &.active,
+  &.hover
+    border-color: $kcold
     +knowl-link-hover
-
+    background: $kcold
+  &.hover
+    color: $kcoll
   &.active
-    border-color: transparent
-    background: $kcol
     padding:
-      left: .5em
-      right: .5em
-    &.hover // class hover, set by JS
-      +knowl-link-hover
+      left: $kx/2
+      right: $kx/2
 
-p + div.knowl
+//p + div.knowl
   margin-top: -$x/2
 
 div.knowl
   +round($kx)
   +transition(border-color #{$animation-knowl})
-  margin: 0
+  margin: 0 0 $x 0
 
   border: 1px solid white
   &.hover
@@ -520,7 +523,6 @@ div.knowl
   //border-top-width: 1px
   //border-bottom-width: $kx + 3px
   background: white
-  margin-bottom: $x
 
   //> .knowl-output,
   //> div.knowl-footer
@@ -589,11 +591,12 @@ div.knowl
       size: $kx + 3
     // line-height: $kx + 4px
     background: transparent
-    padding: 0 $kx+2
+    padding: 0 $kx+2px
     margin:  0
     > a
       color: white
       +transition(color #{$animation-knowl})
+      transform: rotate(45deg)
   &.hover > .knowl-footer > a
     color: $kcold
 

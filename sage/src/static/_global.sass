@@ -111,7 +111,15 @@ $screen-large: 1140px
   -ms-transition: $style
   transition: $style
 
+$animation-fast: .1s cubic-bezier(0.445, 0.05, 0.55, 0.95)
 $animation-knowl: .3s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+
+=animate($style)
+  @include transition($style #{$animation-knowl})
+
+=animate($style)
+  @include transition($style #{$animation-fast})
+
 
 =shadow($style)
   -webkit-box-shadow:  $style
