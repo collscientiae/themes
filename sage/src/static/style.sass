@@ -170,21 +170,24 @@ nav#menu
     transform: scale(0.707) rotate(45deg)
     z-index: 1
     // border: 1px solid red
-    box-shadow: 3px -3px 0 3px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
+    box-shadow: #{$size+1}px -#{$size+1}px 0 1px white //, 3px -3px 0 2px rgba(0, 0, 0, 0.2)
     border-radius: 0 0 0 100px
 
   &:hover:after
     background-color: $col1d
 
+$fontsize-bc: $x * .75
+
 nav#breadcrumb
-  padding: $x 2*$x $x 0
+  padding: $x $x $x 0
+  @include media(max-medium)
+    padding: $x/2 $x $x/2 0
   display: inline-block
   overflow: hidden
 
   > a
-    font-size: 150%
-    line-height: 2*$x
-    padding: 0 $x 0 (2*$x)
+
+    font-size: $fontsize-bc * .75
     position: relative
     display: block
     float: left
@@ -192,15 +195,42 @@ nav#breadcrumb
     color: white
     font-weight: bold
     white-space: nowrap
+    +triangle(1)
+    line-height: $x
+    padding: 0 $x/2 0 $x
+
+    &:after
+      background: $col1d
+    &:hover:after
+      background: $col1
+
+    @include media(min-wide)
+      font-size: $fontsize-bc
+      +triangle(2)
+      line-height: 2*$x
+      padding: 0 $x 0 (2*$x)
+      &:after
+        background: $col1d
+      &:hover:after
+        background: $col1
+
     @include media(max-medium)
-      font-size: 1em
+      font-size: $fontsize-bc / 2
+      &:after
+        background: $col1d
+      &:hover:after
+        background: $col1
 
   > a:first-child,
   > a:last-child
-    font-size: 1.5em
+    font-size: $fontsize-bc
+    @include media(max-medium)
+      font-size: $fontsize-bc * .75
 
   > a:first-child
     padding-left: $x
+    @include media(max-medium)
+      padding-left: $x/2
     > span
       display: inline-block
       transform: rotate(45deg) scale(1.5)
@@ -208,21 +238,12 @@ nav#breadcrumb
   > a:last-child,
   > a:hover
     background: $col1
-    // color: black
 
   > a:last-child:after
     background: $col1
 
-  > a
-    +triangle(2)
-    &:after
-      background: $col1d
-    &:hover:after
-      background: $col1
-
   > a:last-child:after
     box-shadow: none
-    // content: none
 
 article aside
   color: white
@@ -326,7 +347,7 @@ section.content > .indextable
   margin: 0 15%
 
 .indextable
-  margin: 0 $x/2
+  margin: 0 ($x - 3) // -3px compensates for the border
   position: relative
 
   // this is the one which expands between the index entries
@@ -420,10 +441,10 @@ section.content > .indextable
       > div:first-child
         padding-left: $x/2
       > div:first-child > div
-        padding-right: $x / 2
+        padding-right: $x / 4
         display: inline-block
         position: relative
-        left: -$x/2
+        left: -$x/4
     &.dir > div:first-child > div:before
       content: "\2295"
     &.hashtag > div:first-child > div:before

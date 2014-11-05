@@ -104,6 +104,14 @@ $screen-large: 1140px
   @include round-top-left($radius)
   @include round-top-right($radius)
 
+=round-left($radius)
+  @include round-top-left($radius)
+  @include round-bottom-left($radius)
+
+=round-right($radius)
+  @include round-top-right($radius)
+  @include round-bottom-right($radius)
+
 =transition($style...)
   -webkit-transition: $style
   -moz-transition: $style

@@ -7,14 +7,29 @@ code.sagecell
     display: block
   @include clearfix
 
-div.sagecell_input button.sagecell_evalButton
-  margin-bottom: $x
+div.sagecell_input
+  > .sagecell_editor
+    .CodeMirror.cm-s-default
+      +round-left($x/4)
+      @include media(max-medium)
+        +round($x/4)
+      border: 1px solid $col1
+      .CodeMirror-gutters
+        background: $col1l
+      .CodeMirror-linenumber
+        color: $col1
+
+  button.sagecell_evalButton
+    margin-bottom: $x
 
 .sagecell_sessionOutput
-  border: 1px solid black
   background: white
+  border: 1px solid $col1
+  +round-right($x/4)
+  @include media(max-medium)
+    +round($x/4)
   &.sagecell_active
-    border: 1px solid black
+    border: 1px solid $col1
 
   img:not(.sagecell_spinner)
     width: 100%
@@ -40,7 +55,7 @@ div.sagecell_input button.sagecell_evalButton
   padding-top: 0
   @include media(max-medium)
     display: block
-    width: inherit
+    width: 100%
 
 .sagecell_input
   float: left
