@@ -347,7 +347,7 @@ section.content > .indextable
   margin: 0 15%
 
 .indextable
-  margin: 0 ($x - 3) // -3px compensates for the border
+  margin: 0 ($x) // -3px compensates for the border
   position: relative
 
   // this is the one which expands between the index entries
@@ -439,12 +439,12 @@ section.content > .indextable
     &.dir,
     &.hashtag
       > div:first-child
-        padding-left: $x/2
-      > div:first-child > div
-        padding-right: $x / 4
-        display: inline-block
-        position: relative
-        left: -$x/4
+        padding-left: 1.5 * $x
+        > div
+          position: relative
+          &:before
+            left: -1.5 * $x
+            position: absolute
     &.dir > div:first-child > div:before
       content: "\2295"
     &.hashtag > div:first-child > div:before
