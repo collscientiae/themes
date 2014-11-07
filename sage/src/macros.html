@@ -3,7 +3,7 @@
 <div>
     <div>{{  title }}</div>
     <div>
-    {% for d in documents %}
+    {% for d in documents|sort(attribute="title") %}
         <a href="../{{ d.namespace|lower }}/{{ d.docid }}.html">{{ d.title }}</a>
         {%- if not loop.last -%}, {% endif -%}
     {% endfor %}

@@ -159,10 +159,8 @@ var collscientiae = {
             'use strict';
             event.preventDefault();
             var $activate_link = $(this);
-            var cell_id = $activate_link.attr("target");
             $activate_link.text("loading ...");
-            $activate_link.removeAttr("target");
-            collscientiae.sagecellify(cell_id, function () {
+            collscientiae.sagecellify($activate_link, function () {
                 $activate_link.hide();
             });
         });
@@ -479,13 +477,16 @@ var collscientiae = {
         });
     },
     "sagecell_activated": false,
-    "sagecellify": function (cell_id, callback) {
+    "sagecellify": function ($activate_link, callback) {
+        var cell_id = $activate_link.attr("target");
         'use strict';
         if (!collscientiae.sagecell_activated) {
             // lazy-load the sagecell.js script and call the called function again.
+            $activate_link.text("loading sagecell.js ...");
             $.getScript("http://sagecell.sagemath.org/embedded_sagecell.js")
             .done(
                 function() {
+                    $activate_link.text("sagecell.js loaded ...");
                     sagecell.loadMathJax = false;
                     sagecell.init(function () {
                         $('<link/>', {
@@ -494,7 +495,7 @@ var collscientiae = {
                            href: "../static/sagecell_overrides.css"
                         }).appendTo('head');
                     });
-                    collscientiae.sagecellify(cell_id, callback);
+                    collscientiae.sagecellify($activate_link, callback);
                 }
             )
             .fail(function() {
@@ -507,6 +508,7 @@ var collscientiae = {
             return;
         }
         var $cell = $("#" + cell_id);
+        $activate_link.text("creating cell ...");
         sagecell.makeSagecell({
             inputLocation: $cell.get(0),
             languages: [$cell.attr("mode")],
@@ -520,23 +522,23 @@ var collscientiae = {
 
 function initMathjax() {
     'use strict';
-    var head = document.getElementsByTagName("head")[0], script;
     var proto = /^http:/.test(document.location) ? 'http' : 'https';
-    script = document.createElement("script");
-    script.type = "text/x-mathjax-config";
-    script[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({\n" +
-        "  extensions: ['tex2jax.js','fp.js','asciimath2jax.js'],\n" +
-        "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
-        "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
-        "  asciimath2jax: { delimiters: [['\\\'\\\'','\\\'\\\'']]  },\n" +
-        "  TeX: {extensions: ['autoload-all.js'], equationNumbers: { autoNumber: 'AMS' } }\n" +
-        "});";
-    head.appendChild(script);
-    script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = proto + "://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    head.appendChild(script);
+    var $head = $("head");
+    var $script = $('<script>')
+        .attr("type", "text/x-mathjax-config")
+        .text(
+            "MathJax.Hub.Config({\n" +
+            "  extensions: ['tex2jax.js','fp.js','asciimath2jax.js'],\n" +
+            "  jax: ['input/TeX','input/AsciiMath', 'output/SVG'],\n" +
+            "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] },\n" +
+            "  asciimath2jax: { delimiters: [['\\\'\\\'','\\\'\\\'']]  },\n" +
+            "  TeX: {extensions: ['autoload-all.js'], equationNumbers: { autoNumber: 'AMS' } }\n" +
+            "});");
+    $head.append($script);
+    $script = $('<script>')
+        .attr("type", "text/javascript")
+        .attr("src", proto + "://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
+    $head.append($script);
 }
 
 function googleAnalytics() {
