@@ -235,7 +235,7 @@ nav#breadcrumb
       padding-left: $x/2
     > span
       display: inline-block
-      transform: rotate(45deg) scale(1.5)
+      transform: rotate(45deg) scale(2)
 
   > a:last-child,
   > a:hover
@@ -389,7 +389,7 @@ section.content > .indextable
     display: block
     position: relative
     // white-space: nowrap
-    padding: 0 0 0 (5 * $x)
+    padding: 0 $x/2 0 (5 * $x)
 
     > div.title
       font-size: .75 * $x
@@ -512,7 +512,7 @@ span.circular
 *[knowl]
   display: inline-block
   border-bottom: 1px dashed $kcol
-  color: $col_dark
+  color: $kcold
   cursor: pointer
   //+round-top($kx / 2)
   +transition(color #{$animation-knowl}, background #{$animation-knowl}, padding #{$animation-knowl}, border-bottom #{$animation-knowl}, border-radius #{$animation-knowl})
@@ -544,22 +544,15 @@ div.knowl
   +round($kx)
   +transition(border-color #{$animation-knowl})
   margin: 0 0 $x 0
-
   border: 1px solid white
-  &.hover
-    border: 1px solid $kcold
-  //border: $kx solid $kcol
-  //border-top-width: 1px
-  //border-bottom-width: $kx + 3px
   background: white
 
-  //> .knowl-output,
-  //> div.knowl-footer
-  //&:hover,
+  &:hover
+    border-color: $kcold
+
   &.hover // class hover, set by JS
+    border: 1px solid $kcol
     +shadow-normal
-    // > div.knowl-footer > a
-    //  color: white
 
   > .knowl-error
     color: red
@@ -568,11 +561,11 @@ div.knowl
   > .knowl-output
     overflow-y: auto
     max-height: 75vh
+    padding: 0 $kx
+    margin: 0
     // knowl inside knowl!
     .knowl-output
       max-height: 50vh
-    padding: 0 $kx
-    margin: 0
 
     div + a.activate_cell
       margin-bottom: $kx
