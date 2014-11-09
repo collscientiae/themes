@@ -363,12 +363,12 @@ var collscientiae = {
                         $output.show();
                     } else {
                         $knowl.hide();
-                        $link.addClass("active hover");
+                        $link.addClass("active");
                     }
-                    collscientiae.create_sagecell_links($output);
                     collscientiae.process_mathjax($output, function () {
                         $knowl.slideDown("slow");
                     });
+                    collscientiae.create_sagecell_links($output);
                     collscientiae.highlight_code($output);
                     collscientiae.include($output);
                 }
