@@ -6,7 +6,7 @@
 
 <div class="indextable">
 {% for group in index|groupby('group') %}
-    {% if group.grouper != none %}
+    {% if group.grouper != "" %}
     <h1>{{ group.grouper|title }}</h1>
     {% endif %}
 
