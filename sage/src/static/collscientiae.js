@@ -522,7 +522,8 @@ var collscientiae = {
 
 function initMathjax() {
     'use strict';
-    var proto = /^http:/.test(document.location) ? 'http' : 'https';
+    // var proto = /^http:/.test(document.location) ? 'http' : 'https';
+    var proto = '';
     var $head = $("head");
     var $script = $('<script>')
         .attr("type", "text/x-mathjax-config")
@@ -537,7 +538,7 @@ function initMathjax() {
     $head.append($script);
     $script = $('<script>')
         .attr("type", "text/javascript")
-        .attr("src", proto + "://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
+        .attr("src", proto + "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
     $head.append($script);
 }
 
@@ -569,23 +570,23 @@ function googleAnalytics() {
 Prism.languages.python['function'] = /\b([a-zA-Z_]+)(?=\()\b/g;
 
 Prism.languages.sage= {
-	'comment': {
-		pattern: /(^|[^\\])#.*?(\r?\n|$)/g,
-		lookbehind: true
-	},
+    'comment': {
+        pattern: /(^|[^\\])#.*?(\r?\n|$)/g,
+        lookbehind: true
+    },
     'function': Prism.languages.python['function'],
-	'string': /"""[\s\S]+?"""|("|')(\\?.)*?\1/g,
-	'keyword' : /\b(as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|pass|print|raise|return|try|while|with|yield|var)\b/g,
-	'boolean' : /\b(True|False)\b/g,
-	'number' : /\b-?(0x)?\d*\.?[\da-f]+\b/g,
-	'operator' : /[-+]{1,2}|=?&lt;|=?&gt;|!|={1,2}|(&){1,2}|(&amp;){1,2}|\|?\||\?|\*|\/|~|\^|%|\b(or|and|not)\b/g,
-	'ignore' : /&(lt|gt|amp);/gi,
-	'punctuation' : /[{}[\];(),.:<>]/g
+    'string': /"""[\s\S]+?"""|("|')(\\?.)*?\1/g,
+    'keyword' : /\b(as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|pass|print|raise|return|try|while|with|yield|var)\b/g,
+    'boolean' : /\b(True|False)\b/g,
+    'number' : /\b-?(0x)?\d*\.?[\da-f]+\b/g,
+    'operator' : /[-+]{1,2}|=?&lt;|=?&gt;|!|={1,2}|(&){1,2}|(&amp;){1,2}|\|?\||\?|\*|\/|~|\^|%|\b(or|and|not)\b/g,
+    'ignore' : /&(lt|gt|amp);/gi,
+    'punctuation' : /[{}[\];(),.:<>]/g
 };
 
 Prism.languages.r = Prism.languages.extend('clike', {
-	'function': /\b([a-zA-Z.]+)(?=\()\b/g,
-	'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?|NA|-?Infinity)\b/g
+    'function': /\b([a-zA-Z.]+)(?=\()\b/g,
+    'number': /\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?|NA|-?Infinity)\b/g
 });
 
 $(collscientiae.init);
