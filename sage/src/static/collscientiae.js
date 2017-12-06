@@ -537,7 +537,7 @@ function initMathjax() {
     $head.append($script);
     $script = $('<script>')
         .attr("type", "text/javascript")
-        .attr("src", proto + "://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
+        .attr("src", proto + "://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML");
     $head.append($script);
 }
 
